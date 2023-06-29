@@ -64,5 +64,5 @@ jobs:
         run: composer all
 
       - name: Codecov
-        run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_ADMIN_PAGES }}
+        run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.FORM_COMP_CODECOV }}
  
