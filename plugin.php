@@ -30,23 +30,23 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-return;
+// return;
 if ( isset( $_POST['submit'] ) ) {
 	var_dump( $_POST );
 };
 
 ?>
 
-<form action="" method="post">
+<!-- <form action="" method="post">
 	<input type="time" name="time" id="time" value="12:00:00" >
 <input type="color" id="appt" name="appt">
 	<input type="submit" name="submit" value="Send">
 	
-</form>
+</form> -->
 
 <?php
-die;
-return;
+// die;
+// return;
 
 // Require the autoloader so we can dynamically include the rest of the classes.
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
@@ -89,10 +89,10 @@ add_action(
 		$app::view()->render(
 			'tests/Fixtures/PHP/input-fields.php',
 			array(
-				'text' => ( new Text( 'input__text' ) )
+				'text' => Text::make( 'input__text' )
 					->label( 'Input Text Field' )
 					->set_existing( 'Existing Value' )
-					->id( 'input__text__id' )
+					// ->id( 'input__text__id' )
 					->add_class( 'input__text__class' )
 					->data( 'input__text', 'data__value' )
 					->attributes( array( 'input__text' => 'attr__value' ) )

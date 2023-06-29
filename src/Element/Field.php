@@ -64,6 +64,16 @@ abstract class Field implements Element {
 	}
 
 	/**
+	 * Static constructor.
+	 *
+	 * @param string $name
+	 * @return static
+	 */
+	public static function make( string $name ): self {
+		return new static( $name );
+	}
+
+	/**
 	 * Set defaults.
 	 *
 	 * Runs after the constructor, but before the field is rendered.
