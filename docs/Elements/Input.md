@@ -47,3 +47,33 @@ $input = new Text( 'my_input' );
 $input->tabindex( 1 );
 $input->clear_tabindex();
 ```
+
+### Label
+
+**public function label( string $label )**
+> @param string $label  
+> @return \PinkCrab\Form_Components\Element\Field\Input\Abstract_Input
+
+Sets the label for the input.
+
+```php
+$input = new Text( 'my_input' );
+$input->label( 'My Input' );
+```
+
+### Notifcation
+
+**public function notification( string $notification, string $type )**
+> @param string $notification  
+> @param string $type  
+> @return \PinkCrab\Form_Components\Element\Field\Input\Abstract_Input
+
+Sets the notification for the input.
+
+```php
+$input = new Text( 'my_input' );
+$input->notification( 'My Input', 'error' );
+
+// Valid types are: error, warning, success, info
+```
+
