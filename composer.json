@@ -50,7 +50,8 @@
         "coverage": "vendor/bin/phpunit --colors=always --testdox --coverage-html coverage-report",
         "analyse": "vendor/bin/phpstan analyse src -l8",
         "sniff": "./vendor/bin/phpcs src/ -v",
-        "all": "composer coverage && composer analyse && composer sniff"
+        "all": "composer coverage && composer analyse && composer sniff",
+        "test:application": "vendor/bin/phpunit --colors=always --testdox --group=application"
     },
     "prefer-stable": true,
     "minimum-stability": "dev",
