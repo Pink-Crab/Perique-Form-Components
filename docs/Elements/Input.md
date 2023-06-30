@@ -21,3 +21,29 @@ $input->set_existing( 'hello' );
 $input = new Number( 'my_input' );
 $input->set_existing( 10 );
 ```
+
+### Set Tab Index
+
+**public function tabindex( int|string $tab_index )**  
+> @param int|string $tab_index  
+> @return \PinkCrab\Form_Components\Element\Field\Input\Abstract_Input  
+
+Sets the tabindex for the input.
+
+```php
+$input = new Text( 'my_input' );
+$input->tabindex( 1 );
+```
+
+### Clear Tab Index
+
+**public function clear_tabindex()**
+> @return \PinkCrab\Form_Components\Element\Field\Input\Abstract_Input  
+
+Clears the tabindex for the input.
+
+```php
+$input = new Text( 'my_input' );
+$input->tabindex( 1 );
+$input->clear_tabindex();
+```
