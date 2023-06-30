@@ -5,7 +5,7 @@ The Input class is an abstract class that represents an input element. It is the
 
 ## Shared Methods
 
-### Set Existing \[HTTP Method\]
+### Set Existing 
 **public function set_existing( int|float|string|bool|Stringable $value )**  
 > @param int|float|string|bool|Stringable $value   
 > @return \PinkCrab\Form_Components\Element\Field\Input\Abstract_Input
