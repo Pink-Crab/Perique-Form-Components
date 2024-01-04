@@ -37,24 +37,24 @@ class Test_Week extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Week input should return an input type of "email"
-*/
+	 * @testdox A Week input should return an input type of "week"
+	 */
 	public function test_type(): void {
 		$week = new Week( 'test' );
 		$this->assertEquals( 'week', $week->get_input_type() );
 	}
 
 	/**
- * @testdox A Week input should return a type of email_input
-*/
+	 * @testdox A Week input should return a type of week_input
+	 */
 	public function test_element_type(): void {
 		$week = new Week( 'test' );
 		$this->assertEquals( 'week_input', $week->get_type() );
 	}
 
 	/**
- * @testdox By default the Week field should sanitize values as integer using intval.
-*/
+	 * @testdox By default the Week field should sanitize values as integer using intval.
+	 */
 	public function test_default_sanitizer(): void {
 		$week = new Week( 'test' );
 		$this->assertInstanceOf( Closure::class, $week->get_sanitizer() );
@@ -118,7 +118,7 @@ class Test_Week extends WP_UnitTestCase {
 	/**
 	 * @testdox By default the sanitizer format should be set to the standard HTML spec for this input type.
 	 * @dataProvider sanitizer_format_data
-*/
+	 */
 	public function test_default_sanitizer_format( $value, $expected ): void {
 		$week = new Week( 'test' );
 		$this->assertEquals(
@@ -128,8 +128,8 @@ class Test_Week extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to set the step per week with a simple helper.
-*/
+	 * @testdox It should be possible to set the step per week with a simple helper.
+	 */
 	public function test_step_per_week(): void {
 		$week = new Week( 'test' );
 		$week->step_by_weeks( 2 );

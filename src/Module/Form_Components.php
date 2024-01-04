@@ -70,6 +70,7 @@ class Form_Components implements Module {
 				// Button_Component::class       => $this->resolve_template_path('field/button.php'),
 				// Notification_Component::class => $this->resolve_template_path('field/notification.php'),
 				);
+				dump( $aliases, $custom_aliases );
 				return array_merge( $aliases, $custom_aliases );
 			},
 			1

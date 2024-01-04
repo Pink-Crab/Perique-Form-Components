@@ -35,7 +35,7 @@ class Test_Checkbox extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Checkbox input should return an input type of "email"
+ * @testdox A Checkbox input should return an input type of "checkbox"
 */
 	public function test_type(): void {
 		$checkbox = new Checkbox( 'test' );
@@ -43,7 +43,7 @@ class Test_Checkbox extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Checkbox input should return a type of email_input
+ * @testdox A Checkbox input should return a type of checkbox_input
 */
 	public function test_element_type(): void {
 		$checkbox = new Checkbox( 'test' );

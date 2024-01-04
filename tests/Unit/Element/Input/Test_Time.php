@@ -37,7 +37,7 @@ class Test_Time extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Time input should return an input type of "email"
+ * @testdox A Time input should return an input type of "time"
 */
 	public function test_type(): void {
 		$time = new Time( 'test' );
@@ -45,7 +45,7 @@ class Test_Time extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Time input should return a type of email_input
+ * @testdox A Time input should return a type of time_input
 */
 	public function test_element_type(): void {
 		$time = new Time( 'test' );

@@ -13,12 +13,14 @@
 
 use PinkCrab\Perique\Application\App;
 use PinkCrab\Perique\Application\Hooks;
+use PinkCrab\Form_Components\Module\Form_Components;
 use PinkCrab\Form_Components\Element\Field\Input\Text;
 use PinkCrab\Form_Components\Component\Field\Input_Component;
 use PinkCrab\Form_Components\Component\Field\Label_Component;
 use PinkCrab\Form_Components\Component\Field\Datalist_Component;
 use PinkCrab\Form_Components\Component\Partial\Field_Wrapper_End;
 use PinkCrab\Form_Components\Component\Partial\Field_Wrapper_Start;
+
 // use PinkCrab\Form_Components\Component\Field\Input_Component;
 // use PinkCrab\Form_Components\Component\Field\Input_Component;
 // use PinkCrab\Form_Components\Component\Field\Input_Component;
@@ -50,35 +52,39 @@ if ( isset( $_POST['submit'] ) ) {
 // Require the autoloader so we can dynamically include the rest of the classes.
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
-add_filter(
-	Hooks::COMPONENT_ALIASES,
-	function ( array $aliases ): array {
-		$custom_aliases = array(
-			Input_Component::class     => __DIR__ . '/template/component/field/input-text.php',
-			Field_Wrapper_Start::class => __DIR__ . '/template/component/partial/field-wrapper-start.php',
-			Field_Wrapper_End::class   => __DIR__ . '/template/component/partial/field-wrapper-end.php',
-			// Nonce_Component::class        => __DIR__ . '/template/component/partial/nonce.php',
-			Label_Component::class     => __DIR__ . '/template/component/field/label.php',
-			Datalist_Component::class  => __DIR__ . '/template/component/field/datalist.php',
-			// Group_Component::class        => __DIR__ . '/template/component/partial/group.php',
-			// Button_Component::class       => __DIR__ . '/template/component/field/button.php',
-			// Notification_Component::class => __DIR__ . '/template/component/field/notification.php',
-		);
+// add_filter(
+//  Hooks::COMPONENT_ALIASES,
+//  function ( array $aliases ): array {
+//      $custom_aliases = array(
+//          Input_Component::class     => __DIR__ . '/template/component/field/input-text.php',
+//          Field_Wrapper_Start::class => __DIR__ . '/template/component/partial/field-wrapper-start.php',
+//          Field_Wrapper_End::class   => __DIR__ . '/template/component/partial/field-wrapper-end.php',
+//          // Nonce_Component::class        => __DIR__ . '/template/component/partial/nonce.php',
+//          Label_Component::class     => __DIR__ . '/template/component/field/label.php',
+//          Datalist_Component::class  => __DIR__ . '/template/component/field/datalist.php',
+//          // Group_Component::class        => __DIR__ . '/template/component/partial/group.php',
+//          // Button_Component::class       => __DIR__ . '/template/component/field/button.php',
+//          // Notification_Component::class => __DIR__ . '/template/component/field/notification.php',
+//      );
 
-		// @Todoc check if blade one active, then remap.
-		return array_merge( $aliases, $custom_aliases );
-	}
-);
+//      // @Todoc check if blade one active, then remap.
+//      $rn =  array_merge( $aliases, $custom_aliases );
+//      // dd($rn, file_exists( $rn[Input_Component::class] ));
+//      return $rn;
+//  }
+// );
 
 
 /**
  * @var App $app
 */
-$app = ( new \PinkCrab\Perique\Application\App_Factory( __DIR__ ) )
-	->with_wp_dice( true )
-	->app_config( array( 'path' => array( 'view' => __DIR__ . '/tests/Fixtures' ) ) )
-	->boot();
-
+$app     = ( new \PinkCrab\Perique\Application\App_Factory( __DIR__ ) )
+	->module( Form_Components::class )
+	->set_base_view_path( __DIR__ . '/tests/Fixtures' )
+	->default_setup();
+	// ->app_config( array( 'path' => array( 'view' => __DIR__ . '/tests/Fixtures' ) ) );
+	$app = $app->boot();
+// dd($app);
 add_action(
 	'init',
 	function () use ( $app ) {
@@ -88,7 +94,7 @@ add_action(
 		}
 		// dump( $app );
 		$app::view()->render(
-			'tests/Fixtures/PHP/input-fields.php',
+			'PHP/input-fields.php',
 			array(
 				'text' => Text::make( 'input__text' )
 					->label( 'Input Text Field' )

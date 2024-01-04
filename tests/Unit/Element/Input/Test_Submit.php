@@ -39,24 +39,24 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Submit input should return an input type of "email"
-*/
+	 * @testdox A Submit input should return an input type of "submit"
+	 */
 	public function test_type(): void {
 		$submit = new Submit( 'test' );
 		$this->assertEquals( 'submit', $submit->get_input_type() );
 	}
 
 	/**
- * @testdox A Submit input should return a type of email_input
-*/
+	 * @testdox A Submit input should return a type of submit_input
+	 */
 	public function test_element_type(): void {
 		$submit = new Submit( 'test' );
 		$this->assertEquals( 'submit_input', $submit->get_type() );
 	}
 
 	/**
- * @testdox By default the Submit field should sanitize values as integer using intval.
-*/
+	 * @testdox By default the Submit field should sanitize values as integer using intval.
+	 */
 	public function test_default_sanitizer(): void {
 		$submit = new Submit( 'test' );
 		$this->assertEquals( Sanitize::TEXT, $submit->get_sanitizer() );
@@ -67,16 +67,16 @@ class Test_Submit extends WP_UnitTestCase {
 	####################################################################
 
 	/**
- * @testdox A Submit field should allow a single value to be set
-*/
+	 * @testdox A Submit field should allow a single value to be set
+	 */
 	public function test_uses_single_value(): void {
 		$submit = new Submit( 'test' );
 		$this->assertTrue( usesTrait( Single_Value::class )( $submit ) );
 	}
 
 	/**
- * @testdox A Submit field should allow a disabled value to be set
-*/
+	 * @testdox A Submit field should allow a disabled value to be set
+	 */
 	public function test_uses_disabled(): void {
 		$submit = new Submit( 'test' );
 		$this->assertTrue( usesTrait( Disabled::class )( $submit ) );
@@ -87,8 +87,8 @@ class Test_Submit extends WP_UnitTestCase {
 	####################################################################
 
 	/**
- * @testdox It should be possible to use an alias called text() to set the submit value.
-*/
+	 * @testdox It should be possible to use an alias called text() to set the submit value.
+	 */
 	public function test_text_alias(): void {
 		$submit = new Submit( 'test' );
 		$submit->text( 'test' );
@@ -96,8 +96,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to set the formaction of the submit input
-*/
+	 * @testdox It should be possible to set the formaction of the submit input
+	 */
 	public function test_formaction(): void {
 		$submit = new Submit( 'test' );
 		$submit->formaction( 'test' );
@@ -106,8 +106,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to check if formaction has been set the submit input
-*/
+	 * @testdox It should be possible to check if formaction has been set the submit input
+	 */
 	public function test_has_formaction(): void {
 		$submit = new Submit( 'test' );
 		$this->assertFalse( $submit->has_formaction() );
@@ -116,8 +116,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to get the formaction of the submit input
-*/
+	 * @testdox It should be possible to get the formaction of the submit input
+	 */
 	public function test_get_formaction(): void {
 		$submit = new Submit( 'test' );
 		$this->assertNull( $submit->get_formaction() );
@@ -126,8 +126,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to clear the formaction of the submit input
-*/
+	 * @testdox It should be possible to clear the formaction of the submit input
+	 */
 	public function test_clear_formaction(): void {
 		$submit = new Submit( 'test' );
 		$submit->attribute( 'formaction', 'test' );
@@ -137,8 +137,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to set the formenctype of the submit input
-*/
+	 * @testdox It should be possible to set the formenctype of the submit input
+	 */
 	public function test_formenctype(): void {
 		$submit = new Submit( 'test' );
 		$submit->formenctype( 'test' );
@@ -147,8 +147,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to check if formenctype has been set the submit input
-*/
+	 * @testdox It should be possible to check if formenctype has been set the submit input
+	 */
 	public function test_has_formenctype(): void {
 		$submit = new Submit( 'test' );
 		$this->assertFalse( $submit->has_formenctype() );
@@ -157,8 +157,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to get the formenctype of the submit input
-*/
+	 * @testdox It should be possible to get the formenctype of the submit input
+	 */
 	public function test_get_formenctype(): void {
 		$submit = new Submit( 'test' );
 		$this->assertNull( $submit->get_formenctype() );
@@ -167,8 +167,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to clear the formenctype of the submit input
-*/
+	 * @testdox It should be possible to clear the formenctype of the submit input
+	 */
 	public function test_clear_formenctype(): void {
 		$submit = new Submit( 'test' );
 		$submit->attribute( 'formenctype', 'test' );
@@ -178,8 +178,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to set the formmethod of the submit input
-*/
+	 * @testdox It should be possible to set the formmethod of the submit input
+	 */
 	public function test_formmethod(): void {
 		$submit = new Submit( 'test' );
 		$submit->formmethod( 'test' );
@@ -188,8 +188,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to check if formmethod has been set the submit input
-*/
+	 * @testdox It should be possible to check if formmethod has been set the submit input
+	 */
 	public function test_has_formmethod(): void {
 		$submit = new Submit( 'test' );
 		$this->assertFalse( $submit->has_formmethod() );
@@ -198,8 +198,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to get the formmethod of the submit input
-*/
+	 * @testdox It should be possible to get the formmethod of the submit input
+	 */
 	public function test_get_formmethod(): void {
 		$submit = new Submit( 'test' );
 		$this->assertNull( $submit->get_formmethod() );
@@ -208,8 +208,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to clear the formmethod of the submit input
-*/
+	 * @testdox It should be possible to clear the formmethod of the submit input
+	 */
 	public function test_clear_formmethod(): void {
 		$submit = new Submit( 'test' );
 		$submit->attribute( 'formmethod', 'test' );
@@ -219,8 +219,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to set the formnovalidate of the submit input
-*/
+	 * @testdox It should be possible to set the formnovalidate of the submit input
+	 */
 	public function test_formnovalidate(): void {
 		$submit = new Submit( 'test' );
 		$submit->formnovalidate( true );
@@ -231,8 +231,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to check if formnovalidate has been set the submit input
-*/
+	 * @testdox It should be possible to check if formnovalidate has been set the submit input
+	 */
 	public function test_has_formnovalidate(): void {
 		$submit = new Submit( 'test' );
 		$this->assertFalse( $submit->has_formnovalidate() );
@@ -241,8 +241,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to get the formnovalidate of the submit input
-*/
+	 * @testdox It should be possible to get the formnovalidate of the submit input
+	 */
 	public function test_get_formnovalidate(): void {
 		$submit = new Submit( 'test' );
 		$this->assertNull( $submit->get_formnovalidate() );
@@ -251,8 +251,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to clear the formnovalidate of the submit input
-*/
+	 * @testdox It should be possible to clear the formnovalidate of the submit input
+	 */
 	public function test_clear_formnovalidate(): void {
 		$submit = new Submit( 'test' );
 		$submit->attribute( 'formnovalidate', '1' );
@@ -262,8 +262,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to set the formtarget of the submit input
-*/
+	 * @testdox It should be possible to set the formtarget of the submit input
+	 */
 	public function test_formtarget(): void {
 		$submit = new Submit( 'test' );
 		$submit->formtarget( 'test' );
@@ -272,8 +272,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to check if formtarget has been set the submit input
-*/
+	 * @testdox It should be possible to check if formtarget has been set the submit input
+	 */
 	public function test_has_formtarget(): void {
 		$submit = new Submit( 'test' );
 		$this->assertFalse( $submit->has_formtarget() );
@@ -282,8 +282,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to get the formtarget of the submit input
-*/
+	 * @testdox It should be possible to get the formtarget of the submit input
+	 */
 	public function test_get_formtarget(): void {
 		$submit = new Submit( 'test' );
 		$this->assertNull( $submit->get_formtarget() );
@@ -292,8 +292,8 @@ class Test_Submit extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox It should be possible to clear the formtarget of the submit input
-*/
+	 * @testdox It should be possible to clear the formtarget of the submit input
+	 */
 	public function test_clear_formtarget(): void {
 		$submit = new Submit( 'test' );
 		$submit->attribute( 'formtarget', 'test' );

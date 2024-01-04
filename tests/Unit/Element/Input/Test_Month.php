@@ -38,7 +38,7 @@ class Test_Month extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Month input should return an input type of "email"
+ * @testdox A Month input should return an input type of "month"
 */
 	public function test_type(): void {
 		$month = new Month( 'test' );
@@ -46,7 +46,7 @@ class Test_Month extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Month input should return a type of email_input
+ * @testdox A Month input should return a type of month_input
 */
 	public function test_element_type(): void {
 		$month = new Month( 'test' );

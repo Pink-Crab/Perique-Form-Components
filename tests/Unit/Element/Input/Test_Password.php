@@ -37,32 +37,32 @@ class Test_Password extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Password input should return an input type of "TEXT"
-*/
+	 * @testdox A Password input should return an input type of "password"
+ 	 */
 	public function test_type(): void {
 		$password = new Password( 'test' );
 		$this->assertEquals( 'password', $password->get_input_type() );
 	}
 
 	/**
- * @testdox A Password input should return a type of password_input
-*/
+	 * @testdox A Password input should return a type of password_input
+ 	 */
 	public function test_element_type(): void {
 		$password = new Password( 'test' );
 		$this->assertEquals( 'password_input', $password->get_type() );
 	}
 
 	/**
- * @testdox By default the password field should sanitize values as strings.
-*/
+	 * @testdox By default the password field should sanitize values as strings.
+ 	 */
 	public function test_default_sanitizer(): void {
 		$password = new Password( 'test' );
 		$this->assertNull( $password->get_sanitizer() );
 	}
 
 	/**
- * @testdox A Password field should allow a single value to be set
-*/
+	 * @testdox A Password field should allow a single value to be set
+ 	 */
 	public function test_uses_single_value(): void {
 		$password = new Password( 'test' );
 		$this->assertTrue( usesTrait( Single_Value::class )( $password ) );

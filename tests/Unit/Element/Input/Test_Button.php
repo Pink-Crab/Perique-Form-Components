@@ -32,31 +32,31 @@ class Test_Button extends WP_UnitTestCase {
 	use \PinkCrab\Form_Components\Tests\Unit\Element\Shared_Field_Cases;
 
 	/**
- * @inheritDoc
-*/
+	 * @inheritDoc
+	 */
 	public function get_class_under_test(): string {
 		return Button::class;
 	}
 
 	/**
- * @testdox A Button input should return an input type of "email"
-*/
+	 * @testdox A Button input should return an input type of "button"
+	 */
 	public function test_type(): void {
 		$button = new Button( 'test' );
 		$this->assertEquals( 'button', $button->get_input_type() );
 	}
 
 	/**
- * @testdox A Button input should return a type of email_input
-*/
+	 * @testdox A Button input should return a type of button_input
+	*/
 	public function test_element_type(): void {
 		$button = new Button( 'test' );
 		$this->assertEquals( 'button_input', $button->get_type() );
 	}
 
 	/**
- * @testdox By default the Button field should sanitize values as integer using intval.
-*/
+	 * @testdox By default the Button field should sanitize values as integer using intval.
+	*/
 	public function test_default_sanitizer(): void {
 		$button = new Button( 'test' );
 		$this->assertEquals( Sanitize::TEXT, $button->get_sanitizer() );
@@ -67,8 +67,8 @@ class Test_Button extends WP_UnitTestCase {
 	####################################################################
 
 	/**
- * @testdox It should be possible to use an alias called text() to set the button value.
-*/
+	 * @testdox It should be possible to use an alias called text() to set the button value.
+	*/
 	public function test_text_alias(): void {
 		$button = new Button( 'test' );
 		$button->text( 'test' );

@@ -38,7 +38,7 @@ class Test_Tel extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Tel input should return an input type of "TEXT"
+ * @testdox A Tel input should return an input type of "tel"
 */
 	public function test_type(): void {
 		$tel = new Tel( 'test' );

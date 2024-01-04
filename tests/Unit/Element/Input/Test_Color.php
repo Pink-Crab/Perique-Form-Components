@@ -23,6 +23,7 @@ use PinkCrab\Form_Components\Element\Field\Input\Color;
  * @group unit
  * @group element
  * @group input
+ * @group color
  */
 class Test_Color extends WP_UnitTestCase {
 
@@ -33,13 +34,13 @@ class Test_Color extends WP_UnitTestCase {
 		return Color::class;
 	}
 
-	/** @testdox A Color input should return an input type of "email" */
+	/** @testdox A Color input should return an input type of "color" */
 	public function test_type(): void {
 		$color = new Color( 'test' );
 		$this->assertEquals( 'color', $color->get_input_type() );
 	}
 
-	/** @testdox A Color input should return a type of email_input */
+	/** @testdox A Color input should return a type of color_input */
 	public function test_element_type(): void {
 		$color = new Color( 'test' );
 		$this->assertEquals( 'color_input', $color->get_type() );

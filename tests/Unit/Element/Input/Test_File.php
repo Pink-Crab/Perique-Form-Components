@@ -25,7 +25,6 @@ use PinkCrab\Form_Components\Element\Field\Attribute\{Single_Value, Multiple, Di
  * @group input
  * @group file
  */
-* /
 class Test_File extends WP_UnitTestCase {
 
 	use \PinkCrab\Form_Components\Tests\Unit\Element\Shared_Field_Cases;

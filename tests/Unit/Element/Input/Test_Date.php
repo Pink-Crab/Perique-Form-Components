@@ -22,6 +22,7 @@ use PinkCrab\Form_Components\Element\Field\Input\Date;
  * @group unit
  * @group element
  * @group input
+ * @group date
  */
 class Test_Date extends WP_UnitTestCase {
 
@@ -32,13 +33,13 @@ class Test_Date extends WP_UnitTestCase {
 		return Date::class;
 	}
 	
-	/** @testdox A Date input should return an input type of "email" */
+	/** @testdox A Date input should return an input type of "date" */
 	public function test_type(): void {
 		$time = new Date( 'test' );
 		$this->assertEquals( 'date', $time->get_input_type() );
 	}
 
-	/** @testdox A Date input should return a type of email_input */
+	/** @testdox A Date input should return a type of date_input */
 	public function test_element_type(): void {
 		$time = new Date( 'test' );
 		$this->assertEquals( 'date_input', $time->get_type() );

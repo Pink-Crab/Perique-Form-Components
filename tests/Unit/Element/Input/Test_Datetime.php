@@ -17,7 +17,6 @@ namespace PinkCrab\Form_Components\Tests\Unit\Element\Input;
 use Closure;
 use WP_UnitTestCase;
 use PinkCrab\Form_Components\Element\Field\Input\Datetime;
-use function PinkCrab\FunctionConstructors\Objects\usesTrait;
 use PinkCrab\Form_Components\Element\Field\Attribute\{Range, Autocomplete, Placeholder, Datalist, Single_Value, Required, Read_Only};
 
 /**
@@ -38,7 +37,7 @@ class Test_Datetime extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Datetime input should return an input type of "email"
+ * @testdox A Datetime input should return an input type of "datetime"
 */
 	public function test_type(): void {
 		$time = new Datetime( 'test' );
@@ -46,7 +45,7 @@ class Test_Datetime extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Datetime input should return a type of email_input
+ * @testdox A Datetime input should return a type of datetime_input
 */
 	public function test_element_type(): void {
 		$time = new Datetime( 'test' );

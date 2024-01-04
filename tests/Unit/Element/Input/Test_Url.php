@@ -38,7 +38,7 @@ class Test_Url extends WP_UnitTestCase {
 	}
 
 	/**
- * @testdox A Url input should return an input type of "TEXT"
+ * @testdox A Url input should return an input type of "url"
 */
 	public function test_type(): void {
 		$url = new Url( 'test' );
