@@ -24,29 +24,38 @@ use PinkCrab\Form_Components\Element\Field\Attribute\{Range, Autocomplete, Place
  * @group unit
  * @group element
  * @group input
+ * @group month
  */
 class Test_Month extends WP_UnitTestCase {
 
 	use \PinkCrab\Form_Components\Tests\Unit\Element\Shared_Field_Cases;
 
-	/** @inheritDoc */
+	/**
+ * @inheritDoc
+*/
 	public function get_class_under_test(): string {
 		return Month::class;
 	}
 
-	/** @testdox A Month input should return an input type of "email" */
+	/**
+ * @testdox A Month input should return an input type of "email"
+*/
 	public function test_type(): void {
 		$month = new Month( 'test' );
 		$this->assertEquals( 'month', $month->get_input_type() );
 	}
 
-	/** @testdox A Month input should return a type of email_input */
+	/**
+ * @testdox A Month input should return a type of email_input
+*/
 	public function test_element_type(): void {
 		$month = new Month( 'test' );
 		$this->assertEquals( 'month_input', $month->get_type() );
 	}
 
-	/** @testdox By default the Month field should sanitize values as integer using intval. */
+	/**
+ * @testdox By default the Month field should sanitize values as integer using intval.
+*/
 	public function test_default_sanitizer(): void {
 		$month = new Month( 'test' );
 		$this->assertInstanceOf( Closure::class, $month->get_sanitizer() );
@@ -109,7 +118,8 @@ class Test_Month extends WP_UnitTestCase {
 
 	/**
 	 * @testdox By default the sanitizer format should be set to the standard HTML spec for this input type.
-	 * @dataProvider sanitizer_format_data */
+	 * @dataProvider sanitizer_format_data
+*/
 	public function test_default_sanitizer_format( $value, $expected ): void {
 		$month = new Month( 'test' );
 		$this->assertEquals(
@@ -118,7 +128,9 @@ class Test_Month extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox It should be possible to set the step by months with a simple helper */
+	/**
+ * @testdox It should be possible to set the step by months with a simple helper
+*/
 	public function test_step_by_months(): void {
 		$month = new Month( 'test' );
 		$month->step_by_months( 2 );

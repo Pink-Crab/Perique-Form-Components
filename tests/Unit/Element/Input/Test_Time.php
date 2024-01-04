@@ -23,29 +23,38 @@ use PinkCrab\Form_Components\Element\Field\Attribute\{Range, Autocomplete, Place
  * @group unit
  * @group element
  * @group input
+ * @group time
  */
 class Test_Time extends WP_UnitTestCase {
 
 	use \PinkCrab\Form_Components\Tests\Unit\Element\Shared_Field_Cases;
 
-	/** @inheritDoc */
+	/**
+ * @inheritDoc
+*/
 	public function get_class_under_test(): string {
 		return Time::class;
 	}
-	
-	/** @testdox A Time input should return an input type of "email" */
+
+	/**
+ * @testdox A Time input should return an input type of "email"
+*/
 	public function test_type(): void {
 		$time = new Time( 'test' );
 		$this->assertEquals( 'time', $time->get_input_type() );
 	}
 
-	/** @testdox A Time input should return a type of email_input */
+	/**
+ * @testdox A Time input should return a type of email_input
+*/
 	public function test_element_type(): void {
 		$time = new Time( 'test' );
 		$this->assertEquals( 'time_input', $time->get_type() );
 	}
 
-	/** @testdox By default the Time field should sanitize values as integer using intval. */
+	/**
+ * @testdox By default the Time field should sanitize values as integer using intval.
+*/
 	public function test_default_sanitizer(): void {
 		$time = new Time( 'test' );
 		$this->assertInstanceOf( Closure::class, $time->get_sanitizer() );
@@ -108,7 +117,8 @@ class Test_Time extends WP_UnitTestCase {
 
 	/**
 	 * @testdox By default the sanitizer format should be set to the standard HTML spec for this input type.
-	 * @dataProvider sanitizer_format_data */
+	 * @dataProvider sanitizer_format_data
+*/
 	public function test_default_sanitizer_format( $value, $expected ): void {
 		$time = new Time( 'test' );
 
@@ -122,25 +132,30 @@ class Test_Time extends WP_UnitTestCase {
 		$this->assertEquals( $expected, $sanitized === $value );
 	}
 
-	/** @testdox It should be possible to set the step value of a time field in seconds */
+	/**
+ * @testdox It should be possible to set the step value of a time field in seconds
+*/
 	public function test_set_step(): void {
 		$time = new Time( 'test' );
 		$time->step_by_seconds( 60 );
 		$this->assertEquals( 60, $time->get_step() );
 	}
 
-	/** @testdox It should be possible to set the step value of a time field in minutes */
+	/**
+ * @testdox It should be possible to set the step value of a time field in minutes
+*/
 	public function test_set_step_minutes(): void {
 		$time = new Time( 'test' );
 		$time->step_by_minutes( 60 );
 		$this->assertEquals( 3600, $time->get_step() );
 	}
 
-	/** @testdox It should be possible to set the step value of a time field in hours */
+	/**
+ * @testdox It should be possible to set the step value of a time field in hours
+*/
 	public function test_set_step_hours(): void {
 		$time = new Time( 'test' );
 		$time->step_by_hours( 24 );
 		$this->assertEquals( 86400, $time->get_step() );
 	}
-
 }

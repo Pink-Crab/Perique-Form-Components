@@ -25,29 +25,38 @@ use PinkCrab\Form_Components\Element\Field\Attribute\{Disabled, Read_Only, Requi
  * @group unit
  * @group element
  * @group input
+ * @group button
  */
 class Test_Button extends WP_UnitTestCase {
 
 	use \PinkCrab\Form_Components\Tests\Unit\Element\Shared_Field_Cases;
 
-	/** @inheritDoc */
+	/**
+ * @inheritDoc
+*/
 	public function get_class_under_test(): string {
 		return Button::class;
 	}
 
-	/** @testdox A Button input should return an input type of "email" */
+	/**
+ * @testdox A Button input should return an input type of "email"
+*/
 	public function test_type(): void {
 		$button = new Button( 'test' );
 		$this->assertEquals( 'button', $button->get_input_type() );
 	}
 
-	/** @testdox A Button input should return a type of email_input */
+	/**
+ * @testdox A Button input should return a type of email_input
+*/
 	public function test_element_type(): void {
 		$button = new Button( 'test' );
 		$this->assertEquals( 'button_input', $button->get_type() );
 	}
 
-	/** @testdox By default the Button field should sanitize values as integer using intval. */
+	/**
+ * @testdox By default the Button field should sanitize values as integer using intval.
+*/
 	public function test_default_sanitizer(): void {
 		$button = new Button( 'test' );
 		$this->assertEquals( Sanitize::TEXT, $button->get_sanitizer() );
@@ -57,7 +66,9 @@ class Test_Button extends WP_UnitTestCase {
 	######                     FIELD SPECIFIC                     ######
 	####################################################################
 
-	/** @testdox It should be possible to use an alias called text() to set the button value. */
+	/**
+ * @testdox It should be possible to use an alias called text() to set the button value.
+*/
 	public function test_text_alias(): void {
 		$button = new Button( 'test' );
 		$button->text( 'test' );
@@ -76,7 +87,7 @@ class Test_Button extends WP_UnitTestCase {
 	 */
 	public function attribute_methods(): array {
 		return array(
-			'disabled'      => array( 'disabled' ),
+			'disabled' => array( 'disabled' ),
 		);
 	}
 
@@ -85,10 +96,8 @@ class Test_Button extends WP_UnitTestCase {
 	 * @dataProvider attribute_methods
 	 */
 	public function test_has_attributes( string $method ): void {
-		$class = $this->get_class_under_test();
+		$class    = $this->get_class_under_test();
 		$instance = new $class( 'test' );
 		$this->assertTrue( method_exists( $instance, $method ) );
 	}
-
-
 }

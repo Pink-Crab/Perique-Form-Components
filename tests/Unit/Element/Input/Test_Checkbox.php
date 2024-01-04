@@ -21,29 +21,38 @@ use PinkCrab\Form_Components\Tests\Fixtures\Mock_Objects\Stringable_Stub;
  * @group unit
  * @group element
  * @group input
+ * @group checkbox
  */
 class Test_Checkbox extends WP_UnitTestCase {
 
 	use \PinkCrab\Form_Components\Tests\Unit\Element\Shared_Field_Cases;
 
-	/** @inheritDoc */
+	/**
+ * @inheritDoc
+*/
 	public function get_class_under_test(): string {
 		return Checkbox::class;
 	}
 
-	/** @testdox A Checkbox input should return an input type of "email" */
+	/**
+ * @testdox A Checkbox input should return an input type of "email"
+*/
 	public function test_type(): void {
 		$checkbox = new Checkbox( 'test' );
 		$this->assertEquals( 'checkbox', $checkbox->get_input_type() );
 	}
 
-	/** @testdox A Checkbox input should return a type of email_input */
+	/**
+ * @testdox A Checkbox input should return a type of email_input
+*/
 	public function test_element_type(): void {
 		$checkbox = new Checkbox( 'test' );
 		$this->assertEquals( 'checkbox_input', $checkbox->get_type() );
 	}
 
-	/** @testdox By default the Checkbox field should sanitize values as integer using intval. */
+	/**
+ * @testdox By default the Checkbox field should sanitize values as integer using intval.
+*/
 	public function test_default_sanitizer(): void {
 		$checkbox = new Checkbox( 'test' );
 		$this->assertNull( $checkbox->get_sanitizer() );
