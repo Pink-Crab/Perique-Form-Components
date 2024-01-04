@@ -15,12 +15,9 @@ declare(strict_types=1);
 namespace PinkCrab\Form_Components\Tests\Application;
 
 use PinkCrab\Perique\Application\App;
-use Dice\Dice;
-use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
-use PinkCrab\Perique\Services\Registration\Registration_Service;
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Perique\Application\Hooks;
+use PinkCrab\Form_Components\Module\Form_Components;
 
 trait Perique_App_Helper {
 
@@ -31,12 +28,14 @@ trait Perique_App_Helper {
 	 */
 	protected static function unset_app_instance(): void {
 		// Clear COMPONENT_ALIASES from hooks.
-		remove_all_filters( Hooks::COMPONENT_ALIASES );
+		\remove_all_filters( Hooks::COMPONENT_ALIASES );
+		\remove_all_filters( Hooks::APP_INIT_SET_DI_RULES );
 
-		$app = new App();
+		$app = new App( TEST_FIXTURES_DIR );
+		$app->set_view_path( TEST_FIXTURES_DIR );
 		Objects::set_property( $app, 'app_config', null );
 		Objects::set_property( $app, 'container', null );
-		Objects::set_property( $app, 'registration', null );
+		Objects::set_property( $app, 'module_manager', null );
 		Objects::set_property( $app, 'loader', null );
 		Objects::set_property( $app, 'booted', false );
 		$app = null;
@@ -55,10 +54,13 @@ trait Perique_App_Helper {
 	 * @return App
 	 */
 	protected function pre_populated_app_provider(): App {
-        return ( new \PinkCrab\Perique\Application\App_Factory(TEST_FIXTURES_DIR) )
-            ->with_wp_dice( true )
-            ->app_config( array( 'path' => array( 'view' => TEST_FIXTURES_DIR ) ) )
-            ->boot();
+		$r = ( new \PinkCrab\Perique\Application\App_Factory( TEST_FIXTURES_DIR ) )
+			->set_base_view_path( TEST_FIXTURES_DIR )
+			->module( Form_Components::class )
+			->default_setup();
+
+
+		return $r->boot();
 	}
 
 }

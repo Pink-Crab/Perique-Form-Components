@@ -9,7 +9,6 @@
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: form-comp
- *
  */
 
 use PinkCrab\Perique\Application\App;
@@ -24,36 +23,36 @@ use PinkCrab\Form_Components\Component\Partial\Field_Wrapper_Start;
 // use PinkCrab\Form_Components\Component\Field\Input_Component;
 // use PinkCrab\Form_Components\Component\Field\Input_Component;
 
-
+// return;
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-return;
+// return;
 if ( isset( $_POST['submit'] ) ) {
 	var_dump( $_POST );
-};
+}
 
 ?>
 
-<form action="" method="post">
+<!-- <form action="" method="post">
 	<input type="time" name="time" id="time" value="12:00:00" >
 <input type="color" id="appt" name="appt">
 	<input type="submit" name="submit" value="Send">
 	
-</form>
+</form> -->
 
 <?php
-die;
-return;
+// die;
+// return;
 
 // Require the autoloader so we can dynamically include the rest of the classes.
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
 add_filter(
 	Hooks::COMPONENT_ALIASES,
-	function( array $aliases ): array {
+	function ( array $aliases ): array {
 		$custom_aliases = array(
 			Input_Component::class     => __DIR__ . '/template/component/field/input-text.php',
 			Field_Wrapper_Start::class => __DIR__ . '/template/component/partial/field-wrapper-start.php',
@@ -72,7 +71,9 @@ add_filter(
 );
 
 
-/** @var App $app */
+/**
+ * @var App $app
+*/
 $app = ( new \PinkCrab\Perique\Application\App_Factory( __DIR__ ) )
 	->with_wp_dice( true )
 	->app_config( array( 'path' => array( 'view' => __DIR__ . '/tests/Fixtures' ) ) )
@@ -80,7 +81,7 @@ $app = ( new \PinkCrab\Perique\Application\App_Factory( __DIR__ ) )
 
 add_action(
 	'init',
-	function() use ( $app ) {
+	function () use ( $app ) {
 		// return;
 		if ( is_admin() ) {
 			return;
@@ -89,10 +90,10 @@ add_action(
 		$app::view()->render(
 			'tests/Fixtures/PHP/input-fields.php',
 			array(
-				'text' => ( new Text( 'input__text' ) )
+				'text' => Text::make( 'input__text' )
 					->label( 'Input Text Field' )
 					->set_existing( 'Existing Value' )
-					->id( 'input__text__id' )
+					// ->id( 'input__text__id' )
 					->add_class( 'input__text__class' )
 					->data( 'input__text', 'data__value' )
 					->attributes( array( 'input__text' => 'attr__value' ) )
