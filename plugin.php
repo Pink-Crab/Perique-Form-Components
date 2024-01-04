@@ -9,7 +9,6 @@
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: form-comp
- *
  */
 
 use PinkCrab\Perique\Application\App;
@@ -24,7 +23,7 @@ use PinkCrab\Form_Components\Component\Partial\Field_Wrapper_Start;
 // use PinkCrab\Form_Components\Component\Field\Input_Component;
 // use PinkCrab\Form_Components\Component\Field\Input_Component;
 
-
+// return;
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -33,7 +32,7 @@ if ( ! defined( 'WPINC' ) ) {
 // return;
 if ( isset( $_POST['submit'] ) ) {
 	var_dump( $_POST );
-};
+}
 
 ?>
 
@@ -53,7 +52,7 @@ require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
 add_filter(
 	Hooks::COMPONENT_ALIASES,
-	function( array $aliases ): array {
+	function ( array $aliases ): array {
 		$custom_aliases = array(
 			Input_Component::class     => __DIR__ . '/template/component/field/input-text.php',
 			Field_Wrapper_Start::class => __DIR__ . '/template/component/partial/field-wrapper-start.php',
@@ -72,7 +71,9 @@ add_filter(
 );
 
 
-/** @var App $app */
+/**
+ * @var App $app
+*/
 $app = ( new \PinkCrab\Perique\Application\App_Factory( __DIR__ ) )
 	->with_wp_dice( true )
 	->app_config( array( 'path' => array( 'view' => __DIR__ . '/tests/Fixtures' ) ) )
@@ -80,7 +81,7 @@ $app = ( new \PinkCrab\Perique\Application\App_Factory( __DIR__ ) )
 
 add_action(
 	'init',
-	function() use ( $app ) {
+	function () use ( $app ) {
 		// return;
 		if ( is_admin() ) {
 			return;
