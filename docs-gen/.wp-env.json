@@ -1,0 +1,11 @@
+{
+	"core": null,
+	"phpVersion": "8.3",
+	"plugins": [],
+	"mappings": {
+		"wp-content/mu-plugins": "./mu-plugin",
+		"wp-content/plugins/Perique-Form-Components": ".."
+	},
+	"port": 57893,
+	"testsPort": 57894
+}
