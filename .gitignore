@@ -13,3 +13,4 @@ tests/.env
 tests/test-results
 /docs-gen/screenshots
 /docs-gen/.wp-env
+plugin.php
