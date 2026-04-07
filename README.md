@@ -250,4 +250,4 @@ $this->component( Make::form( 'enquiry', fn( $f ) => $f
 
 ## Change Log
 
-* 2.0.0 - Support for Perique V2, complete rewrite with View Components
+* 2.1.0 - Initial release for Perique 2.1.*
