@@ -78,6 +78,4 @@ trait Step {
 		}
 		return $this;
 	}
-
-
 }

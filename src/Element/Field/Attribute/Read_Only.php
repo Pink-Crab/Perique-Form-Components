@@ -57,5 +57,4 @@ trait Read_Only {
 	public function is_readonly(): bool {
 		return $this->has_attribute( 'readonly' );
 	}
-
 }

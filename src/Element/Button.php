@@ -79,9 +79,10 @@ class Button implements Element {
 	}
 
 	/**
-	 * Get all attributes with style classes injected.
+	 * Get a single attribute with style classes injected for 'class'.
 	 *
-	 * @return array<string, string|int|float|bool|null>
+	 * @param string $attribute
+	 * @return string|int|float|bool|null
 	 */
 	public function get_attribute( string $attribute ) {
 		if ( 'class' === $attribute ) {
@@ -145,8 +146,8 @@ class Button implements Element {
 	 * @param string $name
 	 * @return static
 	 */
-	public static function make( string $name ): self {
-		return new static( $name );
+	public static function make( string $name ): static {
+		return new static( $name ); // @phpstan-ignore new.static
 	}
 
 	/**

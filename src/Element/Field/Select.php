@@ -36,11 +36,27 @@ class Select extends Field {
 	use Label, Single_Value, Notification, Options, Disabled, Required, Multiple, Autocomplete, Size;
 
 	/**
+	 * Holds the value of the field (may be array when multiple).
+	 *
+	 * @var string|int|float|null|bool|array<string>
+	 */
+	protected $value;
+
+	/**
 	 * The default sanitizer for the select.
 	 *
-	 * @var string|callable|null
+	 * @var callable(mixed):mixed|null
 	 */
 	protected $sanitizer = Sanitize::TEXT;
+
+	/**
+	 * Returns the value of the field.
+	 *
+	 * @return string|int|float|null|bool|array<string>
+	 */
+	public function get_value() {
+		return $this->value;
+	}
 
 	/**
 	 * Holds the optgroups.

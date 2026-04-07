@@ -29,12 +29,12 @@ class Arrays {
 	/**
 	 * Checks if an array is a list.
 	 *
-	 * @param array $array
+	 * @param array<mixed> $values
 	 * @return bool
 	 */
-	public static function is_list( array $array ): bool {
+	public static function is_list( array $values ): bool {
 		return function_exists( 'array_is_list' )
-		? \array_is_list( $array )
-		: array_keys( $array ) === range( 0, count( $array ) - 1 );
+		? \array_is_list( $values )
+		: array_keys( $values ) === range( 0, count( $values ) - 1 );
 	}
 }

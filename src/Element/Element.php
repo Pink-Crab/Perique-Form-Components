@@ -103,18 +103,18 @@ interface Element {
 	/**
 	 * Adds a class to the class attribute.
 	 *
-	 * @param string $class
+	 * @param string $class_name
 	 * @return static
 	 */
-	public function add_wrapper_class( string $class ): self;
+	public function add_wrapper_class( string $class_name ): self;
 
 	/**
 	 * Remove a class from the class attribute.
 	 *
-	 * @param string $class
+	 * @param string $class_name
 	 * @return static
 	 */
-	public function remove_wrapper_class( string $class ): self;
+	public function remove_wrapper_class( string $class_name ): self;
 
 
 	/**

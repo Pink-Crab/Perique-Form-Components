@@ -109,5 +109,4 @@ trait Range {
 	public function range( $min, $max ): self {
 		return $this->min( $min )->max( $max );
 	}
-
 }

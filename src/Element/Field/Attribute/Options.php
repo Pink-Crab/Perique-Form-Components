@@ -60,5 +60,4 @@ trait Options {
 	public function get_options(): array {
 		return $this->options;
 	}
-
 }

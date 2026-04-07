@@ -29,7 +29,7 @@ use PinkCrab\Form_Components\Util\Sanitize;
 use PinkCrab\Form_Components\Element\Field\Attribute\Multiple;
 use PinkCrab\Form_Components\Element\Field\Input\Abstract_Input;
 use function PinkCrab\FunctionConstructors\GeneralFunctions\{pipe};
-use function \PinkCrab\FunctionConstructors\Strings\split as splitString;
+use function PinkCrab\FunctionConstructors\Strings\split as splitString;
 use function PinkCrab\FunctionConstructors\Arrays\{filter, map, toString};
 use PinkCrab\Form_Components\Element\Field\Attribute\{Autocomplete, Datalist, Disabled, Length, Pattern, Placeholder, Read_Only, Required, Single_Value, Size};
 

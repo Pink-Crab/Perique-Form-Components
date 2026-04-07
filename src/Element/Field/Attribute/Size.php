@@ -56,7 +56,7 @@ trait Size {
 	 */
 	public function get_size(): ?string {
 		return $this->has_attribute( 'size' )
-			? $this->get_attribute( 'size' )
+			? (string) $this->get_attribute( 'size' )
 			: null;
 	}
 
@@ -68,5 +68,4 @@ trait Size {
 	public function has_size(): bool {
 		return $this->has_attribute( 'size' );
 	}
-
 }

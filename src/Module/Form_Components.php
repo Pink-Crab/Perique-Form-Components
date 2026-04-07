@@ -56,7 +56,7 @@ class Form_Components implements Module {
 
 	public function __construct() {
 		// If no lib root is set, use the default.
-		$this->lib_root = $lib_root ?? dirname( __DIR__, 2 );
+		$this->lib_root = dirname( __DIR__, 2 );
 		$this->include_template_paths();
 	}
 

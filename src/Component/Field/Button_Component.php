@@ -55,7 +55,7 @@ class Button_Component extends Abstract_Field_Component {
 		$this->type  = $this->field->get_type();
 		$this->text  = \strtolower( $this->field->get_text() );
 
-		$this->style = $field->get_style() ?? Style_Provider::get_default_style();
+		$this->style = $field->get_style();
 
 		$this->set_attributes( Attributes::combine( $field->get_attributes(), $attributes, array( 'class' ) ) );
 

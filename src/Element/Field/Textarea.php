@@ -38,7 +38,7 @@ class Textarea extends Field {
 	/**
 	 * The default sanitizer for the textarea.
 	 *
-	 * @var string|callable|null
+	 * @var callable(mixed):mixed|null
 	 */
 	protected $sanitizer = Sanitize::TEXTAREA;
 

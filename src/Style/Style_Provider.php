@@ -44,7 +44,7 @@ class Style_Provider {
 	 */
 	public static function set_default_style( string $style ): void {
 		// If not a valid style, throw exception.
-		if ( ! implementsInterface( Style::class )( $style ) ) {
+		if ( ! implementsInterface( Style::class )( $style ) ) { // @phpstan-ignore argument.type
 			throw new \InvalidArgumentException( 'Defined style must implement Style interface' );
 		}
 

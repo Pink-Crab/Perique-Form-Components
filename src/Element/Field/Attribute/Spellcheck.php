@@ -79,5 +79,4 @@ trait Spellcheck {
 		}
 		return $this;
 	}
-
 }

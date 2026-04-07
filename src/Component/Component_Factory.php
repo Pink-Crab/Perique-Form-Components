@@ -44,6 +44,7 @@ use PinkCrab\Form_Components\Component\Field\Radio_Group_Component;
 use PinkCrab\Form_Components\Component\Field\Checkbox_Group_Component;
 use PinkCrab\Form_Components\Component\Field\Textarea_Component;
 use PinkCrab\Perique\Services\View\Component\Component;
+use PinkCrab\Form_Components\Element\Field\Input\Abstract_Input;
 use PinkCrab\Form_Components\Element\{Field, Group, Fieldset, Element, Button};
 use function PinkCrab\FunctionConstructors\Objects\isInstanceOf;
 
@@ -94,9 +95,7 @@ class Component_Factory {
 			case $element instanceof Textarea:
 				return $this->from_textarea( $element );
 
-			case $element instanceof Field:
-				/*@var Field $element */
-				$element = $element;
+			case $element instanceof Abstract_Input:
 				return $this->from_field( $element );
 
 			case $element instanceof Group:
@@ -123,12 +122,12 @@ class Component_Factory {
 	}
 
 	/**
-	 * Create a component from a given field.
+	 * Create a component from a given input field.
 	 *
-	 * @param Field $field
+	 * @param Abstract_Input $field
 	 * @return Component
 	 */
-	public function from_field( Field $field ): Component {
+	public function from_field( Abstract_Input $field ): Component {
 		return new Input_Component( $field );
 	}
 
@@ -219,6 +218,4 @@ class Component_Factory {
 	public function from_html( Raw_HTML $html ): Component {
 		return new Raw_HTML_Component( $html );
 	}
-
-
 }

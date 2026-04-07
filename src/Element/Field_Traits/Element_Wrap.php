@@ -81,7 +81,6 @@ trait Element_Wrap {
 	 */
 	public function get_after(): ?string {
 		return $this->after;
-
 	}
 
 	/**
@@ -91,7 +90,6 @@ trait Element_Wrap {
 	 */
 	public function has_before(): bool {
 		return ! is_null( $this->before );
-
 	}
 
 	/**
@@ -102,6 +100,4 @@ trait Element_Wrap {
 	public function has_after(): bool {
 		return ! is_null( $this->after );
 	}
-
-
 }

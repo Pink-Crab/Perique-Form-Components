@@ -53,7 +53,7 @@ trait Fields {
 	/**
 	 * Rules for the fields
 	 *
-	 * @var array<string, Validator>
+	 * @var array<string, Validatable>
 	 */
 	protected $validation_rules = array();
 
@@ -92,11 +92,11 @@ trait Fields {
 		foreach ( $elements as $element ) {
 			// Cascade parent style to children without an explicit style.
 			if ( method_exists( $element, 'has_explicit_style' )
-				&& ! $element->has_explicit_style()
+				&& ! $element->has_explicit_style() // @phpstan-ignore method.notFound
 				&& method_exists( $this, 'get_style' )
-				&& null !== $this->get_style()
+				&& method_exists( $element, 'style' )
 			) {
-				$element->style( $this->get_style() );
+				$element->style( $this->get_style() ); // @phpstan-ignore method.notFound
 			}
 
 			$this->fields[ $element->get_name() ] = $element;
@@ -143,7 +143,7 @@ trait Fields {
 	/**
 	 * Get all validation rules.
 	 *
-	 * @return array<string, Validator>
+	 * @return array<string, Validatable>
 	 */
 	public function get_validation_rules(): array {
 		return $this->validation_rules;
@@ -153,12 +153,12 @@ trait Fields {
 	 * Get all the sub fields, by recursively checking for sub fields.
 	 *
 	 * @param Element $field
-	 * @return array<Field>
+	 * @return array<Element>
 	 */
 	protected function get_sub_fields( Element $field ): array {
 
 		// If the field doesn't use this trait, return an array of just this field.
-		if ( ! usesTrait( Fields::class )( $field ) ) {
+		if ( ! usesTrait( Fields::class )( $field ) || ! method_exists( $field, 'get_fields' ) ) {
 			return array( $field );
 		}
 

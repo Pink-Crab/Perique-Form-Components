@@ -76,9 +76,13 @@ trait Form_Style {
 	/**
 	 * Returns the fields style.
 	 *
-	 * @return Style|null
+	 * @return Style
+	 * @throws \RuntimeException If style has not been set.
 	 */
-	public function get_style(): ?Style {
+	public function get_style(): Style {
+		if ( $this->form_style === null ) {
+			throw new \RuntimeException( 'Style has not been set.' );
+		}
 		return $this->form_style;
 	}
 }

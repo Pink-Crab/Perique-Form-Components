@@ -57,5 +57,4 @@ trait Required {
 	public function is_required(): bool {
 		return $this->has_attribute( 'required' );
 	}
-
 }

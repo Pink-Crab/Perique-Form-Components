@@ -63,15 +63,11 @@ class Input_Component extends Abstract_Field_Component {
 
 		// If field uses the datalist trait and passed attribute doesnt include list.
 		if ( usesTrait( Datalist::class )( $this->field )
-		&& ! isset( $attributes['list'] )
+		&& method_exists( $this->field, 'get_datalist_key' )
 		) {
 			$attributes['list'] = $this->field->get_datalist_key();
 		}
 
 		return $attributes;
 	}
-
-
-
-
 }

@@ -82,14 +82,15 @@ trait Datalist {
 	/**
 	 * Add an array of options to the datalist.
 	 *
-	 * @param array<string, string|null> $options
+	 * @param array<int|string, string|null> $options
 	 * @return self
 	 */
 	public function datalist_items( array $options ): self {
 
 		// If the options are a list, convert to key value.
 		if ( Arrays::is_list( $options ) ) {
-			$options = \array_flip( $options );
+			/** @var array<string, null> $options */
+			$options = \array_flip( array_filter( $options, 'is_string' ) );
 		}
 
 		foreach ( $options as $value => $label ) {
@@ -134,7 +135,4 @@ trait Datalist {
 	public function get_datalist_items(): array {
 		return $this->datalist_items;
 	}
-
-
-
 }

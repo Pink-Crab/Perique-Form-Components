@@ -68,5 +68,4 @@ trait Placeholder {
 			? (string) $this->get_attribute( 'placeholder' )
 			: null;
 	}
-
 }

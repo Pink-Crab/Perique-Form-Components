@@ -62,8 +62,8 @@ class Nonce implements Element {
 	 * @param string $name   The nonce field name.
 	 * @return static
 	 */
-	public static function make( string $action, string $name = '_wpnonce' ): self {
-		return new static( $action, $name );
+	public static function make( string $action, string $name = '_wpnonce' ): static {
+		return new static( $action, $name ); // @phpstan-ignore new.static
 	}
 
 	/**

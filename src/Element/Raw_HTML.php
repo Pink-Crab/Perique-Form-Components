@@ -65,8 +65,8 @@ class Raw_HTML implements Element {
 	 * @param string $html
 	 * @return static
 	 */
-	public static function make( string $name, string $html = '' ): self {
-		return new static( $name, $html );
+	public static function make( string $name, string $html = '' ): static {
+		return new static( $name, $html ); // @phpstan-ignore new.static
 	}
 
 	/** @inheritDoc */

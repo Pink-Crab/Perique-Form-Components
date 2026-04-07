@@ -35,11 +35,11 @@ trait Notification {
 	/**
 	 * Ensures can only be used on actual fields.
 	 */
-	abstract public function add_wrapper_class( string $value): Element;
-	abstract public function get_wrapper_attribute( string $attribute);
-	abstract public function add_class( string $value): Element;
-	abstract public function get_attribute( string $attribute);
-	abstract public function get_style(): ?Style;
+	abstract public function add_wrapper_class( string $class_name ): Element;
+	abstract public function get_wrapper_attribute( string $attribute );
+	abstract public function add_class( string $class_name ): Element;
+	abstract public function get_attribute( string $attribute );
+	abstract public function get_style(): Style;
 
 
 	/**
@@ -59,7 +59,8 @@ trait Notification {
 	/**
 	 * Sets the notification text.
 	 *
-	 * @param ?string $notification
+	 * @param string $notification
+	 * @param string $type
 	 * @return static
 	 */
 	public function notification( string $notification, string $type = 'info' ): self {
@@ -86,8 +87,7 @@ trait Notification {
 	 * @return string
 	 */
 	public function get_notification(): string {
-		return $this->notification;
-
+		return $this->notification ?? '';
 	}
 
 	/**
@@ -164,7 +164,7 @@ trait Notification {
 		$existing_notification_template = \sprintf( '#%s#', \str_replace( '%s', '(info|success|warning|error)', $this->get_style()->notification_template() ) );
 
 		// Remove any possible wrapper classes.
-		$wrapper = $this->get_wrapper_attribute( 'class' );
+		$wrapper = (string) ( $this->get_wrapper_attribute( 'class' ) ?? '' );
 		if ( $wrapper ) {
 			// Check if class contains any notification types.
 			if ( preg_match( $existing_notification_template, $wrapper ) ) {
@@ -174,7 +174,7 @@ trait Notification {
 		}
 
 		// Remove any possible field classes.
-		$field = $this->get_attribute( 'class' );
+		$field = (string) ( $this->get_attribute( 'class' ) ?? '' );
 		if ( $field ) {
 			// Check if class contains any notification types.
 			if ( preg_match( $existing_notification_template, $field ) ) {
@@ -183,5 +183,4 @@ trait Notification {
 			}
 		}
 	}
-
 }

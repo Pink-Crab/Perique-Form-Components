@@ -56,5 +56,4 @@ trait Checked {
 	public function is_checked(): bool {
 		return $this->has_attribute( 'checked' );
 	}
-
 }

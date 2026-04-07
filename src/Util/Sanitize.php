@@ -40,7 +40,7 @@ class Sanitize {
 	/**
 	 * Sanitizes a string like text input.
 	 *
-	 * @param string|int|float|Stringable $value
+	 * @param string|int|float $value
 	 * @return string
 	 */
 	public static function text( $value ): string {
@@ -50,7 +50,7 @@ class Sanitize {
 	/**
 	 * Sanitizes a string like textarea.
 	 *
-	 * @param string|int|float|Stringable $value
+	 * @param string|int|float $value
 	 * @return string
 	 */
 	public static function textarea( $value ): string {
@@ -60,7 +60,7 @@ class Sanitize {
 	/**
 	 * Sanitizes a string like a URL.
 	 *
-	 * @param string|int|float|Stringable $value
+	 * @param string|int|float $value
 	 * @return string
 	 */
 	public static function url( $value ): string {
@@ -70,7 +70,7 @@ class Sanitize {
 	/**
 	 * Sanitizes a string as hex colour.
 	 *
-	 * @param string|int|float|Stringable $value
+	 * @param string|int|float $value
 	 * @return string
 	 */
 	public static function hex_color( $value ): string {
@@ -80,7 +80,7 @@ class Sanitize {
 	/**
 	 * Sanitizes a string as a email.
 	 *
-	 * @param string|int|float|Stringable $value
+	 * @param string|int|float $value
 	 * @return string
 	 */
 	public static function email( $value ): string {
@@ -90,33 +90,29 @@ class Sanitize {
 	/**
 	 * Sanitizes a value as a number.
 	 *
-	 * @param string|int|float|Stringable $value
+	 * @param string|int|float|null $value
 	 * @return int|float
 	 */
 	public static function number( $value ) {
-		// Cast stringable to string.
-		if ( is_object( $value ) && method_exists( $value, '__toString' ) ) {
-			$value = (string) $value;
+		if ( null === $value ) {
+			return 0;
 		}
 
-		// Check if number is a whole number or a float using regex
-		return is_numeric( $value ) && ! is_float( $value )
-			? (int) $value
-			: (float) $value;
+		// Check if number is a whole number or a float
+		if ( is_numeric( $value ) && ! is_float( $value ) && false === strpos( (string) $value, '.' ) ) {
+			return (int) $value;
+		}
+
+		return (float) $value;
 	}
 
 	/**
 	 * Sanitizes a value as is (pass through).
 	 *
-	 * @param string|int|float|Stringable $value
+	 * @param string|int|float $value
 	 * @return string|int|float
 	 */
 	public static function noop( $value ) {
-		// Cast stringable to string.
-		if ( is_object( $value ) && method_exists( $value, '__toString' ) ) {
-			$value = (string) $value;
-		}
-
 		return $value;
 	}
 

@@ -30,10 +30,10 @@ class Attributes {
 	 * Combines two arrays of attributes, with the second overwriting the first
 	 * and allowing the concatenation of defined indexes.
 	 *
-	 * @param array<string, string|int|float|null> $attributes
-	 * @param array<string, string|int|float|null> $overwrites
+	 * @param array<string, string|int|float|bool|null> $attributes
+	 * @param array<string, string|int|float|bool|null> $overwrites
 	 * @param array<string> $concat_keys
-	 * @return array<string, string|int|float|null>
+	 * @return array<string, string|int|float|bool|null>
 	 */
 	public static function combine( array $attributes, array $overwrites, array $concat_keys = array() ): array {
 		foreach ( $overwrites as $key => $value ) {
@@ -44,7 +44,7 @@ class Attributes {
 			}
 
 			// Trim any whitespace.
-			$attributes[ Esc::attribute( $key ) ] = preg_replace( '/\s+/', ' ', trim( $attributes[ Esc::attribute( $key ) ] ) );
+			$attributes[ Esc::attribute( $key ) ] = preg_replace( '/\s+/', ' ', trim( (string) $attributes[ Esc::attribute( $key ) ] ) );
 		}
 		return $attributes;
 	}
@@ -53,7 +53,7 @@ class Attributes {
 	 * Parses an array of attributes into a string.
 	 * Treats any index with a null value, as a flag.
 	 *
-	 * @param array<string, string|int|float|null> $attributes
+	 * @param array<string, string|int|float|bool|null> $attributes
 	 * @return string
 	 */
 	public static function parse( array $attributes ): string {

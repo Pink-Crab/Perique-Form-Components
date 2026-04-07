@@ -32,7 +32,7 @@ class Label_Component extends Component {
 	protected $label;
 
 	/** @var string */
-	protected $for;
+	protected $for_name;
 
 	/** @var string */
 	protected $label_class;
@@ -41,12 +41,12 @@ class Label_Component extends Component {
 	 * Creates an instance of the component.
 	 *
 	 * @param string $label
-	 * @param string $for
+	 * @param string $for_name
 	 * @param string $label_class
 	 */
-	public function __construct( string $label, string $for, string $label_class = '' ) {
+	public function __construct( string $label, string $for_name, string $label_class = '' ) {
 		$this->label       = $label;
-		$this->for         = $for;
+		$this->for_name    = $for_name;
 		$this->label_class = $label_class;
 	}
 

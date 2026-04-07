@@ -157,8 +157,8 @@ abstract class Field implements Element {
 	 * @param string $name
 	 * @return static
 	 */
-	public static function make( string $name ): self {
-		return new static( $name );
+	public static function make( string $name ): static {
+		return new static( $name ); // @phpstan-ignore new.static
 	}
 
 	/**

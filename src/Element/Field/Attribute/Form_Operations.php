@@ -250,5 +250,4 @@ trait Form_Operations {
 		}
 		return $this;
 	}
-
 }

@@ -115,18 +115,18 @@ trait Attributes {
 	/**
 	 * Adds a class to the class attribute.
 	 *
-	 * @param string $class
+	 * @param string $class_name
 	 * @return static
 	 */
-	public function add_class( string $class ): self {
+	public function add_class( string $class_name ): self {
 		$classes = $this->get_attribute( 'class' );
 		if ( ! $classes ) {
-			return $this->attribute( 'class', $class );
+			return $this->attribute( 'class', $class_name );
 		}
 
 		$classes = explode( ' ', strval( $classes ) );
-		if ( ! in_array( $class, $classes, true ) ) {
-			$classes[] = $class;
+		if ( ! in_array( $class_name, $classes, true ) ) {
+			$classes[] = $class_name;
 		}
 
 		return $this->attribute( 'class', implode( ' ', $classes ) );
@@ -135,18 +135,18 @@ trait Attributes {
 	/**
 	 * Remove a class from the class attribute.
 	 *
-	 * @param string $class
+	 * @param string $class_name
 	 * @return static
 	 */
-	public function remove_class( string $class ): self {
+	public function remove_class( string $class_name ): self {
 		$classes = $this->get_attribute( 'class' );
 		if ( null === $classes ) {
 			return $this;
 		}
 
 		$classes = explode( ' ', strval( $classes ) );
-		if ( in_array( $class, $classes, true ) ) {
-			$classes = array_diff( $classes, array( $class ) );
+		if ( in_array( $class_name, $classes, true ) ) {
+			$classes = array_diff( $classes, array( $class_name ) );
 		}
 
 		return $this->attribute( 'class', implode( ' ', $classes ) );
@@ -173,6 +173,4 @@ trait Attributes {
 	public function data( string $key, $value ): self {
 		return $this->attribute( 'data-' . $key, $value );
 	}
-
-
 }

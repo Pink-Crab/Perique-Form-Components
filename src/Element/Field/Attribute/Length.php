@@ -106,5 +106,4 @@ trait Length {
 
 		return $this;
 	}
-
 }

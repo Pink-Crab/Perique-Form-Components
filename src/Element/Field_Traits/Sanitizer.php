@@ -71,10 +71,10 @@ trait Sanitizer {
 	 */
 	public function sanitize( $value ) {
 		if ( $this->has_sanitizer() ) {
-			return call_user_func( $this->get_sanitizer(), $value ); /* phpstan:ignore-line */
+			/** @var callable(mixed):mixed $sanitizer */
+			$sanitizer = $this->get_sanitizer();
+			return call_user_func( $sanitizer, $value );
 		}
 		return $value;
 	}
-
-
 }

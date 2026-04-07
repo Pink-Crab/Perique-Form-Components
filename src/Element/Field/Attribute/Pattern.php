@@ -70,5 +70,4 @@ trait Pattern {
 			? (string) $this->get_attribute( 'pattern' )
 			: null;
 	}
-
 }

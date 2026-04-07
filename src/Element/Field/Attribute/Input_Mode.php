@@ -79,5 +79,4 @@ trait Input_Mode {
 		}
 		return $this;
 	}
-
 }

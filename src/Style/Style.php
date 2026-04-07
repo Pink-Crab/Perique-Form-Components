@@ -108,5 +108,4 @@ interface Style {
 	 * @return string
 	 */
 	public function legend_class(): string;
-
 }

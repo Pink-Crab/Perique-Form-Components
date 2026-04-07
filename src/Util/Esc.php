@@ -32,20 +32,20 @@ class Esc {
 	/**
 	 * Esc an attribute value/key
 	 *
-	 * @param string|int|float|Stringable $value
+	 * @param string|int|float|bool|null $value
 	 * @return string
 	 */
 	public static function attribute( $value ): string {
-		return esc_attr( (string) $value );
+		return esc_attr( (string) ( $value ?? '' ) );
 	}
 
 	/**
 	 * Esc a string for use in a HTML attribute.
 	 *
-	 * @param string|int|float|Stringable $value
+	 * @param string|int|float|bool|null $value
 	 * @return string
 	 */
 	public static function html( $value ): string {
-		return esc_html( (string) $value );
+		return esc_html( (string) ( $value ?? '' ) );
 	}
 }

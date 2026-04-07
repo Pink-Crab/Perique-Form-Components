@@ -41,7 +41,7 @@ class Checkbox extends Abstract_Input {
 	/**
 	 * Sets the checked values of the radio.
 	 *
-	 * @param string|float|int|Stringable $value
+	 * @param string|float|int|\Stringable $value
 	 * @return self
 	 */
 	public function value( $value ): self {

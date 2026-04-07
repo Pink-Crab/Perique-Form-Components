@@ -64,5 +64,4 @@ trait Validation {
 	public function get_validator(): ?Validator {
 		return $this->validator;
 	}
-
 }
