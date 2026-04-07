@@ -35,6 +35,13 @@ trait Form_Style {
 	protected $form_style;
 
 	/**
+	 * Whether the style was explicitly set (not just defaulted).
+	 *
+	 * @var bool
+	 */
+	protected bool $explicit_style = false;
+
+	/**
 	 * Sets the style for the form.
 	 *
 	 * @param Style $style
@@ -43,6 +50,27 @@ trait Form_Style {
 	protected function set_style( Style $style ) {
 		$this->form_style = $style;
 		return $this;
+	}
+
+	/**
+	 * Sets the style fluently and marks it as explicit.
+	 *
+	 * @param Style $style
+	 * @return static
+	 */
+	public function style( Style $style ): self {
+		$this->form_style     = $style;
+		$this->explicit_style = true;
+		return $this;
+	}
+
+	/**
+	 * Check if a style was explicitly set.
+	 *
+	 * @return bool
+	 */
+	public function has_explicit_style(): bool {
+		return $this->explicit_style;
 	}
 
 	/**

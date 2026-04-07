@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Form_Components\Element\Field\Attribute;
 
-use PinkCrab\Form_Components\Utils;
+use PinkCrab\Form_Components\Util\Esc;
 use PinkCrab\Form_Components\Element\Field\Attribute\Step;
 
 /**
@@ -52,8 +52,8 @@ trait Range {
 	 * @return static
 	 */
 	public function min( $min ): self {
-		if ( null !== $min && \is_numeric( $min ) ) {
-			$this->attribute( 'min', Utils::esc_attr( $min ) );
+		if ( null !== $min ) {
+			$this->attribute( 'min', Esc::attribute( $min ) );
 		} else {
 			$this->remove_attribute( 'min' );
 		}
@@ -79,8 +79,8 @@ trait Range {
 	 * @return static
 	 */
 	public function max( $max ): self {
-		if ( null !== $max && \is_numeric( $max ) ) {
-			$this->attribute( 'max', Utils::esc_attr( $max ) );
+		if ( null !== $max ) {
+			$this->attribute( 'max', Esc::attribute( $max ) );
 		} else {
 			$this->remove_attribute( 'max' );
 		}

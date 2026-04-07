@@ -63,7 +63,7 @@ class Month extends Abstract_Input {
 
 	/**
 	 * Step by months
-	 * 
+	 *
 	 * @param int $step
 	 * @return self
 	 */

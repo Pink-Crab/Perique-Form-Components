@@ -76,4 +76,37 @@ interface Style {
 	 */
 	public function button_class(): string;
 
+	/**
+	 * Field control class template.
+	 *
+	 * Base class for input/select/textarea elements.
+	 * Expects a single %s for the field type.
+	 *
+	 * @return string
+	 */
+	public function field_control_class(): string;
+
+	/**
+	 * Group option label class template.
+	 *
+	 * Expects a single %s for the group type (checkbox-group, radio-group).
+	 *
+	 * @return string
+	 */
+	public function group_option_class(): string;
+
+	/**
+	 * Label element class.
+	 *
+	 * @return string
+	 */
+	public function label_class(): string;
+
+	/**
+	 * Legend element class.
+	 *
+	 * @return string
+	 */
+	public function legend_class(): string;
+
 }

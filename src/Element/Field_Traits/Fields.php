@@ -25,9 +25,9 @@ declare( strict_types=1 );
 
 namespace PinkCrab\Form_Components\Element\Field_Traits;
 
-use PinkCrab\Form_Components\Utils;
 use Respect\Validation\Validator;
 use Respect\Validation\Validatable;
+use function PinkCrab\FunctionConstructors\Objects\usesTrait;
 use PinkCrab\Form_Components\Element\Field;
 use PinkCrab\Form_Components\Element\Element;
 use function PinkCrab\FunctionConstructors\Arrays\mapKey;
@@ -83,6 +83,29 @@ trait Fields {
 	}
 
 	/**
+	 * Adds pre-built Element instances as fields.
+	 *
+	 * @param Element ...$elements
+	 * @return static
+	 */
+	public function fields( Element ...$elements ): self {
+		foreach ( $elements as $element ) {
+			// Cascade parent style to children without an explicit style.
+			if ( method_exists( $element, 'has_explicit_style' )
+				&& ! $element->has_explicit_style()
+				&& method_exists( $this, 'get_style' )
+				&& null !== $this->get_style()
+			) {
+				$element->style( $this->get_style() );
+			}
+
+			$this->fields[ $element->get_name() ] = $element;
+			$this->add_field_from_instance( $element );
+		}
+		return $this;
+	}
+
+	/**
 	 * Sets all keys and validation rules from the passed field.
 	 *
 	 * @param Element $element
@@ -95,7 +118,7 @@ trait Fields {
 			$this->field_names[ esc_attr( $field->get_name() ) ] = esc_attr( $field->get_name() );
 
 			// Get the validation rules, if any.
-			if ( Utils::class_uses_trait( $field, Validation::class )
+			if ( usesTrait( Validation::class )( $field )
 			&& $field->has_validator()
 			) {
 				/** @var Validator $validator */
@@ -135,7 +158,7 @@ trait Fields {
 	protected function get_sub_fields( Element $field ): array {
 
 		// If the field doesn't use this trait, return an array of just this field.
-		if ( ! Utils::class_uses_trait( $field, Fields::class ) ) {
+		if ( ! usesTrait( Fields::class )( $field ) ) {
 			return array( $field );
 		}
 

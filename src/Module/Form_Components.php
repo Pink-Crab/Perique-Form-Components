@@ -35,8 +35,18 @@ use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Form_Components\Component\Field\Input_Component;
 use PinkCrab\Form_Components\Component\Field\Label_Component;
+use PinkCrab\Form_Components\Component\Field\Select_Component;
+use PinkCrab\Form_Components\Component\Field\Raw_HTML_Component;
+use PinkCrab\Form_Components\Component\Field\Textarea_Component;
+use PinkCrab\Form_Components\Component\Field\Radio_Group_Component;
+use PinkCrab\Form_Components\Component\Field\Checkbox_Group_Component;
+use PinkCrab\Form_Components\Component\Field\Button_Component;
+use PinkCrab\Form_Components\Component\Form\Form_Component;
+use PinkCrab\Form_Components\Component\Form\Group_Component;
+use PinkCrab\Form_Components\Component\Form\Fieldset_Component;
 use PinkCrab\Form_Components\Component\Partial\Nonce_Component;
 use PinkCrab\Form_Components\Component\Field\Datalist_Component;
+use PinkCrab\Form_Components\Component\Field\Notification_Component;
 use PinkCrab\Form_Components\Component\Partial\Field_Wrapper_End;
 use PinkCrab\Form_Components\Component\Partial\Field_Wrapper_Start;
 
@@ -60,15 +70,22 @@ class Form_Components implements Module {
 			Hooks::COMPONENT_ALIASES,
 			function( array $aliases ): array {
 				$custom_aliases = array(
-					Input_Component::class     => $this->resolve_template_path( 'field/input-text.php' ),
-					Field_Wrapper_Start::class => $this->resolve_template_path( 'partial/field-wrapper-start.php' ),
-					Field_Wrapper_End::class   => $this->resolve_template_path( 'partial/field-wrapper-end.php' ),
-					// Nonce_Component::class        => $this->resolve_template_path('partial/nonce.php'),
-					Label_Component::class     => $this->resolve_template_path( 'field/label.php' ),
-					Datalist_Component::class  => $this->resolve_template_path( 'field/datalist.php' ),
-				// Group_Component::class        => $this->resolve_template_path('partial/group.php'),
-				// Button_Component::class       => $this->resolve_template_path('field/button.php'),
-				// Notification_Component::class => $this->resolve_template_path('field/notification.php'),
+					Input_Component::class          => $this->resolve_template_path( 'field/input-text.php' ),
+					Textarea_Component::class       => $this->resolve_template_path( 'field/textarea.php' ),
+					Select_Component::class         => $this->resolve_template_path( 'field/select.php' ),
+					Raw_HTML_Component::class       => $this->resolve_template_path( 'field/raw-html.php' ),
+					Checkbox_Group_Component::class => $this->resolve_template_path( 'field/checkbox-group.php' ),
+					Radio_Group_Component::class    => $this->resolve_template_path( 'field/radio-group.php' ),
+					Field_Wrapper_Start::class      => $this->resolve_template_path( 'partial/field-wrapper-start.php' ),
+					Field_Wrapper_End::class        => $this->resolve_template_path( 'partial/field-wrapper-end.php' ),
+					Nonce_Component::class          => $this->resolve_template_path( 'partial/nonce.php' ),
+					Label_Component::class          => $this->resolve_template_path( 'field/label.php' ),
+					Datalist_Component::class       => $this->resolve_template_path( 'field/datalist.php' ),
+					Button_Component::class         => $this->resolve_template_path( 'field/button.php' ),
+					Notification_Component::class   => $this->resolve_template_path( 'field/notification.php' ),
+					Form_Component::class           => $this->resolve_template_path( 'form/form.php' ),
+					Group_Component::class          => $this->resolve_template_path( 'partial/group.php' ),
+					Fieldset_Component::class       => $this->resolve_template_path( 'form/fieldset.php' ),
 				);
 				return array_merge( $aliases, $custom_aliases );
 			},
@@ -84,10 +101,7 @@ class Form_Components implements Module {
 	 */
 	private function resolve_template_path( string $template ): string {
 		return $this->lib_root . '/template/component/' . rtrim( $template, \DIRECTORY_SEPARATOR );
-
 	}
-
-
 
 	## Unused methods
 

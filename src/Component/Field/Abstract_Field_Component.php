@@ -28,7 +28,6 @@ declare( strict_types=1 );
 
 namespace PinkCrab\Form_Components\Component\Field;
 
-use PinkCrab\Form_Components\Utils;
 use PinkCrab\Form_Components\Element\Element;
 use PinkCrab\Form_Components\Util\Attributes;
 use PinkCrab\Form_Components\Util\Esc;
@@ -50,6 +49,9 @@ abstract class Abstract_Field_Component extends Component {
 
 	/** @var string */
 	protected $wrapper_attributes;
+
+	/** @var bool */
+	protected $show_wrapper = true;
 
 	/**
 	 * Returns the base attributes.
@@ -77,6 +79,11 @@ abstract class Abstract_Field_Component extends Component {
 		// Replace all defaults with attributes.
 		$this->field_attributes = Attributes::parse( $attributes );
 
+		// Set wrapper visibility from field.
+		if ( $this->field instanceof \PinkCrab\Form_Components\Element\Field ) {
+			$this->show_wrapper = $this->field->has_wrapper();
+		}
+
 		$this->set_wrapper_attributes();
 	}
 
@@ -86,26 +93,15 @@ abstract class Abstract_Field_Component extends Component {
 	 * @return void
 	 */
 	protected function set_wrapper_attributes(): void {
-		// Add the ID if set.
-		$attributes = array();
+		$attributes = $this->field->get_wrapper_attributes();
 
-		// Add the ID if set.
-		$attributes['id'] = Esc::attribute(
-			$this->field->has_wrapper_attribute( 'id' )
-				? $this->field->get_wrapper_attribute( 'id' )
-				: "field_{$this->field->get_name()}_wrapper"
-		);
-
-		// Add the field type to class.
-		$attributes['class'] = Esc::attribute( "field_{$this->field->get_type()}" );
-
-		// Add any additional classes
-		if ( $this->field->has_wrapper_attribute( 'class' ) ) {
-			$attributes['class'] .= Esc::attribute( " {$this->field->get_wrapper_attribute('class')}" );
+		// Ensure ID is set.
+		if ( ! isset( $attributes['id'] ) ) {
+			$attributes['id'] = Esc::attribute( "field_{$this->field->get_name()}_wrapper" );
 		}
 
-		// Add the wrapper attributes.
-		$this->wrapper_attributes = Attributes::parse( $attributes + $this->field->get_wrapper_attributes() );
+		// Parse the wrapper attributes.
+		$this->wrapper_attributes = Attributes::parse( $attributes );
 	}
 
 	/**

@@ -1,0 +1,2110 @@
+"use strict";
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// packages/php-wasm/node/src/index.ts
+var src_exports = {};
+__export(src_exports, {
+  FileLockManagerForPosix: () => FileLockManagerForPosix,
+  FileLockManagerForWindows: () => FileLockManagerForWindows,
+  bindUserSpace: () => bindUserSpace,
+  createNodeFsMountHandler: () => createNodeFsMountHandler,
+  getPHPLoaderModule: () => getPHPLoaderModule,
+  loadNodeRuntime: () => loadNodeRuntime,
+  useHostFilesystem: () => useHostFilesystem,
+  withNetworking: () => withNetworking,
+  withXdebug: () => withXdebug
+});
+module.exports = __toCommonJS(src_exports);
+var import_node_polyfills = require("@php-wasm/node-polyfills");
+
+// packages/php-wasm/node/src/lib/get-php-loader-module.ts
+var import_universal = require("@php-wasm/universal");
+async function getPHPLoaderModule(version = import_universal.LatestSupportedPHPVersion) {
+  try {
+    switch (version) {
+      case "8.5":
+        return (await import("@php-wasm/node-8-5")).getPHPLoaderModule();
+      case "8.4":
+        return (await import("@php-wasm/node-8-4")).getPHPLoaderModule();
+      case "8.3":
+        return (await import("@php-wasm/node-8-3")).getPHPLoaderModule();
+      case "8.2":
+        return (await import("@php-wasm/node-8-2")).getPHPLoaderModule();
+      case "8.1":
+        return (await import("@php-wasm/node-8-1")).getPHPLoaderModule();
+      case "8.0":
+        return (await import("@php-wasm/node-8-0")).getPHPLoaderModule();
+      case "7.4":
+        return (await import("@php-wasm/node-7-4")).getPHPLoaderModule();
+    }
+    throw new Error(`Unsupported PHP version ${version}`);
+  } catch (errorCandidate) {
+    if (!errorCandidate || typeof errorCandidate !== "object") {
+      throw errorCandidate;
+    }
+    const error = errorCandidate;
+    if (error.message?.includes(
+      `SyntaxError: Cannot use 'import.meta' outside a module`
+    )) {
+      throw new Error(
+        `Node.js crashed on a 'import.meta' statement. This happens when running in a node:vm context. Some testing libraries like Jest use heavily customized runtime contexts, involving node:vm, jest-runtime, and custom require() implementations. These contexts do not support 'import.meta' statements and, by extension, cannot run the @php-wasm/node package. Consider using the --experimental-vm-modules flag or switching to a different test runner such as vitest.`,
+        {
+          cause: error
+        }
+      );
+    } else if (error?.code === `ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING` || error?.code === `ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING_FLAG` || error?.message?.includes(
+      `A dynamic import callback was invoked without --experimental-vm-modules`
+    ) || error?.message?.includes(
+      `A dynamic import callback was not specified`
+    ) || error?.message?.includes(`Must use import to load ES Module`)) {
+      throw new Error(
+        `Node.js crashed on a 'import()' statement. This happens when running in a node:vm context. Some testing libraries like Jest use runtime contexts, involving node:vm, jest-runtime, or other custom require() implementations. These contexts do not support import() statements and, by extension, cannot run the @php-wasm/node package. Consider using the --experimental-vm-modules flag or switching to a different test runner such as vitest.`,
+        {
+          cause: error
+        }
+      );
+    }
+    throw error;
+  }
+}
+
+// packages/php-wasm/node/src/lib/networking/outbound-ws-to-tcp-proxy.ts
+var dns = __toESM(require("dns"), 1);
+var http = __toESM(require("http"), 1);
+var net2 = __toESM(require("net"), 1);
+var import_ws = require("ws");
+
+// packages/php-wasm/node/src/lib/networking/utils.ts
+var net = __toESM(require("net"), 1);
+var import_logger = require("@php-wasm/logger");
+function debugLog(message, ...args) {
+  if (process.env["DEV"] && !process.env["TEST"]) {
+    import_logger.logger.log(message, ...args);
+  }
+}
+async function findFreePorts(n) {
+  const serversPromises = [];
+  for (let i = 0; i < n; i++) {
+    serversPromises.push(listenOnRandomPort());
+  }
+  const servers = await Promise.all(serversPromises);
+  const ports = [];
+  for (const server of servers) {
+    const address = server.address();
+    ports.push(address.port);
+    server.close();
+  }
+  return ports;
+}
+function listenOnRandomPort() {
+  return new Promise((resolve) => {
+    const server = net.createServer();
+    server.listen(0, () => {
+      resolve(server);
+    });
+  });
+}
+
+// packages/php-wasm/node/src/lib/networking/outbound-ws-to-tcp-proxy.ts
+function log(...args) {
+  debugLog("[WS Server]", ...args);
+}
+function lookupIPv4(hostname) {
+  return new Promise((resolve, reject) => {
+    dns.lookup(hostname, { family: 4 }, (err, address) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(address);
+      }
+    });
+  });
+}
+function prependByte(chunk, byte) {
+  if (typeof chunk === "string") {
+    chunk = String.fromCharCode(byte) + chunk;
+  } else if (chunk instanceof ArrayBuffer || "byteLength" in chunk) {
+    const buffer = new Uint8Array(chunk.byteLength + 1);
+    buffer[0] = byte;
+    buffer.set(new Uint8Array(chunk), 1);
+    chunk = buffer.buffer;
+  } else {
+    log({ chunk });
+    throw new Error("Unsupported chunk type: " + typeof chunk);
+  }
+  return chunk;
+}
+var COMMAND_CHUNK = 1;
+var COMMAND_SET_SOCKETOPT = 2;
+function addSocketOptionsSupportToWebSocketClass(WebSocketConstructor) {
+  return class PHPWasmWebSocketConstructor extends WebSocketConstructor {
+    // @ts-ignore
+    send(chunk, callback) {
+      return this.sendCommand(COMMAND_CHUNK, chunk, callback);
+    }
+    setSocketOpt(optionClass, optionName, optionValue) {
+      return this.sendCommand(
+        COMMAND_SET_SOCKETOPT,
+        new Uint8Array([optionClass, optionName, optionValue]).buffer,
+        () => void 0
+      );
+    }
+    sendCommand(commandType, chunk, callback) {
+      return WebSocketConstructor.prototype.send.call(
+        this,
+        prependByte(chunk, commandType),
+        callback
+      );
+    }
+  };
+}
+function initOutboundWebsocketProxyServer(listenPort, listenHost = "127.0.0.1") {
+  log(`Binding the WebSockets server to ${listenHost}:${listenPort}...`);
+  const webServer = http.createServer((request, response) => {
+    response.writeHead(403, { "Content-Type": "text/plain" });
+    response.write(
+      "403 Permission Denied\nOnly websockets are allowed here.\n"
+    );
+    response.end();
+  });
+  return new Promise((resolve) => {
+    webServer.listen(listenPort, listenHost, function() {
+      const wsServer = new import_ws.WebSocketServer({ server: webServer });
+      wsServer.on("connection", onWsConnect);
+      resolve(webServer);
+    });
+  });
+}
+async function onWsConnect(client, request) {
+  const clientAddr = client?._socket?.remoteAddress || client.url;
+  const clientLog = function(...args) {
+    log(" " + clientAddr + ": ", ...args);
+  };
+  clientLog(
+    "WebSocket connection from : " + clientAddr + " at URL " + (request ? request.url : client.upgradeReq.url)
+  );
+  clientLog(
+    "Version " + client.protocolVersion + ", subprotocol: " + client.protocol
+  );
+  const reqUrl = new URL(`ws://0.0.0.0` + request.url);
+  const reqTargetPort = Number(reqUrl.searchParams.get("port"));
+  const reqTargetHost = reqUrl.searchParams.get("host");
+  if (!reqTargetPort || !reqTargetHost) {
+    clientLog("Missing host or port information");
+    client.close(3e3);
+    return;
+  }
+  if (reqTargetPort < 0 || reqTargetPort > 65535) {
+    clientLog("Invalid port number: " + reqTargetPort);
+    client.send([]);
+    client.close(3e3);
+    return;
+  }
+  let target;
+  const recvQueue = [];
+  function flushMessagesQueue() {
+    while (recvQueue.length > 0) {
+      const msg = recvQueue.pop();
+      const commandType = msg[0];
+      clientLog("flushing", { commandType }, msg);
+      if (commandType === COMMAND_CHUNK) {
+        target.write(msg.slice(1));
+      } else if (commandType === COMMAND_SET_SOCKETOPT) {
+        const SOL_SOCKET = 1;
+        const SO_KEEPALIVE = 9;
+        const IPPROTO_TCP = 6;
+        const TCP_NODELAY = 1;
+        if (msg[1] === SOL_SOCKET && msg[2] === SO_KEEPALIVE) {
+          target.setKeepAlive(msg[3]);
+        } else if (msg[1] === IPPROTO_TCP && msg[2] === TCP_NODELAY) {
+          target.setNoDelay(msg[3]);
+        }
+      } else {
+        clientLog("Unknown command type: " + commandType);
+        process.exit();
+      }
+    }
+  }
+  client.on("message", function(msg) {
+    recvQueue.unshift(msg);
+    if (target) {
+      flushMessagesQueue();
+    }
+  });
+  client.on("close", function(code, reason) {
+    clientLog(
+      "WebSocket client disconnected: " + code + " [" + reason + "]"
+    );
+    if (target) {
+      target.end();
+    }
+  });
+  client.on("error", function(a) {
+    clientLog("WebSocket client error: " + a);
+    target.end();
+  });
+  let reqTargetIp;
+  if (net2.isIP(reqTargetHost) === 0) {
+    clientLog("resolving " + reqTargetHost + "... ");
+    try {
+      reqTargetIp = await lookupIPv4(reqTargetHost);
+      clientLog("resolved " + reqTargetHost + " -> " + reqTargetIp);
+    } catch (e) {
+      clientLog("can't resolve " + reqTargetHost + " due to:", e);
+      client.send([]);
+      setTimeout(() => {
+        client.close(3e3);
+      });
+      return;
+    }
+  } else {
+    reqTargetIp = reqTargetHost;
+  }
+  clientLog(
+    "Opening a socket connection to " + reqTargetIp + ":" + reqTargetPort
+  );
+  target = net2.createConnection(reqTargetPort, reqTargetIp, function() {
+    clientLog("Connected to target");
+    flushMessagesQueue();
+  });
+  target.on("data", function(data) {
+    try {
+      client.send(data);
+    } catch {
+      clientLog("Client closed, cleaning up target");
+      target.end();
+    }
+  });
+  target.on("end", function() {
+    clientLog("target disconnected");
+    client.close();
+  });
+  target.on("error", function(e) {
+    clientLog("target connection error", e);
+    client.send([]);
+    setTimeout(() => {
+      client.close(3e3);
+      try {
+        target.end();
+      } catch {
+      }
+    });
+  });
+}
+
+// packages/php-wasm/node/src/lib/networking/inbound-tcp-to-ws-proxy.ts
+var import_net = require("net");
+var import_ws2 = require("ws");
+function log2(...args) {
+  debugLog("[TCP Server]", ...args);
+}
+function addTCPServerToWebSocketServerClass(wsListenPort, WSServer) {
+  return class PHPWasmWebSocketServer extends WSServer {
+    constructor(options, callback) {
+      const requestedPort = options.port;
+      options.port = wsListenPort;
+      listenTCPToWSProxy({
+        tcpListenPort: requestedPort,
+        wsConnectPort: wsListenPort
+      });
+      super(options, callback);
+    }
+  };
+}
+function listenTCPToWSProxy(options) {
+  options = {
+    wsConnectHost: "127.0.0.1",
+    ...options
+  };
+  const { tcpListenPort, wsConnectHost, wsConnectPort } = options;
+  const server = (0, import_net.createServer)();
+  server.on("connection", function handleConnection(tcpSource) {
+    const inBuffer = [];
+    const wsTarget = new import_ws2.WebSocket(
+      `ws://${wsConnectHost}:${wsConnectPort}/`
+    );
+    wsTarget.binaryType = "arraybuffer";
+    function wsSend(data) {
+      wsTarget.send(new Uint8Array(data));
+    }
+    wsTarget.addEventListener("open", function() {
+      log2("Outbound WebSocket connection established");
+      while (inBuffer.length > 0) {
+        wsSend(inBuffer.shift());
+      }
+    });
+    wsTarget.addEventListener("message", (e) => {
+      log2(
+        "WS->TCP message:",
+        new TextDecoder().decode(e.data)
+      );
+      tcpSource.write(Buffer.from(e.data));
+    });
+    wsTarget.addEventListener("close", () => {
+      log2("WebSocket connection closed");
+      tcpSource.end();
+    });
+    tcpSource.on("data", function(data) {
+      log2("TCP->WS message:", data);
+      if (wsTarget.readyState === import_ws2.WebSocket.OPEN) {
+        while (inBuffer.length > 0) {
+          wsSend(inBuffer.shift());
+        }
+        wsSend(data);
+      } else {
+        inBuffer.push(data);
+      }
+    });
+    tcpSource.once("close", function() {
+      log2("TCP connection closed");
+      wsTarget.close();
+    });
+    tcpSource.on("error", function() {
+      log2("TCP connection error");
+      wsTarget.close();
+    });
+  });
+  server.listen(tcpListenPort, function() {
+    log2("TCP server listening");
+  });
+}
+
+// packages/php-wasm/node/src/lib/networking/with-networking.ts
+async function withNetworking(phpModuleArgs = {}) {
+  const [inboundProxyWsServerPort, outboundProxyWsServerPort] = await findFreePorts(2);
+  const outboundNetworkProxyServer = await initOutboundWebsocketProxyServer(
+    outboundProxyWsServerPort
+  );
+  return {
+    ...phpModuleArgs,
+    outboundNetworkProxyServer,
+    websocket: {
+      ...phpModuleArgs["websocket"] || {},
+      url: (_, host, port) => {
+        const query = new URLSearchParams({
+          host,
+          port
+        }).toString();
+        return `ws://127.0.0.1:${outboundProxyWsServerPort}/?${query}`;
+      },
+      subprotocol: "binary",
+      decorator: addSocketOptionsSupportToWebSocketClass,
+      serverDecorator: addTCPServerToWebSocketServerClass.bind(
+        null,
+        inboundProxyWsServerPort
+      )
+    }
+  };
+}
+
+// packages/php-wasm/node/src/lib/load-runtime.ts
+var import_universal12 = require("@php-wasm/universal");
+
+// packages/php-wasm/node/src/lib/wasm-user-space.ts
+var import_promises = require("dns/promises");
+function bindUserSpace({ fileLockManager }, {
+  pid,
+  memory,
+  constants: {
+    F_RDLCK,
+    F_WRLCK,
+    F_UNLCK,
+    F_GETFL,
+    O_ACCMODE,
+    O_RDONLY,
+    O_WRONLY,
+    O_APPEND,
+    O_NONBLOCK,
+    F_SETFL,
+    F_GETLK,
+    F_SETLK,
+    F_SETLKW,
+    SEEK_SET,
+    SEEK_CUR,
+    SEEK_END,
+    LOCK_SH,
+    LOCK_EX,
+    LOCK_NB,
+    LOCK_UN
+  },
+  errnoCodes: { EBADF, EINVAL, EAGAIN, EWOULDBLOCK },
+  wasmImports: { builtin_fcntl64, builtin_fd_close, js_wasm_trace },
+  wasmExports: { wasm_get_end_offset },
+  syscalls: { getStreamFromFD },
+  FS,
+  PROXYFS,
+  NODEFS
+}) {
+  class VarArgsAccessor {
+    constructor(argsAddr) {
+      this.argsAddr = argsAddr;
+    }
+    getNextAsPointer() {
+      return this.getNextAsInt();
+    }
+    getNextAsInt() {
+      const fourByteOffset = this.argsAddr >> 2;
+      const value = memory.HEAP32.get(fourByteOffset);
+      this.argsAddr += 4;
+      return value;
+    }
+  }
+  const locking = {
+    /*
+     * This is a set of possibly locked file descriptors.
+     *
+     * When a file descriptor is closed, we need to release any associated held by this process.
+     * Instead of trying remember and forget file descriptors as they are locked and unlocked,
+     * we just track file descriptors we have locked before and try an unlock when they are closed.
+     */
+    maybeLockedFds: /* @__PURE__ */ new Set(),
+    lockStateToFcntl: {
+      shared: F_RDLCK,
+      exclusive: F_WRLCK,
+      unlocked: F_UNLCK
+    },
+    fcntlToLockState: {
+      [F_RDLCK]: "shared",
+      [F_WRLCK]: "exclusive",
+      [F_UNLCK]: "unlocked"
+    },
+    is_path_to_shared_fs(path2) {
+      const { node } = FS.lookupPath(path2, { noent_okay: true });
+      if (!node) {
+        return false;
+      }
+      if (node.mount.type !== PROXYFS) {
+        return !!node.isSharedFS;
+      }
+      const nodePath = PROXYFS.realPath(node);
+      const backingFs = node?.mount?.opts?.["fs"];
+      if (backingFs) {
+        const { node: backingNode } = backingFs.lookupPath(nodePath, {
+          noent_okay: true
+        });
+        return !!backingNode?.isSharedFS;
+      }
+      return false;
+    },
+    get_fd_access_mode(fd) {
+      return builtin_fcntl64(fd, F_GETFL) & O_ACCMODE;
+    },
+    get_vfs_path_from_fd(fd) {
+      try {
+        return [FS.readlink(`/proc/self/fd/${fd}`), 0];
+      } catch {
+        return [null, EBADF];
+      }
+    },
+    get_native_path_from_vfs_path(vfsPath) {
+      const { node } = FS.lookupPath(vfsPath, {
+        noent_okay: true
+      });
+      if (!node) {
+        throw new Error(`No node found for VFS path ${vfsPath}`);
+      }
+      if (node.mount.type === NODEFS) {
+        return NODEFS.realPath(node);
+      } else if (node.mount.type === PROXYFS) {
+        const { node: backingNode, path: backingPath } = node.mount.opts["fs"].lookupPath(vfsPath);
+        js_wasm_trace(
+          "backingNode for %s: %s",
+          vfsPath,
+          backingPath,
+          backingNode
+        );
+        return backingNode.mount.type.realPath(backingNode);
+      } else {
+        throw new Error(
+          `Unsupported filesystem type for path ${vfsPath}`
+        );
+      }
+    },
+    get_native_fd_from_emscripten_fd(fd) {
+      try {
+        const stream = getStreamFromFD(fd);
+        if (stream.nfd === void 0) {
+          return [null, EBADF];
+        }
+        return [stream.nfd, 0];
+      } catch {
+        return [null, EBADF];
+      }
+    },
+    check_lock_params(fd, l_type) {
+      const accessMode = locking.get_fd_access_mode(fd);
+      if (l_type === F_WRLCK && accessMode === O_RDONLY || l_type === F_RDLCK && accessMode === O_WRONLY) {
+        js_wasm_trace(
+          "check_lock_params(%d, %d, %d) EBADF",
+          fd,
+          l_type,
+          accessMode
+        );
+        return EBADF;
+      }
+      return 0;
+    }
+  };
+  const emscripten_flock_l_type_offset = 0;
+  const emscripten_flock_l_whence_offset = 2;
+  const emscripten_flock_l_start_offset = 8;
+  const emscripten_flock_l_len_offset = 16;
+  const emscripten_flock_l_pid_offset = 24;
+  function readFlockStruct(flockStructAddress) {
+    return {
+      l_type: memory.HEAP16.get(
+        // Shift right by 1 to divide by 2^1.
+        flockStructAddress + emscripten_flock_l_type_offset >> 1
+      ),
+      l_whence: memory.HEAP16.get(
+        // Shift right by 1 to divide by 2^1.
+        flockStructAddress + emscripten_flock_l_whence_offset >> 1
+      ),
+      l_start: memory.HEAP64.get(
+        // Shift right by 3 to divide by 2^3.
+        flockStructAddress + emscripten_flock_l_start_offset >> 3
+      ),
+      l_len: memory.HEAP64.get(
+        // Shift right by 3 to divide by 2^3.
+        flockStructAddress + emscripten_flock_l_len_offset >> 3
+      ),
+      l_pid: memory.HEAP32.get(
+        // Shift right by 2 to divide by 2^2.
+        flockStructAddress + emscripten_flock_l_pid_offset >> 2
+      )
+    };
+  }
+  function updateFlockStruct(flockStructAddress, fields) {
+    if (fields.l_type !== void 0) {
+      memory.HEAP16.set(
+        // Shift right by 1 to divide by 2^1.
+        flockStructAddress + emscripten_flock_l_type_offset >> 1,
+        fields.l_type
+      );
+    }
+    if (fields.l_whence !== void 0) {
+      memory.HEAP16.set(
+        // Shift right by 1 to divide by 2^1.
+        flockStructAddress + emscripten_flock_l_whence_offset >> 1,
+        fields.l_whence
+      );
+    }
+    if (fields.l_start !== void 0) {
+      memory.HEAP64.set(
+        // Shift right by 3 to divide by 2^3.
+        flockStructAddress + emscripten_flock_l_start_offset >> 3,
+        fields.l_start
+      );
+    }
+    if (fields.l_len !== void 0) {
+      memory.HEAP64.set(
+        // Shift right by 3 to divide by 2^3.
+        flockStructAddress + emscripten_flock_l_len_offset >> 3,
+        fields.l_len
+      );
+    }
+    if (fields.l_pid !== void 0) {
+      memory.HEAP32.set(
+        // Shift right by 2 to divide by 2^2.
+        flockStructAddress + emscripten_flock_l_pid_offset >> 2,
+        fields.l_pid
+      );
+    }
+  }
+  function getBaseAddress(fd, whence, startOffset) {
+    let baseAddress;
+    switch (whence) {
+      case SEEK_SET:
+        baseAddress = 0n;
+        break;
+      case SEEK_CUR:
+        try {
+          const stream = getStreamFromFD(fd);
+          baseAddress = FS.llseek(stream, 0, whence);
+        } catch (e) {
+          js_wasm_trace(
+            "get_base_address(%d, %d, %d) getStreamFromFD error %s",
+            fd,
+            whence,
+            startOffset,
+            e
+          );
+          return [null, EINVAL];
+        }
+        break;
+      case SEEK_END:
+        baseAddress = wasm_get_end_offset(fd);
+        break;
+      default:
+        return [null, EINVAL];
+    }
+    if (baseAddress == -1) {
+      return [null, EBADF];
+    }
+    const resolvedOffset = baseAddress + startOffset;
+    if (resolvedOffset < 0) {
+      return [null, EINVAL];
+    }
+    return [resolvedOffset, 0];
+  }
+  function fcntl64(fd, cmd, varargs) {
+    js_wasm_trace("fcntl64(%d, %d)", fd, cmd);
+    if (!fileLockManager) {
+      js_wasm_trace(
+        "fcntl64(%d, %d) file lock manager is not available. delegate to Emscripten builtin fcntl64.",
+        fd,
+        cmd
+      );
+      return builtin_fcntl64(fd, cmd, varargs);
+    }
+    switch (cmd) {
+      case F_GETLK: {
+        const reportUnlockedFileByDefault = function reportUnlockedFileByDefault2() {
+          updateFlockStruct(flockStructAddr, {
+            l_type: F_UNLCK
+          });
+          return 0;
+        };
+        js_wasm_trace("fcntl(%d, F_GETLK)", fd);
+        const [vfsPath, vfsPathErrno] = locking.get_vfs_path_from_fd(fd);
+        if (vfsPathErrno !== 0) {
+          js_wasm_trace(
+            "fcntl(%d, F_GETLK) %s get_vfs_path_from_fd errno %d",
+            fd,
+            vfsPath,
+            vfsPathErrno
+          );
+          return -EBADF;
+        }
+        const varArgsAccessor = new VarArgsAccessor(varargs);
+        const flockStructAddr = varArgsAccessor.getNextAsPointer();
+        if (!locking.is_path_to_shared_fs(vfsPath) || fileLockManager === void 0) {
+          js_wasm_trace(
+            "fcntl(%d, F_GETLK) locking is not implemented for non-NodeFS path '%s'",
+            fd,
+            vfsPath
+          );
+          return reportUnlockedFileByDefault();
+        }
+        const flockStruct = readFlockStruct(flockStructAddr);
+        if (!(flockStruct.l_type in locking.fcntlToLockState)) {
+          return -EINVAL;
+        }
+        const paramsCheckErrno = locking.check_lock_params(
+          fd,
+          flockStruct.l_type
+        );
+        if (paramsCheckErrno !== 0) {
+          js_wasm_trace(
+            "fcntl(%d, F_GETLK) %s check_lock_params errno %d",
+            fd,
+            vfsPath,
+            paramsCheckErrno
+          );
+          return -EINVAL;
+        }
+        const requestedLockType = locking.fcntlToLockState[flockStruct.l_type];
+        const [absoluteStartOffset, baseAddressErrno] = getBaseAddress(
+          fd,
+          flockStruct.l_whence,
+          flockStruct.l_start
+        );
+        if (baseAddressErrno !== 0) {
+          js_wasm_trace(
+            "fcntl(%d, F_GETLK) %s get_base_address errno %d",
+            fd,
+            vfsPath,
+            baseAddressErrno
+          );
+          return -EINVAL;
+        }
+        const [nativeFd, nativeFdErrno] = locking.get_native_fd_from_emscripten_fd(fd);
+        if (nativeFdErrno !== 0) {
+          js_wasm_trace(
+            "fcntl(%d, F_GETLK) get_native_fd_from_emscripten_fd errno %d",
+            fd,
+            nativeFdErrno
+          );
+          return -nativeFdErrno;
+        }
+        try {
+          const nativeFilePath = locking.get_native_path_from_vfs_path(vfsPath);
+          const conflictingLock = fileLockManager.findFirstConflictingByteRangeLock(
+            nativeFilePath,
+            {
+              type: requestedLockType,
+              start: absoluteStartOffset,
+              end: absoluteStartOffset + flockStruct.l_len,
+              pid,
+              fd: nativeFd
+            }
+          );
+          if (conflictingLock === void 0) {
+            js_wasm_trace(
+              "fcntl(%d, F_GETLK) %s findFirstConflictingByteRangeLock type=unlocked start=0x%x end=0x%x",
+              fd,
+              vfsPath,
+              absoluteStartOffset,
+              absoluteStartOffset + flockStruct.l_len
+            );
+            updateFlockStruct(flockStructAddr, {
+              l_type: F_UNLCK
+            });
+            return 0;
+          }
+          js_wasm_trace(
+            "fcntl(%d, F_GETLK) %s findFirstConflictingByteRangeLock type=%s start=0x%x end=0x%x conflictingLock %d",
+            fd,
+            vfsPath,
+            conflictingLock.type,
+            conflictingLock.start,
+            conflictingLock.end,
+            conflictingLock.pid
+          );
+          const fcntlLockState = locking.lockStateToFcntl[conflictingLock.type];
+          updateFlockStruct(flockStructAddr, {
+            l_type: fcntlLockState,
+            l_whence: SEEK_SET,
+            l_start: conflictingLock.start,
+            l_len: BigInt(
+              conflictingLock.end - conflictingLock.start
+            ),
+            l_pid: conflictingLock.pid
+          });
+          return 0;
+        } catch (e) {
+          js_wasm_trace(
+            "fcntl(%d, F_GETLK) %s findFirstConflictingByteRangeLock error %s",
+            fd,
+            vfsPath,
+            e
+          );
+          return -EINVAL;
+        }
+      }
+      case F_SETLKW:
+      case F_SETLK: {
+        js_wasm_trace("fcntl(%d, F_SETLK)", fd);
+        const [vfsPath, vfsPathErrno] = locking.get_vfs_path_from_fd(fd);
+        if (vfsPathErrno !== 0) {
+          js_wasm_trace(
+            "fcntl(%d, F_SETLK) %s get_vfs_path_from_fd errno %d",
+            fd,
+            vfsPath,
+            vfsPathErrno
+          );
+          return -vfsPathErrno;
+        }
+        if (!locking.is_path_to_shared_fs(vfsPath)) {
+          js_wasm_trace(
+            "fcntl(%d, F_SETLK) locking is not implemented for non-NodeFS path %s",
+            fd,
+            vfsPath
+          );
+          return 0;
+        }
+        const varArgsAccessor = new VarArgsAccessor(varargs);
+        const flockStructAddr = varArgsAccessor.getNextAsPointer();
+        const flockStruct = readFlockStruct(flockStructAddr);
+        const [absoluteStartOffset, baseAddressErrno] = getBaseAddress(
+          fd,
+          flockStruct.l_whence,
+          flockStruct.l_start
+        );
+        if (baseAddressErrno !== 0) {
+          js_wasm_trace(
+            "fcntl(%d, F_SETLK) %s get_base_address errno %d",
+            fd,
+            vfsPath,
+            baseAddressErrno
+          );
+          return -EINVAL;
+        }
+        if (!(flockStruct.l_type in locking.fcntlToLockState)) {
+          js_wasm_trace(
+            "fcntl(%d, F_SETLK) %s invalid lock type %d",
+            fd,
+            vfsPath,
+            flockStruct.l_type
+          );
+          return -EINVAL;
+        }
+        const paramsCheckErrno = locking.check_lock_params(
+          fd,
+          flockStruct.l_type
+        );
+        if (paramsCheckErrno !== 0) {
+          js_wasm_trace(
+            "fcntl(%d, F_SETLK) %s check_lock_params errno %d",
+            fd,
+            vfsPath,
+            paramsCheckErrno
+          );
+          return -paramsCheckErrno;
+        }
+        const [nativeFd, nativeFdErrno] = locking.get_native_fd_from_emscripten_fd(fd);
+        if (nativeFdErrno !== 0) {
+          js_wasm_trace(
+            "fcntl(%d, F_SETLK) get_native_fd_from_emscripten_fd errno %d",
+            fd,
+            nativeFdErrno
+          );
+          return -nativeFdErrno;
+        }
+        const requestedLockType = locking.fcntlToLockState[flockStruct.l_type];
+        const rangeLock = {
+          type: requestedLockType,
+          start: absoluteStartOffset,
+          end: absoluteStartOffset + flockStruct.l_len,
+          pid,
+          fd: nativeFd
+        };
+        try {
+          const nativeFilePath = locking.get_native_path_from_vfs_path(vfsPath);
+          js_wasm_trace(
+            "fcntl(%d, F_SETLK) %s calling lockFileByteRange for range lock %s",
+            fd,
+            vfsPath,
+            rangeLock
+          );
+          const waitForLock = cmd === F_SETLKW;
+          const succeeded = fileLockManager.lockFileByteRange(
+            nativeFilePath,
+            rangeLock,
+            waitForLock
+          );
+          if (succeeded) {
+            locking.maybeLockedFds.add(nativeFd);
+          }
+          js_wasm_trace(
+            "fcntl(%d, F_SETLK) %s lockFileByteRange returned %d for range lock %s",
+            fd,
+            vfsPath,
+            succeeded,
+            rangeLock
+          );
+          return succeeded ? 0 : -EAGAIN;
+        } catch (e) {
+          js_wasm_trace(
+            "fcntl(%d, F_SETLK) %s lockFileByteRange error %s for range lock %s",
+            fd,
+            vfsPath,
+            e,
+            rangeLock
+          );
+          return -EINVAL;
+        }
+      }
+      case F_SETFL: {
+        let arg = 0;
+        if (varargs !== void 0) {
+          const varArgsAccessor = new VarArgsAccessor(varargs);
+          arg = varArgsAccessor.getNextAsInt();
+        }
+        const stream = getStreamFromFD(fd);
+        const SETFL_MASK = O_APPEND | O_NONBLOCK;
+        stream.flags = arg & SETFL_MASK | stream.flags & ~SETFL_MASK;
+        return 0;
+      }
+      default:
+        return builtin_fcntl64(fd, cmd, varargs);
+    }
+  }
+  function flock(fd, op) {
+    js_wasm_trace("flock(%d, %d)", fd, op);
+    if (!fileLockManager) {
+      js_wasm_trace(
+        "flock(%d, %d) file lock manager is not available. succeed by default as Emscripten does.",
+        fd,
+        op
+      );
+      return 0;
+    }
+    const flockToLockOpType = {
+      [LOCK_SH]: "shared",
+      [LOCK_EX]: "exclusive",
+      [LOCK_UN]: "unlock"
+    };
+    const [vfsPath, vfsPathErrno] = locking.get_vfs_path_from_fd(fd);
+    if (vfsPathErrno !== 0) {
+      js_wasm_trace(
+        "flock(%d, %d) get_vfs_path_from_fd errno %d",
+        fd,
+        op,
+        vfsPath,
+        vfsPathErrno
+      );
+      return -vfsPathErrno;
+    }
+    if (!locking.is_path_to_shared_fs(vfsPath)) {
+      js_wasm_trace(
+        "flock(%d, %d) locking is not implemented for non-NodeFS path %s",
+        fd,
+        op,
+        vfsPath
+      );
+      return 0;
+    }
+    const paramsCheckErrno = locking.check_lock_params(fd, op);
+    if (paramsCheckErrno !== 0) {
+      js_wasm_trace(
+        "flock(%d, %d) %s check_lock_params errno %d",
+        fd,
+        op,
+        vfsPath,
+        paramsCheckErrno
+      );
+      return -paramsCheckErrno;
+    }
+    const maskedOp = op & (LOCK_SH | LOCK_EX | LOCK_UN);
+    const waitForLock = (op & LOCK_NB) === 0;
+    if (maskedOp === 0) {
+      js_wasm_trace("flock(%d, %d) invalid flock() operation", fd, op);
+      return -EINVAL;
+    }
+    const lockOpType = flockToLockOpType[maskedOp];
+    if (lockOpType === void 0) {
+      js_wasm_trace("flock(%d, %d) invalid flock() operation", fd, op);
+      return -EINVAL;
+    }
+    const [nativeFd, nativeFdErrno] = locking.get_native_fd_from_emscripten_fd(fd);
+    if (nativeFdErrno !== 0) {
+      js_wasm_trace(
+        "js_flock(%d, %d) get_native_fd_from_emscripten_fd errno %d",
+        fd,
+        op,
+        nativeFdErrno
+      );
+      return -nativeFdErrno;
+    }
+    try {
+      const nativeFilePath = locking.get_native_path_from_vfs_path(vfsPath);
+      const succeeded = fileLockManager.lockWholeFile(nativeFilePath, {
+        type: lockOpType,
+        pid,
+        fd: nativeFd,
+        waitForLock
+      });
+      js_wasm_trace(
+        "flock(%d, %d) lockWholeFile %s returned %d",
+        fd,
+        op,
+        vfsPath,
+        succeeded
+      );
+      if (succeeded) {
+        locking.maybeLockedFds.add(nativeFd);
+      }
+      return succeeded ? 0 : -EWOULDBLOCK;
+    } catch (e) {
+      js_wasm_trace("flock(%d, %d) lockWholeFile error %s", fd, op, e);
+      return -EINVAL;
+    }
+  }
+  function fd_close(fd) {
+    if (!fileLockManager) {
+      js_wasm_trace(
+        "fd_close(%d) file lock manager is not available. delegate to Emscripten builtin fd_close.",
+        fd
+      );
+      return builtin_fd_close(fd);
+    }
+    const [vfsPath, vfsPathResolutionErrno] = locking.get_vfs_path_from_fd(fd);
+    const [nativeFd, nativeFdErrno] = locking.get_native_fd_from_emscripten_fd(fd);
+    const fdCloseResult = builtin_fd_close(fd);
+    if (fdCloseResult !== 0) {
+      js_wasm_trace(
+        "fd_close(%d) %s result %d",
+        fd,
+        vfsPath,
+        fdCloseResult
+      );
+      return fdCloseResult;
+    }
+    if (!locking.maybeLockedFds.has(nativeFd)) {
+      js_wasm_trace(
+        "fd_close(%d) not in maybe-locked-list %s result %d",
+        fd,
+        vfsPath,
+        fdCloseResult
+      );
+      return fdCloseResult;
+    }
+    if (vfsPathResolutionErrno !== 0) {
+      js_wasm_trace(
+        "fd_close(%d) get_vfs_path_from_fd error %d",
+        fd,
+        vfsPathResolutionErrno
+      );
+      return fdCloseResult;
+    }
+    if (nativeFdErrno !== 0) {
+      js_wasm_trace(
+        "fd_close(%d) %s get_native_fd_from_emscripten_fd error %d",
+        fd,
+        vfsPath,
+        nativeFdErrno
+      );
+      return fdCloseResult;
+    }
+    if (!locking.is_path_to_shared_fs(vfsPath)) {
+      return fdCloseResult;
+    }
+    try {
+      js_wasm_trace("fd_close(%d) %s release locks", fd, vfsPath);
+      const nativeFilePath = locking.get_native_path_from_vfs_path(vfsPath);
+      fileLockManager.releaseLocksOnFdClose(
+        pid,
+        nativeFd,
+        nativeFilePath
+      );
+      js_wasm_trace("fd_close(%d) %s release locks success", fd, vfsPath);
+    } catch (e) {
+      js_wasm_trace("fd_close(%d) %s error '%s'", fd, vfsPath, e);
+    }
+    return fdCloseResult;
+  }
+  function js_release_file_locks() {
+    js_wasm_trace("js_release_file_locks()");
+    if (pid === void 0) {
+      js_wasm_trace("js_release_file_locks pid is undefined");
+      return;
+    }
+    if (fileLockManager === void 0) {
+      js_wasm_trace(
+        "js_release_file_locks file lock manager is undefined"
+      );
+      return;
+    }
+    try {
+      fileLockManager.releaseLocksForProcess(pid);
+      js_wasm_trace("js_release_file_locks succeeded");
+    } catch (e) {
+      js_wasm_trace("js_release_file_locks error %s", e);
+    }
+  }
+  async function gethostbyname(hostname) {
+    const { address } = await (0, import_promises.lookup)(hostname, {
+      family: 4,
+      verbatim: false
+    });
+    return address;
+  }
+  return {
+    fcntl64,
+    flock,
+    fd_close,
+    js_release_file_locks,
+    gethostbyname
+  };
+}
+
+// packages/php-wasm/node/src/lib/load-runtime.ts
+var import_fs5 = __toESM(require("fs"), 1);
+
+// packages/php-wasm/node/src/lib/file-lock-manager-for-posix.ts
+var import_universal2 = require("@php-wasm/universal");
+var import_fs_ext_extra_prebuilt = require("fs-ext-extra-prebuilt");
+var import_logger2 = require("@php-wasm/logger");
+function isLockDenialError(e) {
+  if (e && typeof e === "object" && "code" in e) {
+    const code = e.code;
+    return code === "EWOULDBLOCK" || code === "EAGAIN" || code === "EACCES";
+  }
+  return false;
+}
+var FileLockManagerForPosix = class {
+  constructor() {
+    this.wholeFileLockMap = /* @__PURE__ */ new Map();
+    this.rangeLockedFds = /* @__PURE__ */ new Map();
+  }
+  lockWholeFile(path2, op) {
+    const opType = op.type === "unlock" ? "un" : op.waitForLock ? op.type === "exclusive" ? "ex" : "sh" : op.type === "exclusive" ? "exnb" : "shnb";
+    try {
+      (0, import_fs_ext_extra_prebuilt.flockSync)(op.fd, opType);
+      if (op.type === "unlock") {
+        this.wholeFileLockMap.get(op.pid)?.delete(op.fd);
+      } else {
+        if (!this.wholeFileLockMap.has(op.pid)) {
+          this.wholeFileLockMap.set(op.pid, /* @__PURE__ */ new Map());
+        }
+        this.wholeFileLockMap.get(op.pid).set(op.fd, {
+          ...op,
+          path: path2
+        });
+      }
+      return true;
+    } catch (e) {
+      if (!isLockDenialError(e)) {
+        import_logger2.logger.warn("flock(): unexpected error", e);
+      }
+      return false;
+    }
+  }
+  lockFileByteRange(path2, op, waitForLock) {
+    if (op.start === op.end) {
+      op = {
+        ...op,
+        end: import_universal2.MAX_ADDRESSABLE_FILE_OFFSET
+      };
+    }
+    const fcntlCmd = waitForLock ? "setlkw" : "setlk";
+    const fcntlOp = op.type === "unlocked" ? import_fs_ext_extra_prebuilt.constants.F_UNLCK : op.type === "exclusive" ? import_fs_ext_extra_prebuilt.constants.F_WRLCK : import_fs_ext_extra_prebuilt.constants.F_RDLCK;
+    try {
+      (0, import_fs_ext_extra_prebuilt.fcntlSync)(
+        op.fd,
+        fcntlCmd,
+        fcntlOp,
+        Number(op.start),
+        Number(op.end - op.start)
+      );
+      if (!this.rangeLockedFds.has(op.pid)) {
+        this.rangeLockedFds.set(op.pid, /* @__PURE__ */ new Map());
+      }
+      const pidMap = this.rangeLockedFds.get(op.pid);
+      if (!pidMap.has(path2)) {
+        pidMap.set(path2, /* @__PURE__ */ new Set());
+      }
+      pidMap.get(path2).add(op.fd);
+      return true;
+    } catch (e) {
+      if (!isLockDenialError(e)) {
+        import_logger2.logger.warn("fcntl(): unexpected error", e);
+      }
+      return false;
+    }
+  }
+  findFirstConflictingByteRangeLock(path2, op) {
+    if (op.type === "unlocked") {
+      return void 0;
+    }
+    const obtainedLock = this.lockFileByteRange(path2, op, false);
+    if (obtainedLock) {
+      this.lockFileByteRange(path2, { ...op, type: "unlocked" }, true);
+      return void 0;
+    }
+    return {
+      type: "exclusive",
+      start: 0n,
+      end: 0xffffffffffffffffn,
+      pid: -1
+    };
+  }
+  releaseLocksForProcess(targetPid) {
+    const fdMap = this.wholeFileLockMap.get(targetPid);
+    if (fdMap) {
+      for (const storedLock of fdMap.values()) {
+        try {
+          this.lockWholeFile(storedLock.path, {
+            ...storedLock,
+            type: "unlock"
+          });
+        } catch (e) {
+          import_logger2.logger.error(
+            `releaseLocksForProcess: failed to unlock whole-file lock for pid=${targetPid} fd=${storedLock.fd}`,
+            e
+          );
+        }
+      }
+      this.wholeFileLockMap.delete(targetPid);
+    }
+    for (const [path2, fdSet] of this.rangeLockedFds.get(targetPid) ?? []) {
+      for (const fd of fdSet) {
+        try {
+          this.lockFileByteRange(
+            path2,
+            {
+              pid: targetPid,
+              fd,
+              type: "unlocked",
+              start: 0n,
+              end: import_universal2.MAX_ADDRESSABLE_FILE_OFFSET
+            },
+            false
+          );
+        } catch (e) {
+          import_logger2.logger.error(
+            `releaseLocksForProcess: failed to unlock byte range for pid=${targetPid} fd=${fd} path=${path2}`,
+            e
+          );
+        }
+      }
+    }
+    this.rangeLockedFds.delete(targetPid);
+  }
+  releaseLocksOnFdClose(targetPid, targetFd, targetPath) {
+    this.wholeFileLockMap.get(targetPid)?.delete(targetFd);
+    this.rangeLockedFds.get(targetPid)?.delete(targetPath);
+  }
+};
+
+// packages/php-wasm/node/src/lib/file-lock-manager-for-windows.ts
+var import_fs_ext_extra_prebuilt2 = require("fs-ext-extra-prebuilt");
+var import_logger3 = require("@php-wasm/logger");
+var import_universal3 = require("@php-wasm/universal");
+function toLowAndHigh32BitNumbers(num) {
+  const low = Number(num & 0xffffffffn);
+  const high = Number(num >> 32n & 0xffffffffn);
+  return [low, high];
+}
+function isErrnoError(e) {
+  return e !== null && typeof e === "object" && ("errno" in e || "code" in e || "syscall" in e);
+}
+function tryLockFileExSync(fd, flags, start, end) {
+  const [offsetLow, offsetHigh] = toLowAndHigh32BitNumbers(start);
+  const [lengthLow, lengthHigh] = toLowAndHigh32BitNumbers(end - start);
+  try {
+    (0, import_fs_ext_extra_prebuilt2.lockFileExSync)(fd, flags, offsetLow, offsetHigh, lengthLow, lengthHigh);
+    return true;
+  } catch (e) {
+    if (!isErrnoError(e)) {
+      throw e;
+    }
+    return false;
+  }
+}
+function tryUnlockFileExSync(fd, start, end) {
+  const [offsetLow, offsetHigh] = toLowAndHigh32BitNumbers(start);
+  const [lengthLow, lengthHigh] = toLowAndHigh32BitNumbers(end - start);
+  try {
+    (0, import_fs_ext_extra_prebuilt2.unlockFileExSync)(fd, offsetLow, offsetHigh, lengthLow, lengthHigh);
+    return true;
+  } catch (e) {
+    if (!isErrnoError(e)) {
+      throw e;
+    }
+    return false;
+  }
+}
+var FileLockManagerForWindows = class {
+  constructor() {
+    this.wholeFileLockMap = /* @__PURE__ */ new Map();
+    this.rangeLockedFds = /* @__PURE__ */ new Map();
+  }
+  lockWholeFile(path2, op) {
+    const start = 0n;
+    const end = 2n ** 64n - 1n;
+    if (op.type === "unlock") {
+      const success2 = tryUnlockFileExSync(op.fd, start, end);
+      if (success2) {
+        this.wholeFileLockMap.get(op.pid)?.delete(op.fd);
+        if (this.wholeFileLockMap.get(op.pid)?.size === 0) {
+          this.wholeFileLockMap.delete(op.pid);
+        }
+      } else {
+        import_logger3.logger.warn(
+          `lockWholeFile: unlock failed for pid=${op.pid} fd=${op.fd} path=${path2}`
+        );
+      }
+      return success2;
+    }
+    const preexistingLock = this.wholeFileLockMap.get(op.pid)?.get(op.fd);
+    if (op.type === preexistingLock?.type) {
+      return true;
+    }
+    let flags = 0;
+    if (!op.waitForLock) {
+      flags |= import_fs_ext_extra_prebuilt2.constants.LOCKFILE_FAIL_IMMEDIATELY;
+    }
+    let success = false;
+    if (op.type === "shared") {
+      success = tryLockFileExSync(op.fd, flags, start, end);
+      if (success && preexistingLock?.type === "exclusive") {
+        const exclusiveUnlockSuccess = tryUnlockFileExSync(
+          op.fd,
+          start,
+          end
+        );
+        if (!exclusiveUnlockSuccess) {
+          const message = "Failed to unlock preexisting exclusive lock after failing to obtain shared lock";
+          import_logger3.logger.error(message);
+          throw new Error(message);
+        }
+      }
+    } else if (op.type === "exclusive") {
+      flags |= import_fs_ext_extra_prebuilt2.constants.LOCKFILE_EXCLUSIVE_LOCK;
+      let sharedUnlockSuccess;
+      if (preexistingLock?.type === "shared") {
+        sharedUnlockSuccess = tryUnlockFileExSync(op.fd, start, end);
+        if (!sharedUnlockSuccess) {
+          import_logger3.logger.warn(
+            `lockWholeFile: failed to release shared lock before exclusive upgrade for pid=${op.pid} fd=${op.fd}`
+          );
+        }
+      }
+      success = tryLockFileExSync(op.fd, flags, start, end);
+      if (!success) {
+        import_logger3.logger.debug(
+          `lockWholeFile: failed to obtain exclusive lock for pid=${op.pid} fd=${op.fd}`
+        );
+      }
+      if (!success && sharedUnlockSuccess) {
+        const sharedReLockResult = tryLockFileExSync(
+          op.fd,
+          // Wait to restore the shared lock.
+          0,
+          start,
+          end
+        );
+        if (!sharedReLockResult) {
+          const message = "Failed to re-lock preexisting shared lock after failing to obtain exclusive lock";
+          import_logger3.logger.error(message);
+          throw new Error(message);
+        }
+      }
+    } else {
+      throw new Error(`Unexpected wholeFileLock() op: '${op.type}'`);
+    }
+    if (success) {
+      if (!this.wholeFileLockMap.has(op.pid)) {
+        this.wholeFileLockMap.set(op.pid, /* @__PURE__ */ new Map());
+      }
+      this.wholeFileLockMap.get(op.pid).set(op.fd, {
+        ...op,
+        path: path2
+      });
+    }
+    return success;
+  }
+  lockFileByteRange(path2, op, waitForLock) {
+    if (op.start === op.end) {
+      op = {
+        ...op,
+        end: import_universal3.MAX_ADDRESSABLE_FILE_OFFSET
+      };
+    }
+    if (!this.rangeLockedFds.has(path2)) {
+      this.rangeLockedFds.set(path2, new import_universal3.FileLockIntervalTree());
+    }
+    const lockedRangeTree = this.rangeLockedFds.get(path2);
+    const overlappingLocks = lockedRangeTree.findOverlapping(op);
+    let preexistingLock;
+    if (overlappingLocks.length === 1 && overlappingLocks[0].pid === op.pid && // NOTE: FD shouldn't matter for fcntl() F_SETLK because it is a process-level lock,
+    // but it matters for Windows where locks are fd-specific.
+    overlappingLocks[0].fd === op.fd && overlappingLocks[0].start === op.start && overlappingLocks[0].end === op.end) {
+      preexistingLock = overlappingLocks[0];
+    }
+    if (op.type === preexistingLock?.type) {
+      return true;
+    }
+    let flags = 0;
+    if (!waitForLock) {
+      flags |= import_fs_ext_extra_prebuilt2.constants.LOCKFILE_FAIL_IMMEDIATELY;
+    }
+    if (op.type === "shared") {
+      const success = tryLockFileExSync(op.fd, flags, op.start, op.end);
+      if (!success) {
+        return false;
+      }
+      if (preexistingLock?.type === "exclusive") {
+        const releasedPreexistingExclusiveLock = tryUnlockFileExSync(
+          preexistingLock.fd,
+          preexistingLock.start,
+          preexistingLock.end
+        );
+        if (!releasedPreexistingExclusiveLock) {
+          const message = "Failed to unlock preexisting exclusive lock after obtaining a shared lock";
+          import_logger3.logger.error(message);
+          throw new Error(message);
+        }
+        lockedRangeTree.remove(preexistingLock);
+      }
+      lockedRangeTree.insert(op);
+      return true;
+    } else if (op.type === "exclusive") {
+      let sharedUnlockSuccess;
+      if (preexistingLock?.type === "shared") {
+        sharedUnlockSuccess = tryUnlockFileExSync(
+          op.fd,
+          op.start,
+          op.end
+        );
+      }
+      if (op.type === "exclusive") {
+        flags |= import_fs_ext_extra_prebuilt2.constants.LOCKFILE_EXCLUSIVE_LOCK;
+      }
+      const success = tryLockFileExSync(op.fd, flags, op.start, op.end);
+      if (!success) {
+        if (preexistingLock && sharedUnlockSuccess) {
+          const sharedRelockSuccess = tryLockFileExSync(
+            op.fd,
+            0,
+            op.start,
+            op.end
+          );
+          if (!sharedRelockSuccess) {
+            const message = "Failed to re-lock preexisting shared lock after failing to obtain exclusive lock";
+            import_logger3.logger.error(message);
+            throw new Error(message);
+          }
+        }
+        return false;
+      }
+      lockedRangeTree.insert(op);
+      return true;
+    } else {
+      const intersectingLocksForThisProcess = overlappingLocks.filter((lock) => lock.pid === op.pid).filter((lock) => lock.start >= op.start && lock.end <= op.end);
+      for (const lock of intersectingLocksForThisProcess) {
+        const success = tryUnlockFileExSync(
+          lock.fd,
+          lock.start,
+          lock.end
+        );
+        if (!success) {
+          import_logger3.logger.warn(
+            `lockFileByteRange: unlock failed for pid=${op.pid} fd=${lock.fd} range=[${lock.start},${lock.end}]`
+          );
+          return false;
+        }
+        lockedRangeTree.remove(lock);
+      }
+      return true;
+    }
+  }
+  findFirstConflictingByteRangeLock(path2, op) {
+    if (op.type === "unlocked") {
+      return void 0;
+    }
+    const obtainedLock = !!this.lockFileByteRange(path2, op, false);
+    this.lockFileByteRange(path2, { ...op, type: "unlocked" }, false);
+    if (obtainedLock) {
+      return void 0;
+    }
+    return {
+      type: "exclusive",
+      start: 0n,
+      end: 0xffffffffffffffffn,
+      pid: -1
+    };
+  }
+  releaseLocksForProcess(targetPid) {
+    const fdMap = this.wholeFileLockMap.get(targetPid);
+    if (fdMap) {
+      for (const storedLock of fdMap.values()) {
+        try {
+          this.lockWholeFile(storedLock.path, {
+            ...storedLock,
+            type: "unlock"
+          });
+        } catch (e) {
+          import_logger3.logger.error(
+            `releaseLocksForProcess: failed to unlock whole-file lock for pid=${targetPid} fd=${storedLock.fd}`,
+            e
+          );
+        }
+      }
+      this.wholeFileLockMap.delete(targetPid);
+    }
+    for (const [path2, lockedRangeTree] of this.rangeLockedFds.entries()) {
+      const rangesLockedByTargetPid = lockedRangeTree.findLocksForProcess(targetPid);
+      for (const op of rangesLockedByTargetPid) {
+        try {
+          this.lockFileByteRange(
+            path2,
+            { ...op, type: "unlocked" },
+            false
+          );
+        } catch (e) {
+          import_logger3.logger.error(
+            `releaseLocksForProcess: failed to unlock byte range for pid=${targetPid} fd=${op.fd} path=${path2}`,
+            e
+          );
+        }
+        lockedRangeTree.remove(op);
+      }
+    }
+  }
+  releaseLocksOnFdClose(targetPid, targetFd, targetPath) {
+    const storedLock = this.wholeFileLockMap.get(targetPid)?.get(targetFd);
+    if (storedLock) {
+      this.lockWholeFile(storedLock.path, {
+        ...storedLock,
+        type: "unlock"
+      });
+    }
+    this.wholeFileLockMap.get(targetPid)?.delete(targetFd);
+    const lockedRangeTree = this.rangeLockedFds.get(targetPath);
+    for (const op of lockedRangeTree?.findLocksForProcess(targetPid) ?? []) {
+      this.lockFileByteRange(
+        targetPath,
+        {
+          ...op,
+          type: "unlocked",
+          // Use a dummy FD because we're releasing locks for
+          // all FDs on this file (POSIX semantics), not just
+          // the one being closed.
+          fd: -1
+        },
+        false
+      );
+      lockedRangeTree.remove(op);
+    }
+  }
+};
+
+// packages/php-wasm/node/src/lib/extensions/xdebug/with-xdebug.ts
+var import_cli_util = require("@php-wasm/cli-util");
+var import_universal5 = require("@php-wasm/universal");
+var import_fs = __toESM(require("fs"), 1);
+
+// packages/php-wasm/node/src/lib/extensions/xdebug/get-xdebug-extension-module.ts
+var import_universal4 = require("@php-wasm/universal");
+async function getXdebugExtensionModule(version = import_universal4.LatestSupportedPHPVersion) {
+  switch (version) {
+    case "8.5":
+      return (await import("@php-wasm/node-8-5")).getXdebugExtensionPath();
+    case "8.4":
+      return (await import("@php-wasm/node-8-4")).getXdebugExtensionPath();
+    case "8.3":
+      return (await import("@php-wasm/node-8-3")).getXdebugExtensionPath();
+    case "8.2":
+      return (await import("@php-wasm/node-8-2")).getXdebugExtensionPath();
+    case "8.1":
+      return (await import("@php-wasm/node-8-1")).getXdebugExtensionPath();
+    case "8.0":
+      return (await import("@php-wasm/node-8-0")).getXdebugExtensionPath();
+    case "7.4":
+      return (await import("@php-wasm/node-7-4")).getXdebugExtensionPath();
+  }
+  throw new Error(`Unsupported PHP version ${version}`);
+}
+
+// packages/php-wasm/node/src/lib/extensions/xdebug/with-xdebug.ts
+async function withXdebug(version = import_universal5.LatestSupportedPHPVersion, options, xdebugOptions) {
+  const fileName = "xdebug.so";
+  const filePath = await getXdebugExtensionModule(version);
+  const extension = import_fs.default.readFileSync(filePath);
+  return {
+    ...options,
+    ENV: {
+      ...options.ENV,
+      PHP_INI_SCAN_DIR: "/internal/shared/extensions"
+    },
+    onRuntimeInitialized: (phpRuntime) => {
+      if (options.onRuntimeInitialized) {
+        options.onRuntimeInitialized(phpRuntime);
+      }
+      if (!import_universal5.FSHelpers.fileExists(
+        phpRuntime.FS,
+        "/internal/shared/extensions"
+      )) {
+        phpRuntime.FS.mkdirTree("/internal/shared/extensions");
+      }
+      if (!import_universal5.FSHelpers.fileExists(
+        phpRuntime.FS,
+        `/internal/shared/extensions/${fileName}`
+      )) {
+        phpRuntime.FS.writeFile(
+          `/internal/shared/extensions/${fileName}`,
+          new Uint8Array(extension)
+        );
+      }
+      if (!import_universal5.FSHelpers.fileExists(
+        phpRuntime.FS,
+        "/internal/shared/extensions/xdebug.ini"
+      )) {
+        const ideKey = xdebugOptions.ideKey || import_cli_util.DEFAULT_IDE_KEY;
+        phpRuntime.FS.writeFile(
+          "/internal/shared/extensions/xdebug.ini",
+          [
+            "zend_extension=/internal/shared/extensions/xdebug.so",
+            "xdebug.mode=debug,develop",
+            "xdebug.start_with_request=yes",
+            `xdebug.idekey="${ideKey}"`,
+            // Path mapping is only available starting
+            // from Xdebug 3.5, which is used by PHP 8.5+
+            // Previous versions will ignore this entry.
+            "xdebug.path_mapping=yes"
+          ].join("\n")
+        );
+      }
+      const isPHP85orHigher = import_universal5.SupportedPHPVersionsList.indexOf(version) <= import_universal5.SupportedPHPVersions.indexOf("8.5");
+      if (isPHP85orHigher) {
+        const { pathMappings, pathSkippings } = xdebugOptions;
+        if (!pathMappings && !pathSkippings)
+          return;
+        phpRuntime.FS.mkdir("/.xdebug");
+        if (pathMappings) {
+          phpRuntime.FS.writeFile(
+            "/.xdebug/path.map",
+            pathMappings.map((map) => `${map.vfsPath} = ${map.hostPath}`).join("\n")
+          );
+        }
+        if (pathSkippings) {
+          phpRuntime.FS.writeFile(
+            "/.xdebug/skip.map",
+            pathSkippings.map((path2) => `${path2} = SKIP`).join("\n")
+          );
+        }
+      }
+    }
+  };
+}
+
+// packages/php-wasm/node/src/lib/extensions/intl/with-intl.ts
+var import_universal7 = require("@php-wasm/universal");
+var import_fs2 = __toESM(require("fs"), 1);
+var import_path = __toESM(require("path"), 1);
+
+// packages/php-wasm/node/src/lib/extensions/intl/get-intl-extension-module.ts
+var import_universal6 = require("@php-wasm/universal");
+async function getIntlExtensionModule(version = import_universal6.LatestSupportedPHPVersion) {
+  switch (version) {
+    case "8.5":
+      return (await import("@php-wasm/node-8-5")).getIntlExtensionPath();
+    case "8.4":
+      return (await import("@php-wasm/node-8-4")).getIntlExtensionPath();
+    case "8.3":
+      return (await import("@php-wasm/node-8-3")).getIntlExtensionPath();
+    case "8.2":
+      return (await import("@php-wasm/node-8-2")).getIntlExtensionPath();
+    case "8.1":
+      return (await import("@php-wasm/node-8-1")).getIntlExtensionPath();
+    case "8.0":
+      return (await import("@php-wasm/node-8-0")).getIntlExtensionPath();
+    case "7.4":
+      return (await import("@php-wasm/node-7-4")).getIntlExtensionPath();
+  }
+  throw new Error(`Unsupported PHP version ${version}`);
+}
+
+// packages/php-wasm/node/src/lib/extensions/intl/with-intl.ts
+var import_meta = {};
+async function withIntl(version = import_universal7.LatestSupportedPHPVersion, options) {
+  const extensionName = "intl.so";
+  const extensionPath = await getIntlExtensionModule(version);
+  const extension = import_fs2.default.readFileSync(extensionPath);
+  const dataName = "icu.dat";
+  const moduleDir = typeof __dirname !== "undefined" ? __dirname : import_meta.dirname;
+  const dataPath = import_path.default.join(moduleDir, "shared", dataName);
+  const ICUData = import_fs2.default.readFileSync(dataPath);
+  return {
+    ...options,
+    ENV: {
+      ...options.ENV,
+      PHP_INI_SCAN_DIR: "/internal/shared/extensions",
+      ICU_DATA: "/internal/shared"
+    },
+    onRuntimeInitialized: (phpRuntime) => {
+      if (options.onRuntimeInitialized) {
+        options.onRuntimeInitialized(phpRuntime);
+      }
+      if (!import_universal7.FSHelpers.fileExists(
+        phpRuntime.FS,
+        "/internal/shared/extensions"
+      )) {
+        phpRuntime.FS.mkdirTree("/internal/shared/extensions");
+      }
+      if (!import_universal7.FSHelpers.fileExists(
+        phpRuntime.FS,
+        `/internal/shared/extensions/${extensionName}`
+      )) {
+        phpRuntime.FS.writeFile(
+          `/internal/shared/extensions/${extensionName}`,
+          new Uint8Array(extension)
+        );
+      }
+      if (!import_universal7.FSHelpers.fileExists(
+        phpRuntime.FS,
+        "/internal/shared/extensions/intl.ini"
+      )) {
+        phpRuntime.FS.writeFile(
+          "/internal/shared/extensions/intl.ini",
+          [
+            `extension=/internal/shared/extensions/${extensionName}`
+          ].join("\n")
+        );
+      }
+      if (!import_universal7.FSHelpers.fileExists(
+        phpRuntime.FS,
+        `${phpRuntime.ENV.ICU_DATA}/${dataName}`
+      )) {
+        phpRuntime.FS.mkdirTree(phpRuntime.ENV.ICU_DATA);
+        phpRuntime.FS.writeFile(
+          `${phpRuntime.ENV.ICU_DATA}/icudt74l.dat`,
+          new Uint8Array(ICUData)
+        );
+      }
+    }
+  };
+}
+
+// packages/php-wasm/node/src/lib/extensions/redis/with-redis.ts
+var import_universal9 = require("@php-wasm/universal");
+var import_fs3 = __toESM(require("fs"), 1);
+
+// packages/php-wasm/node/src/lib/extensions/redis/get-redis-extension-module.ts
+var import_universal8 = require("@php-wasm/universal");
+async function getRedisExtensionModule(version = import_universal8.LatestSupportedPHPVersion) {
+  switch (version) {
+    case "8.5":
+      return (await import("@php-wasm/node-8-5")).getRedisExtensionPath();
+    case "8.4":
+      return (await import("@php-wasm/node-8-4")).getRedisExtensionPath();
+    case "8.3":
+      return (await import("@php-wasm/node-8-3")).getRedisExtensionPath();
+    case "8.2":
+      return (await import("@php-wasm/node-8-2")).getRedisExtensionPath();
+    case "8.1":
+      return (await import("@php-wasm/node-8-1")).getRedisExtensionPath();
+    case "8.0":
+      return (await import("@php-wasm/node-8-0")).getRedisExtensionPath();
+    case "7.4":
+      return (await import("@php-wasm/node-7-4")).getRedisExtensionPath();
+  }
+  throw new Error(`Unsupported PHP version ${version}`);
+}
+
+// packages/php-wasm/node/src/lib/extensions/redis/with-redis.ts
+async function withRedis(version = import_universal9.LatestSupportedPHPVersion, options) {
+  const extensionName = "redis.so";
+  const extensionPath = await getRedisExtensionModule(version);
+  const extension = import_fs3.default.readFileSync(extensionPath);
+  return {
+    ...options,
+    ENV: {
+      ...options.ENV,
+      PHP_INI_SCAN_DIR: "/internal/shared/extensions"
+    },
+    onRuntimeInitialized: (phpRuntime) => {
+      if (options.onRuntimeInitialized) {
+        options.onRuntimeInitialized(phpRuntime);
+      }
+      if (!import_universal9.FSHelpers.fileExists(
+        phpRuntime.FS,
+        "/internal/shared/extensions"
+      )) {
+        phpRuntime.FS.mkdirTree("/internal/shared/extensions");
+      }
+      if (!import_universal9.FSHelpers.fileExists(
+        phpRuntime.FS,
+        `/internal/shared/extensions/${extensionName}`
+      )) {
+        phpRuntime.FS.writeFile(
+          `/internal/shared/extensions/${extensionName}`,
+          new Uint8Array(extension)
+        );
+      }
+      if (!import_universal9.FSHelpers.fileExists(
+        phpRuntime.FS,
+        "/internal/shared/extensions/redis.ini"
+      )) {
+        phpRuntime.FS.writeFile(
+          "/internal/shared/extensions/redis.ini",
+          [
+            `extension=/internal/shared/extensions/${extensionName}`
+          ].join("\n")
+        );
+      }
+    }
+  };
+}
+
+// packages/php-wasm/node/src/lib/extensions/memcached/with-memcached.ts
+var import_universal11 = require("@php-wasm/universal");
+var import_fs4 = __toESM(require("fs"), 1);
+
+// packages/php-wasm/node/src/lib/extensions/memcached/get-memcached-extension-module.ts
+var import_universal10 = require("@php-wasm/universal");
+async function getMemcachedExtensionModule(version = import_universal10.LatestSupportedPHPVersion) {
+  switch (version) {
+    case "8.5":
+      return (await import("@php-wasm/node-8-5")).getMemcachedExtensionPath();
+    case "8.4":
+      return (await import("@php-wasm/node-8-4")).getMemcachedExtensionPath();
+    case "8.3":
+      return (await import("@php-wasm/node-8-3")).getMemcachedExtensionPath();
+    case "8.2":
+      return (await import("@php-wasm/node-8-2")).getMemcachedExtensionPath();
+    case "8.1":
+      return (await import("@php-wasm/node-8-1")).getMemcachedExtensionPath();
+    case "8.0":
+      return (await import("@php-wasm/node-8-0")).getMemcachedExtensionPath();
+    case "7.4":
+      return (await import("@php-wasm/node-7-4")).getMemcachedExtensionPath();
+  }
+  throw new Error(`Unsupported PHP version ${version}`);
+}
+
+// packages/php-wasm/node/src/lib/extensions/memcached/with-memcached.ts
+async function withMemcached(version = import_universal11.LatestSupportedPHPVersion, options) {
+  const extensionName = "memcached.so";
+  const extensionPath = await getMemcachedExtensionModule(version);
+  const extension = import_fs4.default.readFileSync(extensionPath);
+  return {
+    ...options,
+    ENV: {
+      ...options.ENV,
+      PHP_INI_SCAN_DIR: "/internal/shared/extensions"
+    },
+    onRuntimeInitialized: (phpRuntime) => {
+      if (options.onRuntimeInitialized) {
+        options.onRuntimeInitialized(phpRuntime);
+      }
+      if (!import_universal11.FSHelpers.fileExists(
+        phpRuntime.FS,
+        "/internal/shared/extensions"
+      )) {
+        phpRuntime.FS.mkdirTree("/internal/shared/extensions");
+      }
+      if (!import_universal11.FSHelpers.fileExists(
+        phpRuntime.FS,
+        `/internal/shared/extensions/${extensionName}`
+      )) {
+        phpRuntime.FS.writeFile(
+          `/internal/shared/extensions/${extensionName}`,
+          new Uint8Array(extension)
+        );
+      }
+      if (!import_universal11.FSHelpers.fileExists(
+        phpRuntime.FS,
+        "/internal/shared/extensions/memcached.ini"
+      )) {
+        phpRuntime.FS.writeFile(
+          "/internal/shared/extensions/memcached.ini",
+          [
+            `extension=/internal/shared/extensions/${extensionName}`
+          ].join("\n")
+        );
+      }
+    }
+  };
+}
+
+// packages/php-wasm/node/src/lib/load-runtime.ts
+var import_util = require("@php-wasm/util");
+var import_os = require("os");
+var dangerousDefaultProcessIdAllocator = process.env.VITEST ? new import_universal12.ProcessIdAllocator() : void 0;
+async function loadNodeRuntime(phpVersion, options = {}) {
+  const processId = options.emscriptenOptions?.processId ?? // !! Only assign a default process ID during test.
+  // Otherwise, multiple workers with duplicate process IDs
+  // could break file locking and lead to database corruption.
+  (process.env.VITEST ? dangerousDefaultProcessIdAllocator.claim() : void 0);
+  let emscriptenOptions = {
+    /**
+     * Emscripten default behavior is to kill the process when
+     * the WASM program calls `exit()`. We want to throw an
+     * exception instead.
+     */
+    quit: function(code, error) {
+      throw error;
+    },
+    bindUserSpace: (userSpaceContext) => {
+      const nativeFileLockManager = (0, import_os.platform)() === "win32" ? new FileLockManagerForWindows() : new FileLockManagerForPosix();
+      const fileLockManager = options.fileLockManager ? new import_universal12.FileLockManagerComposite({
+        nativeLockManager: nativeFileLockManager,
+        wasmLockManager: options.fileLockManager
+      }) : nativeFileLockManager;
+      return bindUserSpace({ fileLockManager }, userSpaceContext);
+    },
+    ...options.emscriptenOptions || {},
+    processId,
+    onRuntimeInitialized: (phpRuntime) => {
+      if (options?.followSymlinks === true) {
+        phpRuntime.FS.filesystems.NODEFS.node_ops.readlink = (node) => {
+          const absoluteSourcePath = phpRuntime.FS.filesystems.NODEFS.tryFSOperation(
+            () => import_fs5.default.realpathSync(
+              phpRuntime.FS.filesystems.NODEFS.realPath(node)
+            )
+          );
+          const normalizedPath = (0, import_util.toPosixPath)(absoluteSourcePath);
+          const symlinkMountPath = (0, import_util.joinPaths)(
+            `/internal/symlinks`,
+            normalizedPath
+          );
+          if (import_fs5.default.existsSync(absoluteSourcePath)) {
+            const sourceStat = import_fs5.default.statSync(absoluteSourcePath);
+            if (!import_universal12.FSHelpers.fileExists(
+              phpRuntime.FS,
+              symlinkMountPath
+            )) {
+              if (sourceStat.isDirectory()) {
+                phpRuntime.FS.mkdirTree(symlinkMountPath);
+              } else if (sourceStat.isFile()) {
+                phpRuntime.FS.mkdirTree(
+                  (0, import_util.dirname)(symlinkMountPath)
+                );
+                phpRuntime.FS.writeFile(symlinkMountPath, "");
+              } else {
+                throw new Error(
+                  "Unsupported file type. PHP-wasm supports only symlinks that link to files, directories, or symlinks."
+                );
+              }
+            }
+            const mountPath = sourceStat.isFile() ? (0, import_util.dirname)(symlinkMountPath) : symlinkMountPath;
+            const mountRoot = sourceStat.isFile() ? (0, import_util.dirname)(normalizedPath) : absoluteSourcePath;
+            const mountNode = phpRuntime.FS.lookupPath(mountPath).node;
+            const isMounted = mountNode.mount.mountpoint === mountPath;
+            if (!isMounted) {
+              phpRuntime.FS.mount(
+                phpRuntime.FS.filesystems.NODEFS,
+                { root: mountRoot },
+                mountPath
+              );
+            }
+          }
+          return symlinkMountPath;
+        };
+      }
+      phpRuntime.FS.root.node_ops = {
+        ...phpRuntime.FS.root.node_ops,
+        statfs: phpRuntime.FS.filesystems.NODEFS.node_ops.statfs
+      };
+      phpRuntime.FS.root.mount.opts.root = ".";
+    }
+  };
+  if (options?.withXdebug) {
+    emscriptenOptions = await withXdebug(
+      phpVersion,
+      emscriptenOptions,
+      typeof options.withXdebug === "object" ? options.withXdebug : {}
+    );
+  }
+  if (options?.withIntl === true) {
+    emscriptenOptions = await withIntl(phpVersion, emscriptenOptions);
+  }
+  if (options?.withRedis === true) {
+    emscriptenOptions = await withRedis(phpVersion, emscriptenOptions);
+  }
+  if (options?.withMemcached === true) {
+    emscriptenOptions = await withMemcached(phpVersion, emscriptenOptions);
+  }
+  emscriptenOptions = await withNetworking(emscriptenOptions);
+  const phpLoaderModule = await getPHPLoaderModule(phpVersion);
+  const runtimeId = await (0, import_universal12.loadPHPRuntime)(phpLoaderModule, emscriptenOptions);
+  return runtimeId;
+}
+
+// packages/php-wasm/node/src/lib/use-host-filesystem.ts
+var import_node_fs = require("node:fs");
+
+// packages/php-wasm/node/src/lib/node-fs-mount.ts
+var import_universal13 = require("@php-wasm/universal");
+var import_util2 = require("@php-wasm/util");
+var import_fs6 = require("fs");
+var import_path2 = require("path");
+function createNodeFsMountHandler(localPath) {
+  return function(php, FS, vfsMountPoint) {
+    let removeVfsNode = false;
+    if (!import_universal13.FSHelpers.fileExists(FS, vfsMountPoint)) {
+      const lstat = (0, import_fs6.lstatSync)(localPath);
+      if (lstat.isFile() || lstat.isSymbolicLink()) {
+        FS.mkdirTree((0, import_path2.dirname)(vfsMountPoint));
+        FS.writeFile(vfsMountPoint, "");
+      } else if (lstat.isDirectory()) {
+        FS.mkdirTree(vfsMountPoint);
+      } else {
+        throw new Error(
+          "Unsupported file type. PHP-wasm supports only symlinks that link to files, directories, or symlinks."
+        );
+      }
+      removeVfsNode = true;
+    }
+    let lookup3;
+    try {
+      lookup3 = FS.lookupPath(vfsMountPoint);
+    } catch (e) {
+      const error = e;
+      if (error.errno === 44) {
+        throw new Error(
+          `Unable to access the mount point ${vfsMountPoint} in VFS after attempting to create it.`
+        );
+      }
+      throw e;
+    }
+    FS.mount(FS.filesystems["NODEFS"], { root: localPath }, vfsMountPoint);
+    return () => {
+      FS.unmount(vfsMountPoint);
+      if (removeVfsNode) {
+        if (FS.isDir(lookup3.node.mode)) {
+          if ((0, import_util2.isParentOf)(vfsMountPoint, FS.cwd())) {
+            throw new Error(
+              `Cannot remove the VFS directory "${vfsMountPoint}" on umount cleanup \u2013 it is a parent of the CWD "${FS.cwd()}". Change CWD before unmounting or explicitly disable post-unmount node cleanup with createNodeFsMountHandler(path, {cleanupNodesOnUnmount: false}).`
+            );
+          }
+          FS.rmdir(vfsMountPoint);
+        } else {
+          FS.unlink(vfsMountPoint);
+        }
+      }
+    };
+  };
+}
+
+// packages/php-wasm/node/src/lib/use-host-filesystem.ts
+function useHostFilesystem(php) {
+  const dirs = (0, import_node_fs.readdirSync)("/").filter((file) => file !== "dev").filter((file) => file !== "proc").map((file) => `/${file}`).filter((file) => {
+    try {
+      return statPathFollowSymlinks(file).isDirectory();
+    } catch {
+      return false;
+    }
+  });
+  for (const dir of dirs) {
+    if (!php.fileExists(dir)) {
+      php.mkdirTree(dir);
+    }
+    php.mount(dir, createNodeFsMountHandler(dir));
+  }
+  php.chdir(process.cwd());
+}
+function statPathFollowSymlinks(path2) {
+  let stat = (0, import_node_fs.lstatSync)(path2);
+  if (stat.isSymbolicLink()) {
+    const fs6 = require("fs");
+    let target = path2;
+    const seen = /* @__PURE__ */ new Set();
+    while (true) {
+      if (seen.has(target)) {
+        throw new Error(`Symlink loop detected: ${path2}`);
+      }
+      seen.add(target);
+      const linkStat = (0, import_node_fs.lstatSync)(target);
+      if (linkStat.isSymbolicLink()) {
+        target = fs6.realpathSync(target);
+        continue;
+      }
+      stat = linkStat;
+      break;
+    }
+  }
+  return stat;
+}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  FileLockManagerForPosix,
+  FileLockManagerForWindows,
+  bindUserSpace,
+  createNodeFsMountHandler,
+  getPHPLoaderModule,
+  loadNodeRuntime,
+  useHostFilesystem,
+  withNetworking,
+  withXdebug
+});

@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Form_Components\Element\Field\Attribute;
 
-use PinkCrab\Form_Components\Utils;
+use PinkCrab\Form_Components\Util\Esc;
 
 trait Pattern {
 
@@ -43,7 +43,7 @@ trait Pattern {
 	 */
 	public function pattern( ?string $pattern = null ): self {
 		if ( $pattern ) {
-			$this->attribute( 'pattern', Utils::esc_attr( $pattern ) );
+			$this->attribute( 'pattern', Esc::attribute( $pattern ) );
 		} else {
 			$this->remove_attribute( 'pattern' );
 		}

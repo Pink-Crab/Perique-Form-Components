@@ -39,4 +39,7 @@ class Hidden extends Abstract_Input {
 	/** @inheritDoc */
 	protected $sanitizer = null;
 
+	/** @inheritDoc */
+	protected $show_wrapper = false;
+
 }

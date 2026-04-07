@@ -25,6 +25,7 @@ declare( strict_types=1 );
 namespace PinkCrab\Form_Components\Component\Field;
 
 use PinkCrab\Form_Components\Style\Style;
+use PinkCrab\Form_Components\Util\Attributes;
 use PinkCrab\Form_Components\Element\Button;
 use PinkCrab\Form_Components\Style\Style_Provider;
 use PinkCrab\Form_Components\Component\Field\Abstract_Field_Component;
@@ -56,7 +57,7 @@ class Button_Component extends Abstract_Field_Component {
 
 		$this->style = $field->get_style() ?? Style_Provider::get_default_style();
 
-		$this->set_attributes( $attributes );
+		$this->set_attributes( Attributes::combine( $field->get_attributes(), $attributes, array( 'class' ) ) );
 
 		$this->before_field = $this->field->get_before();
 		$this->after_field  = $this->field->get_after();

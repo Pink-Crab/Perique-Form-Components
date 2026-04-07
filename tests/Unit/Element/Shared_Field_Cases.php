@@ -478,5 +478,39 @@ trait Shared_Field_Cases {
 		$this->assertEquals( 'value', $field->get_wrapper_attribute( 'data-test' ) );
 	}
 
+	####################################################################
+	######                   Wrapper Visibility                   ######
+	####################################################################
+
+	/** @testdox [Shared::Wrapper] It should be possible to check if a field has a wrapper enabled by default. */
+	public function test_has_wrapper_default(): void {
+		$class = $this->get_class_under_test();
+		$field = new $class( 'test' );
+		$this->assertIsBool( $field->has_wrapper() );
+	}
+
+	/** @testdox [Shared::Wrapper] It should be possible to enable the wrapper on a field. */
+	public function test_show_wrapper_enable(): void {
+		$class = $this->get_class_under_test();
+		$field = new $class( 'test' );
+		$field->show_wrapper( true );
+		$this->assertTrue( $field->has_wrapper() );
+	}
+
+	/** @testdox [Shared::Wrapper] It should be possible to disable the wrapper on a field. */
+	public function test_show_wrapper_disable(): void {
+		$class = $this->get_class_under_test();
+		$field = new $class( 'test' );
+		$field->show_wrapper( false );
+		$this->assertFalse( $field->has_wrapper() );
+	}
+
+	/** @testdox [Shared::Wrapper] The show_wrapper method should return the field instance for chaining. */
+	public function test_show_wrapper_returns_self(): void {
+		$class = $this->get_class_under_test();
+		$field = new $class( 'test' );
+		$this->assertSame( $field, $field->show_wrapper( true ) );
+	}
+
 
 }

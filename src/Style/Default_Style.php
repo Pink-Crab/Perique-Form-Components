@@ -56,4 +56,24 @@ class Default_Style implements Style {
 	public function button_class(): string {
 		return 'pc-form__button';
 	}
+
+	/** @inheritDoc */
+	public function field_control_class(): string {
+		return 'form-control %s';
+	}
+
+	/** @inheritDoc */
+	public function group_option_class(): string {
+		return '%s__option';
+	}
+
+	/** @inheritDoc */
+	public function label_class(): string {
+		return 'pc-form__label';
+	}
+
+	/** @inheritDoc */
+	public function legend_class(): string {
+		return 'pc-form__legend';
+	}
 }

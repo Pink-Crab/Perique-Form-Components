@@ -58,7 +58,7 @@ class Input_Component extends Abstract_Field_Component {
 	/** @inheritDoc */
 	protected function base_attributes(): array {
 		$attributes = array(
-			'class' => "form-control {$this->input_type}-input",
+			'class' => sprintf( $this->field->get_style()->field_control_class(), "{$this->input_type}-input" ),
 		);
 
 		// If field uses the datalist trait and passed attribute doesnt include list.

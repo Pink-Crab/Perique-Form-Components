@@ -69,7 +69,7 @@ class Week extends Abstract_Input {
 
 	/**
 	 * Step by weeks
-	 * 
+	 *
 	 * @param int $step
 	 * @return self
 	 */

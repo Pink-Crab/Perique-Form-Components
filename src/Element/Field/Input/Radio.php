@@ -33,7 +33,7 @@ class Radio extends Abstract_Input {
 	use Disabled, Checked;
 
 	/** @inheritDoc */
-	protected $type = 'radio';
+	protected $input_type = 'radio';
 
 	/** @inheritDoc */
 	protected $sanitizer = null;

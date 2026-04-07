@@ -34,15 +34,20 @@ class Label_Component extends Component {
 	/** @var string */
 	protected $for;
 
+	/** @var string */
+	protected $label_class;
+
 	/**
 	 * Creates an instance of the component.
 	 *
 	 * @param string $label
 	 * @param string $for
+	 * @param string $label_class
 	 */
-	public function __construct( string $label, string $for ) {
-		$this->label = $label;
-		$this->for   = $for;
+	public function __construct( string $label, string $for, string $label_class = '' ) {
+		$this->label       = $label;
+		$this->for         = $for;
+		$this->label_class = $label_class;
 	}
 
 }

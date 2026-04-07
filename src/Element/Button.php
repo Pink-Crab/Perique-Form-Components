@@ -25,6 +25,7 @@ declare( strict_types=1 );
 
 namespace PinkCrab\Form_Components\Element;
 
+use PinkCrab\Form_Components\Util\Esc;
 use PinkCrab\Form_Components\Element\Element;
 use PinkCrab\Form_Components\Style\{Style_Provider, Style};
 use PinkCrab\Form_Components\Element\Field\Attribute\Disabled;
@@ -34,6 +35,13 @@ use PinkCrab\Form_Components\Element\Field_Traits\{Attributes,Validation,Sanitiz
 class Button implements Element {
 
 	use Attributes, Element_Wrap, Form_Style, Disabled;
+
+	/**
+	 * The button name
+	 *
+	 * @var string
+	 */
+	protected $name;
 
 	/**
 	 * The button type
@@ -60,14 +68,85 @@ class Button implements Element {
 		$this->name = esc_attr( \sanitize_title( $name ) );
 
 		// Set the style.
-		$this->set_style( $style ?? Style_Provider::get_default_style() );
+		if ( null !== $style ) {
+			$this->style( $style );
+		} else {
+			$this->set_style( Style_Provider::get_default_style() );
+		}
 
 		// Set with a default wrapper id.
 		$this->wrapper_id( 'form-button' . $this->name );
-		$this->add_wrapper_class( pipe( sprintf( $this->get_style()->element_wrapper_class(), 'button' ), 'esc_attr' ) );
+	}
 
-		// Set the field id and style.
-		$this->add_class( esc_attr( $this->get_style()->button_class() ) );
+	/**
+	 * Get all attributes with style classes injected.
+	 *
+	 * @return array<string, string|int|float|bool|null>
+	 */
+	public function get_attribute( string $attribute ) {
+		if ( 'class' === $attribute ) {
+			$existing = $this->attributes['class'] ?? null;
+			$style    = esc_attr( $this->get_style()->button_class() );
+			return $existing ? $style . ' ' . $existing : $style;
+		}
+		return \array_key_exists( $attribute, $this->attributes )
+			? $this->attributes[ $attribute ]
+			: null;
+	}
+
+	/**
+	 * Get all attributes with style classes injected.
+	 *
+	 * @return array<string, string|int|float|bool|null>
+	 */
+	public function get_attributes(): array {
+		$attributes          = $this->attributes;
+		$style_class         = esc_attr( $this->get_style()->button_class() );
+		$existing            = isset( $attributes['class'] ) ? $attributes['class'] : '';
+		$attributes['class'] = $existing ? $style_class . ' ' . $existing : $style_class;
+		return $attributes;
+	}
+
+	/**
+	 * Get a single wrapper attribute with style classes injected for 'class'.
+	 *
+	 * @param string $attribute
+	 * @return string|int|float|bool|null
+	 */
+	public function get_wrapper_attribute( string $attribute ) {
+		if ( 'class' === $attribute ) {
+			$existing = \array_key_exists( 'class', $this->wrapper_attributes )
+				? Esc::attribute( $this->wrapper_attributes['class'] )
+				: null;
+			$style = pipe( sprintf( $this->get_style()->element_wrapper_class(), 'button' ), 'esc_attr' );
+			return $existing ? $style . ' ' . $existing : $style;
+		}
+		return \array_key_exists( $attribute, $this->wrapper_attributes )
+			? Esc::attribute( $this->wrapper_attributes[ $attribute ] )
+			: null;
+	}
+
+	/**
+	 * Get all wrapper attributes with style classes injected.
+	 *
+	 * @return array<string, string|int|float|bool|null>
+	 */
+	public function get_wrapper_attributes(): array {
+		$attributes          = $this->wrapper_attributes;
+		$style_class         = pipe( sprintf( $this->get_style()->element_wrapper_class(), 'button' ), 'esc_attr' );
+		$existing            = isset( $attributes['class'] ) ? $attributes['class'] : '';
+		$attributes['class'] = $existing ? $style_class . ' ' . $existing : $style_class;
+		return $attributes;
+	}
+
+	/**
+	 * Static constructor.
+	 *
+	 * @param string $name
+	 * @return static
+	 */
+	public static function make( string $name ): self {
+		return new static( $name );
 	}
 
 	/**

@@ -26,6 +26,7 @@ declare( strict_types=1 );
 namespace PinkCrab\Form_Components\Element;
 
 use PinkCrab\Form_Components\Element\Field_Traits\{Attributes,Validation,Sanitizer,Element_Wrap, Form_Style};
+use PinkCrab\Form_Components\Util\Esc;
 use PinkCrab\Form_Components\Element\Element;
 use PinkCrab\Form_Components\Style\{Style_Provider, Style};
 use function PinkCrab\FunctionConstructors\GeneralFunctions\pipe;
@@ -41,6 +42,13 @@ abstract class Field implements Element {
 	 */
 	protected $name;
 
+	/**
+	 * Whether to render the wrapper div around the field.
+	 *
+	 * @var bool
+	 */
+	protected $show_wrapper = true;
+
 
 	/**
 	 * Constructs an instance of the field.
@@ -53,14 +61,94 @@ abstract class Field implements Element {
 		$this->set_defaults();
 
 		// Set the style.
-		$this->set_style( $style ?? Style_Provider::get_default_style() );
+		if ( null !== $style ) {
+			$this->style( $style );
+		} else {
+			$this->set_style( Style_Provider::get_default_style() );
+		}
 
 		// Set with a default wrapper id.
 		$this->wrapper_id( 'form-field_' . $this->name );
-		$this->add_wrapper_class( pipe( sprintf( $this->get_style()->element_wrapper_class(), $this->get_type() ), 'esc_attr' ) );
+	}
 
-		// Set the field id and style.
-		$this->add_class( pipe( sprintf( $this->get_style()->field_class(), $this->get_type() ), 'esc_attr' ) );
+	/**
+	 * Compute the style class for the field element.
+	 *
+	 * @return string
+	 */
+	protected function get_style_field_class(): string {
+		return pipe( sprintf( $this->get_style()->field_class(), $this->get_type() ), 'esc_attr' );
+	}
+
+	/**
+	 * Compute the style class for the wrapper element.
+	 *
+	 * @return string
+	 */
+	protected function get_style_wrapper_class(): string {
+		return pipe( sprintf( $this->get_style()->element_wrapper_class(), $this->get_type() ), 'esc_attr' );
+	}
+
+	/**
+	 * Get a single attribute with style classes injected for 'class'.
+	 *
+	 * @param string $attribute
+	 * @return string|int|float|bool|null
+	 */
+	public function get_attribute( string $attribute ) {
+		if ( 'class' === $attribute ) {
+			$existing = $this->attributes['class'] ?? null;
+			$style    = $this->get_style_field_class();
+			return $existing ? $style . ' ' . $existing : $style;
+		}
+		return \array_key_exists( $attribute, $this->attributes )
+			? $this->attributes[ $attribute ]
+			: null;
+	}
+
+	/**
+	 * Get all attributes with style classes injected.
+	 *
+	 * @return array<string, string|int|float|bool|null>
+	 */
+	public function get_attributes(): array {
+		$attributes          = $this->attributes;
+		$style_class         = $this->get_style_field_class();
+		$existing            = isset( $attributes['class'] ) ? $attributes['class'] : '';
+		$attributes['class'] = $existing ? $style_class . ' ' . $existing : $style_class;
+		return $attributes;
+	}
+
+	/**
+	 * Get a single wrapper attribute with style classes injected for 'class'.
+	 *
+	 * @param string $attribute
+	 * @return string|int|float|bool|null
+	 */
+	public function get_wrapper_attribute( string $attribute ) {
+		if ( 'class' === $attribute ) {
+			$existing = \array_key_exists( 'class', $this->wrapper_attributes )
+				? Esc::attribute( $this->wrapper_attributes['class'] )
+				: null;
+			$style = $this->get_style_wrapper_class();
+			return $existing ? $style . ' ' . $existing : $style;
+		}
+		return \array_key_exists( $attribute, $this->wrapper_attributes )
+			? Esc::attribute( $this->wrapper_attributes[ $attribute ] )
+			: null;
+	}
+
+	/**
+	 * Get all wrapper attributes with style classes injected.
+	 *
+	 * @return array<string, string|int|float|bool|null>
+	 */
+	public function get_wrapper_attributes(): array {
+		$attributes          = $this->wrapper_attributes;
+		$style_class         = $this->get_style_wrapper_class();
+		$existing            = isset( $attributes['class'] ) ? $attributes['class'] : '';
+		$attributes['class'] = $existing ? $style_class . ' ' . $existing : $style_class;
+		return $attributes;
 	}
 
 	/**
@@ -108,5 +196,24 @@ abstract class Field implements Element {
 		return $this->name;
 	}
 
+	/**
+	 * Set whether to show the wrapper div.
+	 *
+	 * @param bool $show
+	 * @return static
+	 */
+	public function show_wrapper( bool $show = true ): self {
+		$this->show_wrapper = $show;
+		return $this;
+	}
+
+	/**
+	 * Check if the field should render its wrapper.
+	 *
+	 * @return bool
+	 */
+	public function has_wrapper(): bool {
+		return $this->show_wrapper;
+	}
 
 }

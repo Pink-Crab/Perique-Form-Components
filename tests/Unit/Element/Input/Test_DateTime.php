@@ -16,7 +16,7 @@ namespace PinkCrab\Form_Components\Tests\Unit\Element\Input;
 
 use Closure;
 use WP_UnitTestCase;
-use PinkCrab\Form_Components\Element\Field\Input\DateTime;
+use PinkCrab\Form_Components\Element\Field\Input\Datetime;
 use function PinkCrab\FunctionConstructors\Objects\usesTrait;
 use PinkCrab\Form_Components\Element\Field\Attribute\{Range, Autocomplete, Placeholder, Datalist, Single_Value, Required, Read_Only};
 
@@ -31,24 +31,24 @@ class Test_DateTime extends WP_UnitTestCase {
 
 	/** @inheritDoc */
 	public function get_class_under_test(): string {
-		return DateTime::class;
+		return Datetime::class;
 	}
 	
 	/** @testdox A DateTime input should return an input type of "email" */
 	public function test_type(): void {
-		$time = new DateTime( 'test' );
+		$time = new Datetime( 'test' );
 		$this->assertEquals( 'datetime-local', $time->get_input_type() );
 	}
 
 	/** @testdox A DateTime input should return a type of email_input */
 	public function test_element_type(): void {
-		$time = new DateTime( 'test' );
+		$time = new Datetime( 'test' );
 		$this->assertEquals( 'datetime-local_input', $time->get_type() );
 	}
 
 	/** @testdox By default the DateTime field should sanitize values as integer using intval. */
 	public function test_default_sanitizer(): void {
-		$time = new DateTime( 'test' );
+		$time = new Datetime( 'test' );
 		$this->assertInstanceOf( Closure::class, $time->get_sanitizer() );
 	}
 
@@ -78,7 +78,7 @@ class Test_DateTime extends WP_UnitTestCase {
 	 * @dataProvider attribute_methods
 	 */
 	public function test_has_attributes( string $method ): void {
-		$time = new DateTime( 'test' );
+		$time = new Datetime( 'test' );
 		$this->assertTrue( method_exists( $time, $method ) );
 	}
 
@@ -115,7 +115,7 @@ class Test_DateTime extends WP_UnitTestCase {
 	 * @testdox By default the sanitizer format should be set to the standard HTML spec for this input type.
 	 * @dataProvider sanitizer_format_data */
 	public function test_default_sanitizer_format( $value, $expected, $add_seconds ): void {
-		$time = new DateTime( 'test' );
+		$time = new Datetime( 'test' );
 
 		$sanitized = $time->set_existing( $value )->get_value();
 
@@ -130,35 +130,35 @@ class Test_DateTime extends WP_UnitTestCase {
 
 	/** @testdox It should be possible to set the step value of a time field in seconds */
 	public function test_set_step(): void {
-		$time = new DateTime( 'test' );
+		$time = new Datetime( 'test' );
 		$time->step_by_seconds( 60 );
 		$this->assertEquals( 60, $time->get_step() );
 	}
 
 	/** @testdox It should be possible to set the step value of a time field in minutes */
 	public function test_set_step_minutes(): void {
-		$time = new DateTime( 'test' );
+		$time = new Datetime( 'test' );
 		$time->step_by_minutes( 60 );
 		$this->assertEquals( 3600, $time->get_step() );
 	}
 
 	/** @testdox It should be possible to set the step value of a time field in hours */
 	public function test_set_step_hours(): void {
-		$time = new DateTime( 'test' );
+		$time = new Datetime( 'test' );
 		$time->step_by_hours( 24 );
 		$this->assertEquals( 86400, $time->get_step() );
 	}
 
 	/** @testdox It should be possible to set the step value of a time field in days */
 	public function test_set_step_days(): void {
-		$time = new DateTime( 'test' );
+		$time = new Datetime( 'test' );
 		$time->step_by_days( 7 );
 		$this->assertEquals( 604800, $time->get_step() );
 	}
 
 	/** @testdox It should be possible to set the step value of a time field in weeks */
 	public function test_set_step_weeks(): void {
-		$time = new DateTime( 'test' );
+		$time = new Datetime( 'test' );
 		$time->step_by_weeks( 4 );
 		$this->assertEquals( 2419200, $time->get_step() );
 	}

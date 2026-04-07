@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Form_Components\Element\Field\Attribute;
 
-use PinkCrab\Form_Components\Utils;
+use PinkCrab\Form_Components\Util\Esc;
 
 trait Length {
 
@@ -63,7 +63,7 @@ trait Length {
 	 */
 	public function minlength( $minlength = null ): self {
 		if ( null !== $minlength && \is_numeric( $minlength ) ) {
-			$this->attribute( 'minlength', Utils::esc_attr( $minlength ) );
+			$this->attribute( 'minlength', Esc::attribute( $minlength ) );
 		} else {
 			$this->remove_attribute( 'minlength' );
 		}
@@ -99,7 +99,7 @@ trait Length {
 	 */
 	public function maxlength( $maxlength = null ): self {
 		if ( null !== $maxlength && \is_numeric( $maxlength ) ) {
-			$this->attribute( 'maxlength', Utils::esc_attr( $maxlength ) );
+			$this->attribute( 'maxlength', Esc::attribute( $maxlength ) );
 		} else {
 			$this->remove_attribute( 'maxlength' );
 		}

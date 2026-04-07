@@ -24,6 +24,7 @@ declare( strict_types=1 );
 
 namespace PinkCrab\Form_Components\Component\Partial;
 
+use PinkCrab\Form_Components\Element\Nonce;
 use PinkCrab\Perique\Services\View\Component\Component;
 
 class Nonce_Component extends Component {
@@ -34,8 +35,8 @@ class Nonce_Component extends Component {
 	/** @var string */
 	protected $name;
 
-	public function __construct( string $action, string $name ) {
-		$this->action = $action;
-		$this->name   = $name;
+	public function __construct( Nonce $nonce ) {
+		$this->action = $nonce->get_action();
+		$this->name   = $nonce->get_name();
 	}
 }

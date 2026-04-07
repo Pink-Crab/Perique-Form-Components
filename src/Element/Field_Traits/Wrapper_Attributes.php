@@ -25,7 +25,6 @@ declare( strict_types=1 );
 
 namespace PinkCrab\Form_Components\Element\Field_Traits;
 
-use PinkCrab\Form_Components\Utils;
 use PinkCrab\Form_Components\Util\Esc;
 use PinkCrab\Form_Components\Element\Element;
 

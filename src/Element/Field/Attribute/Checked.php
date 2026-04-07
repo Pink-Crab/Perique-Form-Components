@@ -27,11 +27,11 @@ namespace PinkCrab\Form_Components\Element\Field\Attribute;
 trait Checked {
 
 	/**
-	 * Sets the select type
+	 * Ensure only used when the field has attributes.
 	 *
-	 * @var bool
+	 * @return bool
 	 */
-	protected $checked = false;
+	abstract public function has_attributes(): bool;
 
 	/**
 	 * Sets if the field is checked.
@@ -40,7 +40,11 @@ trait Checked {
 	 * @return self
 	 */
 	public function checked( bool $checked = true ): self {
-		$this->checked = $checked;
+		if ( $checked ) {
+			$this->attribute( 'checked', null );
+		} else {
+			$this->remove_attribute( 'checked' );
+		}
 		return $this;
 	}
 
@@ -50,7 +54,7 @@ trait Checked {
 	 * @return bool
 	 */
 	public function is_checked(): bool {
-		return $this->checked;
+		return $this->has_attribute( 'checked' );
 	}
 
 }

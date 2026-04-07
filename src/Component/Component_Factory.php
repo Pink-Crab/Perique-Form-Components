@@ -24,13 +24,28 @@ declare( strict_types=1 );
 
 namespace PinkCrab\Form_Components\Component;
 
-use PinkCrab\Form_Components\Utils;
+use PinkCrab\Form_Components\Util\Attributes;
+use PinkCrab\Form_Components\Element\Form;
+use PinkCrab\Form_Components\Element\Nonce;
+use PinkCrab\Form_Components\Element\Raw_HTML;
+use PinkCrab\Form_Components\Element\Field\Select;
+use PinkCrab\Form_Components\Element\Field\Group\Radio_Group;
+use PinkCrab\Form_Components\Element\Field\Group\Checkbox_Group;
+use PinkCrab\Form_Components\Element\Field\Textarea;
 use PinkCrab\Form_Components\Component\Form\Group_Component;
 use PinkCrab\Form_Components\Component\Field\Input_Component;
 use PinkCrab\Form_Components\Component\Field\Button_Component;
+use PinkCrab\Form_Components\Component\Form\Form_Component;
+use PinkCrab\Form_Components\Component\Form\Fieldset_Component;
+use PinkCrab\Form_Components\Component\Partial\Nonce_Component;
+use PinkCrab\Form_Components\Component\Field\Select_Component;
+use PinkCrab\Form_Components\Component\Field\Raw_HTML_Component;
+use PinkCrab\Form_Components\Component\Field\Radio_Group_Component;
+use PinkCrab\Form_Components\Component\Field\Checkbox_Group_Component;
+use PinkCrab\Form_Components\Component\Field\Textarea_Component;
 use PinkCrab\Perique\Services\View\Component\Component;
-use function PinkCrab\FunctionConstructors\Objects\isInstanceOf;
 use PinkCrab\Form_Components\Element\{Field, Group, Fieldset, Element, Button};
+use function PinkCrab\FunctionConstructors\Objects\isInstanceOf;
 
 class Component_Factory {
 
@@ -67,6 +82,18 @@ class Component_Factory {
 	 */
 	public function from_element( Element $element ): Component {
 		switch ( true ) {
+			case $element instanceof Checkbox_Group:
+				return $this->from_checkbox_group( $element );
+
+			case $element instanceof Radio_Group:
+				return $this->from_radio_group( $element );
+
+			case $element instanceof Select:
+				return $this->from_select( $element );
+
+			case $element instanceof Textarea:
+				return $this->from_textarea( $element );
+
 			case $element instanceof Field:
 				/*@var Field $element */
 				$element = $element;
@@ -75,14 +102,20 @@ class Component_Factory {
 			case $element instanceof Group:
 				return $this->from_group( $element );
 
-			// case Utils::class_uses_trait( $element, Fieldset::class ):
-			// 	return $this->from_fieldset( $element );
+			case $element instanceof Fieldset:
+				return new Fieldset_Component( $element );
 
 			case $element instanceof Button:
 				return $this->from_button( $element );
 
-			// case Utils::class_uses_trait( $element, Raw_HTML::class ):
-			// 	return $this->from_html( $element );
+			case $element instanceof Raw_HTML:
+				return $this->from_html( $element );
+
+			case $element instanceof Nonce:
+				return new Nonce_Component( $element );
+
+			case $element instanceof Form:
+				return new Form_Component( $element );
 
 			default:
 				throw new \InvalidArgumentException( 'Element is not a valid form element' );
@@ -97,6 +130,46 @@ class Component_Factory {
 	 */
 	public function from_field( Field $field ): Component {
 		return new Input_Component( $field );
+	}
+
+	/**
+	 * Create a component from a Checkbox_Group field.
+	 *
+	 * @param Checkbox_Group $group
+	 * @return Component
+	 */
+	public function from_checkbox_group( Checkbox_Group $group ): Component {
+		return new Checkbox_Group_Component( $group );
+	}
+
+	/**
+	 * Create a component from a Radio_Group field.
+	 *
+	 * @param Radio_Group $group
+	 * @return Component
+	 */
+	public function from_radio_group( Radio_Group $group ): Component {
+		return new Radio_Group_Component( $group );
+	}
+
+	/**
+	 * Create a component from a Select field.
+	 *
+	 * @param Select $select
+	 * @return Component
+	 */
+	public function from_select( Select $select ): Component {
+		return new Select_Component( $select );
+	}
+
+	/**
+	 * Create a component from a Textarea field.
+	 *
+	 * @param Textarea $textarea
+	 * @return Component
+	 */
+	public function from_textarea( Textarea $textarea ): Component {
+		return new Textarea_Component( $textarea );
 	}
 
 	/**
@@ -116,12 +189,12 @@ class Component_Factory {
 
 		return new Group_Component(
 			array_map(
-				function( Element $element ): Component {
+				function ( Element $element ): Component {
 					return $this->from_element( $element );
 				},
 				$group->get_fields()
 			),
-			Utils::parse_attributes( $attributes ),
+			Attributes::parse( $attributes ),
 			$group->get_before() ?? '',
 			$group->get_after() ?? ''
 		);
@@ -137,15 +210,15 @@ class Component_Factory {
 		return new Button_Component( $button );
 	}
 
-	// /**
-	//  * Create a component from a Raw_HTML element.
-	//  *
-	//  * @param Raw_HTML $html
-	//  * @return Component
-	//  */
-	// public function from_html( Raw_HTML $html ): Component {
-	// 	return new Component( $html );
-	// }
+	/**
+	 * Create a component from a Raw_HTML element.
+	 *
+	 * @param Raw_HTML $html
+	 * @return Component
+	 */
+	public function from_html( Raw_HTML $html ): Component {
+		return new Raw_HTML_Component( $html );
+	}
 
 
 }

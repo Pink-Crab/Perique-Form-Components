@@ -106,7 +106,8 @@ trait Datalist {
 	 * @param string|null $label An option label to be used
 	 * @return static
 	 */
-	public function datalist_item( string $value, ?string $label = null ) {
+	public function datalist_item( string|int|float $value, ?string $label = null ) {
+		$value = (string) $value;
 		// If no datalist key has been set, set it.
 		if ( ! $this->datalist_key ) {
 			$this->datalist_key( $this->get_datalist_key() );
