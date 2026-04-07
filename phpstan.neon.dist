@@ -1,0 +1,27 @@
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    treatPhpDocTypesAsCertain: false
+    paths:
+        - %currentWorkingDirectory%/src/
+    excludePaths:
+        - %currentWorkingDirectory%/tests/*
+    bootstrapFiles:
+        - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+    scanFiles:
+        - %currentWorkingDirectory%/type_def.php
+    ignoreErrors:
+        - '#Function apply_filters invoked with \d parameters, \d required#'
+        -
+            message: '#Call to an undefined method PinkCrab\\Form_Components\\Element\\Element::(has_validator|get_validator)\(\)#'
+            path: src/Element/Field_Traits/Fields.php
+        -
+            message: '#Call to function method_exists\(\) with .* will always evaluate to true#'
+            path: src/Element/Field_Traits/Fields.php
+        -
+            message: '#should return bool\|float\|int\|string\|null but returns#'
+            path: src/Element/Field/Attribute/Single_Value.php
+    reportUnmatchedIgnoredErrors: false

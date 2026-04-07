@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Example Project" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+
+	<description>PinkCrab general PHPCS rules for modules</description>
+
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/wordpress/*</exclude-pattern>
+	<exclude-pattern>/tests/*</exclude-pattern>
+
+	<!-- Include the WordPress-Extra standard. -->
+	<rule ref="WordPress-Extra">
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+		<exclude name="WordPress.PHP.YodaConditions.NotYoda"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.curl_curl_getinfo"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.curl_curl_setopt"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.curl_curl_exec"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.curl_curl_init"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.curl_curl_close"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents"/>
+		<exclude name="WordPress.PHP.DisallowShortTernary.Found"/>
+	</rule>
+
+	<!-- Exclude rules that conflict with project code style. -->
+	<rule ref="PSR12.Files.FileHeader.IncorrectOrder">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PSR12.Files.FileHeader.IncorrectGrouping">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PSR12.Traits.UseDeclaration.MultipleImport">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Universal.WhiteSpace.CommaSpacing.TooMuchSpaceAfter">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Universal.WhiteSpace.CommaSpacing.NoSpaceAfter">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Add in some extra rules from other standards. -->
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+	<rule ref="Generic.Commenting.Todo"/>
+
+	<config name="minimum_supported_wp_version" value="4.9"/>
+
+</ruleset>

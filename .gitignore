@@ -1,0 +1,15 @@
+/vendor
+/wordpress
+/node_modules
+/artifacts
+composer.lock
+package-lock.json
+coverage.xml
+clover.xml
+/coverage-report
+/.vscode
+.phpunit.result.cache
+tests/.env
+tests/test-results
+/docs-gen/screenshots
+/docs-gen/.wp-env
