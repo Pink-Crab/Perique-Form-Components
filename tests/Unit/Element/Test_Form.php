@@ -305,4 +305,11 @@ class Test_Form extends WP_UnitTestCase {
 		$this->assertEquals( '<p>Footer</p>', $form->get_after() );
 		$this->assertCount( 4, $form->get_fields() );
 	}
+
+	/** @testdox It should be possible to construct a Form with a custom style */
+	public function test_custom_style(): void {
+		$style = new \PinkCrab\Form_Components\Style\Default_Style();
+		$form  = new Form( 'test', $style );
+		$this->assertSame( $style, $form->get_style() );
+	}
 }

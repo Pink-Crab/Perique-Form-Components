@@ -9,6 +9,9 @@ define('TEST_FIXTURES_DIR', __DIR__ . '/Fixtures');
 
 // Composer autoloader must be loaded before WP_PHPUNIT__DIR will be available
 require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+// Load test stubs for external dependencies not installed.
+require_once __DIR__ . '/Fixtures/Mock_Objects/Validator_Stub.php';
 // Give access to tests_add_filter() function.
 require_once getenv('WP_PHPUNIT__DIR') . '/includes/functions.php';
 

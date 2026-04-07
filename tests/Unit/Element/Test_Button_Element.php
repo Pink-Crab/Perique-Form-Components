@@ -140,4 +140,66 @@ class Test_Button_Element extends WP_UnitTestCase {
 		$button->after( '<span>After</span>' );
 		$this->assertEquals( '<span>After</span>', $button->get_after() );
 	}
+
+	/** @testdox Getting a non-class attribute should return null if not set */
+	public function test_get_attribute_non_class_returns_null(): void {
+		$button = new Button( 'test' );
+		$this->assertNull( $button->get_attribute( 'data-something' ) );
+	}
+
+	/** @testdox Getting a non-class attribute that exists should return its value */
+	public function test_get_attribute_non_class_returns_value(): void {
+		$button = new Button( 'test' );
+		$button->attribute( 'data-action', 'submit' );
+		$this->assertEquals( 'submit', $button->get_attribute( 'data-action' ) );
+	}
+
+	/** @testdox It should be possible to construct a Button with a custom style */
+	public function test_custom_style(): void {
+		$style  = new Default_Style();
+		$button = new Button( 'test', $style );
+		$this->assertSame( $style, $button->get_style() );
+	}
+
+	/** @testdox Getting wrapper class attribute should include element wrapper style */
+	public function test_get_wrapper_attribute_class(): void {
+		$button = new Button( 'test' );
+		$class  = $button->get_wrapper_attribute( 'class' );
+		$this->assertStringContainsString( 'pc-form__element', $class );
+		$this->assertStringContainsString( 'button', $class );
+	}
+
+	/** @testdox Getting wrapper class with custom class should merge */
+	public function test_get_wrapper_attribute_class_with_custom(): void {
+		$button = new Button( 'test' );
+		$button->add_wrapper_class( 'my-custom' );
+		$class = $button->get_wrapper_attribute( 'class' );
+		$this->assertStringContainsString( 'my-custom', $class );
+		$this->assertStringContainsString( 'pc-form__element', $class );
+	}
+
+	/** @testdox Getting all wrapper attributes should include style classes */
+	public function test_get_wrapper_attributes(): void {
+		$button = new Button( 'test' );
+		$attrs  = $button->get_wrapper_attributes();
+		$this->assertArrayHasKey( 'class', $attrs );
+		$this->assertStringContainsString( 'button', $attrs['class'] );
+	}
+
+	/** @testdox Getting all attributes should include button style class */
+	public function test_get_attributes_includes_style(): void {
+		$button = new Button( 'test' );
+		$attrs  = $button->get_attributes();
+		$this->assertArrayHasKey( 'class', $attrs );
+		$this->assertStringContainsString( 'pc-form__button', $attrs['class'] );
+	}
+
+	/** @testdox Getting class attribute with custom class added should merge with style */
+	public function test_get_attribute_class_with_custom(): void {
+		$button = new Button( 'test' );
+		$button->add_class( 'extra' );
+		$class = $button->get_attribute( 'class' );
+		$this->assertStringContainsString( 'pc-form__button', $class );
+		$this->assertStringContainsString( 'extra', $class );
+	}
 }

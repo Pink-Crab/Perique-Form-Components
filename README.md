@@ -13,6 +13,7 @@ A collection of View Components for rendering form fields in the Perique Framewo
 [![WordPress 6.8 Test Suite [PHP8.0-8.4]](https://github.com/Pink-Crab/Perique-Form-Components/actions/workflows/WP_6_8.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Form-Components/actions/workflows/WP_6_8.yaml)
 [![WordPress 6.9 Test Suite [PHP8.0-8.4]](https://github.com/Pink-Crab/Perique-Form-Components/actions/workflows/WP_6_9.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Form-Components/actions/workflows/WP_6_9.yaml)
 [![E2E Tests (Playwright)](https://github.com/Pink-Crab/Perique-Form-Components/actions/workflows/E2E.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Form-Components/actions/workflows/E2E.yaml)
+[![codecov](https://codecov.io/gh/Pink-Crab/Perique-Form-Components/graph/badge.svg?token=hdrrvng8pv)](https://codecov.io/gh/Pink-Crab/Perique-Form-Components)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Form-Components/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Form-Components/?branch=master)
 
 ****

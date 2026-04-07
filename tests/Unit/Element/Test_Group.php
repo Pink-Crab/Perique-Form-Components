@@ -145,4 +145,11 @@ class Test_Group extends WP_UnitTestCase {
 		$group->add_wrapper_class( 'custom' );
 		$this->assertStringContainsString( 'custom', $group->get_wrapper_attribute( 'class' ) );
 	}
+
+	/** @testdox It should be possible to construct a Group with a custom style */
+	public function test_custom_style(): void {
+		$style = new \PinkCrab\Form_Components\Style\Default_Style();
+		$group = new Group( 'test', $style );
+		$this->assertSame( $style, $group->get_style() );
+	}
 }

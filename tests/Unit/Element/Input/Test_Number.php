@@ -94,4 +94,142 @@ class Test_Number extends WP_UnitTestCase {
 		$this->assertTrue( usesTrait( Read_Only::class )( $number ) );
 	}
 
+	####################################################################
+	######                     RANGE TRAIT                        ######
+	####################################################################
+
+	/** @testdox It should be possible to set and get a min value */
+	public function test_range_min(): void {
+		$number = new Number( 'test' );
+		$this->assertNull( $number->get_min() );
+		$number->min( 5 );
+		$this->assertEquals( '5', $number->get_min() );
+	}
+
+	/** @testdox Passing null to min should remove it */
+	public function test_range_min_null(): void {
+		$number = new Number( 'test' );
+		$number->min( 5 );
+		$this->assertEquals( '5', $number->get_min() );
+		$number->min( null );
+		$this->assertNull( $number->get_min() );
+	}
+
+	/** @testdox It should be possible to set and get a max value */
+	public function test_range_max(): void {
+		$number = new Number( 'test' );
+		$this->assertNull( $number->get_max() );
+		$number->max( 100 );
+		$this->assertEquals( '100', $number->get_max() );
+	}
+
+	/** @testdox Passing null to max should remove it */
+	public function test_range_max_null(): void {
+		$number = new Number( 'test' );
+		$number->max( 100 );
+		$this->assertEquals( '100', $number->get_max() );
+		$number->max( null );
+		$this->assertNull( $number->get_max() );
+	}
+
+	/** @testdox It should be possible to set both min and max using range */
+	public function test_range_set(): void {
+		$number = new Number( 'test' );
+		$number->range( 1, 50 );
+		$this->assertEquals( '1', $number->get_min() );
+		$this->assertEquals( '50', $number->get_max() );
+	}
+
+	####################################################################
+	######                      STEP TRAIT                        ######
+	####################################################################
+
+	/** @testdox It should be possible to set and get the step attribute */
+	public function test_step_set_and_get(): void {
+		$number = new Number( 'test' );
+		$this->assertFalse( $number->has_step() );
+		$this->assertNull( $number->get_step() );
+		$number->step( 2 );
+		$this->assertTrue( $number->has_step() );
+		$this->assertEquals( '2', $number->get_step() );
+	}
+
+	/** @testdox It should be possible to set a float step value */
+	public function test_step_float(): void {
+		$number = new Number( 'test' );
+		$number->step( 0.5 );
+		$this->assertTrue( $number->has_step() );
+		$this->assertEquals( '0.5', $number->get_step() );
+	}
+
+	/** @testdox It should be possible to clear the step attribute */
+	public function test_step_clear(): void {
+		$number = new Number( 'test' );
+		$number->step( 5 );
+		$this->assertTrue( $number->has_step() );
+		$number->clear_step();
+		$this->assertFalse( $number->has_step() );
+		$this->assertNull( $number->get_step() );
+	}
+
+	/** @testdox Clearing step when not set should not throw */
+	public function test_step_clear_when_not_set(): void {
+		$number = new Number( 'test' );
+		$number->clear_step();
+		$this->assertFalse( $number->has_step() );
+	}
+
+	####################################################################
+	######                   PLACEHOLDER TRAIT                    ######
+	####################################################################
+
+	/** @testdox It should be possible to set and get a placeholder on Number */
+	public function test_placeholder_set_and_get(): void {
+		$number = new Number( 'test' );
+		$this->assertFalse( $number->has_placeholder() );
+		$this->assertNull( $number->get_placeholder() );
+		$number->placeholder( 'Enter a number' );
+		$this->assertTrue( $number->has_placeholder() );
+		$this->assertEquals( 'Enter a number', $number->get_placeholder() );
+	}
+
+	####################################################################
+	######                    READ_ONLY TRAIT                     ######
+	####################################################################
+
+	/** @testdox It should be possible to set and unset readonly on Number */
+	public function test_readonly_set_and_unset(): void {
+		$number = new Number( 'test' );
+		$this->assertFalse( $number->is_readonly() );
+		$number->readonly();
+		$this->assertTrue( $number->is_readonly() );
+		$number->readonly( false );
+		$this->assertFalse( $number->is_readonly() );
+	}
+
+	####################################################################
+	######                    REQUIRED TRAIT                      ######
+	####################################################################
+
+	/** @testdox It should be possible to set and unset required on Number */
+	public function test_required_set_and_unset(): void {
+		$number = new Number( 'test' );
+		$this->assertFalse( $number->is_required() );
+		$number->required();
+		$this->assertTrue( $number->is_required() );
+		$number->required( false );
+		$this->assertFalse( $number->is_required() );
+	}
+
+	####################################################################
+	######                  AUTOCOMPLETE TRAIT                    ######
+	####################################################################
+
+	/** @testdox It should be possible to set autocomplete on Number */
+	public function test_autocomplete_set_and_get(): void {
+		$number = new Number( 'test' );
+		$number->autocomplete( 'off' );
+		$this->assertTrue( $number->has_autocomplete() );
+		$this->assertEquals( 'off', $number->get_autocomplete() );
+	}
 }
