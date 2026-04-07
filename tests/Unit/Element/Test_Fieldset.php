@@ -181,4 +181,97 @@ class Test_Fieldset extends WP_UnitTestCase {
 		$this->assertTrue( $fieldset->is_disabled() );
 		$this->assertCount( 2, $fieldset->get_fields() );
 	}
+
+	/** @testdox It should be possible to construct a Fieldset with a custom style */
+	public function test_custom_style(): void {
+		$style    = new Default_Style();
+		$fieldset = new Fieldset( 'test', $style );
+		$this->assertSame( $style, $fieldset->get_style() );
+	}
+
+	/** @testdox Getting wrapper class attribute should include element wrapper style */
+	public function test_get_wrapper_attribute_class(): void {
+		$fieldset = new Fieldset( 'test' );
+		$class    = $fieldset->get_wrapper_attribute( 'class' );
+		$this->assertStringContainsString( 'pc-form__element', $class );
+		$this->assertStringContainsString( 'fieldset', $class );
+	}
+
+	/** @testdox Getting wrapper class with custom class added should merge */
+	public function test_get_wrapper_attribute_class_with_custom(): void {
+		$fieldset = new Fieldset( 'test' );
+		$fieldset->add_wrapper_class( 'custom-class' );
+		$class = $fieldset->get_wrapper_attribute( 'class' );
+		$this->assertStringContainsString( 'custom-class', $class );
+		$this->assertStringContainsString( 'pc-form__element', $class );
+	}
+
+	/** @testdox It should be possible to get a single attribute via the base trait method */
+	public function test_get_attribute(): void {
+		$fieldset = new Fieldset( 'test' );
+		$this->assertNull( $fieldset->get_attribute( 'data-nope' ) );
+		$fieldset->attribute( 'data-foo', 'bar' );
+		$this->assertEquals( 'bar', $fieldset->get_attribute( 'data-foo' ) );
+	}
+
+	/** @testdox It should be possible to get all attributes via the base trait method */
+	public function test_get_attributes(): void {
+		$fieldset = new Fieldset( 'test' );
+		$fieldset->attribute( 'data-a', '1' );
+		$fieldset->attribute( 'data-b', '2' );
+		$attrs = $fieldset->get_attributes();
+		$this->assertIsArray( $attrs );
+		$this->assertArrayHasKey( 'data-a', $attrs );
+		$this->assertArrayHasKey( 'data-b', $attrs );
+	}
+
+	/** @testdox Adding a class when no class attribute exists should set it */
+	public function test_add_class_when_no_class_exists(): void {
+		$fieldset = new Fieldset( 'test' );
+		// Clear any existing class via reflection
+		$reflection = new \ReflectionClass( $fieldset );
+		$prop       = $reflection->getProperty( 'attributes' );
+		$prop->setAccessible( true );
+		$attrs = $prop->getValue( $fieldset );
+		unset( $attrs['class'] );
+		$prop->setValue( $fieldset, $attrs );
+
+		$fieldset->add_class( 'my-class' );
+		$this->assertEquals( 'my-class', $fieldset->get_attribute( 'class' ) );
+	}
+
+	/** @testdox Removing a class when no class attribute exists should not throw */
+	public function test_remove_class_when_no_class_exists(): void {
+		$fieldset = new Fieldset( 'test' );
+		// Clear any existing class via reflection
+		$reflection = new \ReflectionClass( $fieldset );
+		$prop       = $reflection->getProperty( 'attributes' );
+		$prop->setAccessible( true );
+		$attrs = $prop->getValue( $fieldset );
+		unset( $attrs['class'] );
+		$prop->setValue( $fieldset, $attrs );
+
+		$this->assertSame( $fieldset, $fieldset->remove_class( 'nope' ) );
+	}
+
+	/** @testdox Adding and removing classes should work via base trait */
+	public function test_add_and_remove_class(): void {
+		$fieldset = new Fieldset( 'test' );
+		// Clear any existing class via reflection
+		$reflection = new \ReflectionClass( $fieldset );
+		$prop       = $reflection->getProperty( 'attributes' );
+		$prop->setAccessible( true );
+		$attrs = $prop->getValue( $fieldset );
+		unset( $attrs['class'] );
+		$prop->setValue( $fieldset, $attrs );
+
+		$fieldset->add_class( 'foo' );
+		$fieldset->add_class( 'bar' );
+		$this->assertStringContainsString( 'foo', $fieldset->get_attribute( 'class' ) );
+		$this->assertStringContainsString( 'bar', $fieldset->get_attribute( 'class' ) );
+
+		$fieldset->remove_class( 'foo' );
+		$this->assertStringNotContainsString( 'foo', $fieldset->get_attribute( 'class' ) );
+		$this->assertStringContainsString( 'bar', $fieldset->get_attribute( 'class' ) );
+	}
 }

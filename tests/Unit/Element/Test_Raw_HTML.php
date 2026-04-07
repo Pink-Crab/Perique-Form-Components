@@ -127,4 +127,19 @@ class Test_Raw_HTML extends WP_UnitTestCase {
 		$raw->wrapper_id( 'my-id' );
 		$this->assertEquals( 'my-id', $raw->get_wrapper_attribute( 'id' ) );
 	}
+
+	/** @testdox It should be possible to get all wrapper attributes */
+	public function test_get_wrapper_attributes(): void {
+		$raw = new Raw_HTML( 'test' );
+		$raw->wrapper_attribute( 'data-foo', 'bar' );
+		$attrs = $raw->get_wrapper_attributes();
+		$this->assertIsArray( $attrs );
+		$this->assertArrayHasKey( 'data-foo', $attrs );
+	}
+
+	/** @testdox Removing a wrapper class when none exist should not throw */
+	public function test_remove_wrapper_class_when_no_class(): void {
+		$raw = new Raw_HTML( 'test' );
+		$this->assertSame( $raw, $raw->remove_wrapper_class( 'nope' ) );
+	}
 }

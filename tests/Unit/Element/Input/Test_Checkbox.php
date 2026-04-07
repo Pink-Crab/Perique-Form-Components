@@ -105,4 +105,46 @@ class Test_Checkbox extends WP_UnitTestCase {
 		$checkbox = new Checkbox( 'test' );
 		$this->assertTrue( method_exists( $checkbox, $method ) );
 	}
+
+	####################################################################
+	######                    CHECKED TRAIT                       ######
+	####################################################################
+
+	/** @testdox It should be possible to set a checkbox as checked */
+	public function test_checked_set(): void {
+		$checkbox = new Checkbox( 'test' );
+		$this->assertFalse( $checkbox->is_checked() );
+		$checkbox->checked();
+		$this->assertTrue( $checkbox->is_checked() );
+	}
+
+	/** @testdox It should be possible to uncheck a checkbox */
+	public function test_checked_unset(): void {
+		$checkbox = new Checkbox( 'test' );
+		$checkbox->checked( true );
+		$this->assertTrue( $checkbox->is_checked() );
+		$checkbox->checked( false );
+		$this->assertFalse( $checkbox->is_checked() );
+	}
+
+	####################################################################
+	######                   DISABLED TRAIT                       ######
+	####################################################################
+
+	/** @testdox It should be possible to set a checkbox as disabled */
+	public function test_disabled_set(): void {
+		$checkbox = new Checkbox( 'test' );
+		$this->assertFalse( $checkbox->is_disabled() );
+		$checkbox->disabled();
+		$this->assertTrue( $checkbox->is_disabled() );
+	}
+
+	/** @testdox It should be possible to unset disabled on a checkbox */
+	public function test_disabled_unset(): void {
+		$checkbox = new Checkbox( 'test' );
+		$checkbox->disabled( true );
+		$this->assertTrue( $checkbox->is_disabled() );
+		$checkbox->disabled( false );
+		$this->assertFalse( $checkbox->is_disabled() );
+	}
 }
