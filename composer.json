@@ -28,7 +28,7 @@
         "szepeviktor/phpstan-wordpress": "^1.0",
         "php-stubs/wordpress-stubs": "6.6.*",
         "roots/wordpress": "6.6.*",
-        "wp-phpunit/wp-phpunit": "6.6.*",
+        "wp-phpunit/wp-phpunit": "6.6.* || 6.9.*",
         "dealerdirect/phpcodesniffer-composer-installer": "*",
         "wp-coding-standards/wpcs": "*",
         "yoast/phpunit-polyfills": "^1.0.0 || ^2.0.0",
