@@ -47,6 +47,7 @@ use PinkCrab\Form_Components\Component\Form\Fieldset_Component;
 use PinkCrab\Form_Components\Component\Partial\Nonce_Component;
 use PinkCrab\Form_Components\Component\Field\Datalist_Component;
 use PinkCrab\Form_Components\Component\Field\Notification_Component;
+use PinkCrab\Form_Components\Component\Field\Custom_Field_Component;
 use PinkCrab\Form_Components\Component\Partial\Field_Wrapper_End;
 use PinkCrab\Form_Components\Component\Partial\Field_Wrapper_Start;
 
@@ -86,6 +87,7 @@ class Form_Components implements Module {
 					Form_Component::class           => $this->resolve_template_path( 'form/form.php' ),
 					Group_Component::class          => $this->resolve_template_path( 'partial/group.php' ),
 					Fieldset_Component::class       => $this->resolve_template_path( 'form/fieldset.php' ),
+					Custom_Field_Component::class   => $this->resolve_template_path( 'field/custom-field.php' ),
 				);
 				return array_merge( $aliases, $custom_aliases );
 			},

@@ -245,6 +245,7 @@ $this->component( Make::form( 'enquiry', fn( $f ) => $f
 | Button | `Element\Button` | `Make::button()` | [View](docs/fields/button.md) |
 | Form | `Element\Form` | `Make::form()` | [View](docs/fields/form.md) |
 | Fieldset | `Element\Fieldset` | `Make::fieldset()` | [View](docs/fields/fieldset.md) |
+| Custom Field | `Element\Custom_Field` | `Make::custom()` | [View](docs/fields/custom-field.md) |
 
 ****
 
