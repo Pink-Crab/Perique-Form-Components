@@ -67,9 +67,7 @@ tools:
                     files:
                         file_name_sniff: false
                     php:
-                        yoda_conditions_sniff: false
                         discouraged_functions_sniff: true
-                        disallow_short_ternary_sniff: false
                     arrays:
                         array_declaration_sniff: true
                     classes:
