@@ -141,3 +141,34 @@ coding_style:
             general:
                 use_tabs: true
                 size: 4
+        spaces:
+            around_operators:
+                concatenation: true
+            before_parentheses:
+                function_declaration: true
+                closure_definition: true
+                function_call: false
+                if: true
+                for: true
+                while: true
+                switch: true
+                catch: true
+            within:
+                function_call: true
+                function_declaration: true
+                if: true
+                for: true
+                while: true
+                switch: true
+                catch: true
+                type_cast: true
+            before_left_brace:
+                class: true
+                function: true
+                if: true
+                else: true
+                for: true
+                while: true
+                do: true
+                switch: true
+                try: true
