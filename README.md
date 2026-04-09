@@ -251,4 +251,5 @@ $this->component( Make::form( 'enquiry', fn( $f ) => $f
 
 ## Change Log
 
+* 2.1.1 - Added Custom_Field element for rendering arbitrary HTML with full field treatment (wrapper, label, notifications, configurable kses filtering)
 * 2.1.0 - Initial release for Perique 2.1.*
