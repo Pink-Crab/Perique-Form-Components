@@ -27,7 +27,7 @@ namespace PinkCrab\Form_Components\Element\Field\Input;
 
 use PinkCrab\Form_Components\Util\Sanitize;
 use PinkCrab\Form_Components\Element\Field\Input\Abstract_Input;
-use PinkCrab\Form_Components\Element\Field\Attribute\{Autocomplete, Pattern, Datalist, Disabled, Length, Single_Value, Placeholder, Read_Only, Required,Input_Mode, Spellcheck};
+use PinkCrab\Form_Components\Element\Field\Attribute\{Autocomplete, Pattern, Datalist, Disabled, Length, Single_Value, Placeholder, Read_Only, Required, Input_Mode, Spellcheck};
 
 class Search extends Abstract_Input {
 
