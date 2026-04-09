@@ -1,0 +1,140 @@
+build:
+    environment:
+        php: 8.2
+    nodes:
+        analysis:
+            project_setup:
+                override:
+                    - 'composer install --no-interaction --prefer-dist'
+            tests:
+                override:
+                    - php-scrutinizer-run
+                    -
+                        command: phpcs-run
+                        use_website_config: true
+
+filter:
+    paths:
+        - 'src/*'
+    excluded_paths:
+        - 'tests/*'
+        - 'docs/*'
+        - 'docs-gen/*'
+        - 'node_modules/*'
+        - 'vendor/*'
+        - 'template/*'
+
+tools:
+    php_mess_detector:
+        filter:
+            excluded_paths: ['tests/*', 'docs/*', 'template/*']
+        config:
+            unused_code_rules: { unused_formal_parameter: true }
+            controversial_rules: { superglobals: false }
+            design_rules: { exit_expression: false }
+    php_analyzer:
+        filter:
+            excluded_paths: ['tests/*', 'docs/*', 'template/*']
+        config:
+            parameter_reference_check: { enabled: true }
+            checkstyle: { enabled: true, no_trailing_whitespace: true, naming: { enabled: true, local_variable: '^[a-z][a-zA-Z0-9_]*$', abstract_class_name: ^Abstract|Factory$, utility_class_name: 'Utils?$', constant_name: '^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$', property_name: '^[a-z][a-zA-Z0-9_]*$', method_name: '^(?:[a-z]|__)[a-zA-Z0-9_]*$', parameter_name: '^[a-z][a-zA-Z0-9_]*$', interface_name: '^[A-Z][a-zA-Z0-9_]*$', type_name: '^[A-Z][a-zA-Z0-9_]*$', exception_name: '^[A-Z][a-zA-Z0-9]*Exception$', isser_method_name: '^(?:is|has|should|may|supports|get|can)' } }
+            unreachable_code: { enabled: true }
+            check_access_control: { enabled: true }
+            typo_checks: { enabled: true }
+            check_variables: { enabled: true }
+            suspicious_code: { enabled: false, overriding_parameter: false, overriding_closure_use: false, parameter_closure_use_conflict: false, parameter_multiple_times: false, non_existent_class_in_instanceof_check: false, non_existent_class_in_catch_clause: false, assignment_of_null_return: false, non_commented_switch_fallthrough: false, non_commented_empty_catch_block: false, overriding_private_members: false, use_statement_alias_conflict: false, precedence_in_condition_assignment: false }
+            dead_assignments: { enabled: true }
+            verify_php_doc_comments: { enabled: true, parameters: true, return: true, suggest_more_specific_types: true, ask_for_return_if_not_inferrable: true, ask_for_param_type_annotation: true }
+            loops_must_use_braces: { enabled: false }
+            check_usage_context: { enabled: true, method_call_on_non_object: { enabled: true, ignore_null_pointer: true }, foreach: { value_as_reference: true, traversable: true }, missing_argument: true, argument_type_checks: lenient }
+            simplify_boolean_return: { enabled: false }
+            phpunit_checks: { enabled: false }
+            reflection_checks: { enabled: false }
+            precedence_checks: { enabled: true, assignment_in_condition: true, comparison_of_bit_result: true }
+            basic_semantic_checks: { enabled: true }
+            doc_comment_fixes: { enabled: false }
+            reflection_fixes: { enabled: false }
+            use_statement_fixes: { enabled: true, remove_unused: true, preserve_multiple: false, order_alphabetically: false }
+    php_code_sniffer:
+        command: 'phpcs -n -s -p -v'
+        filter:
+            excluded_paths: ['tests/*', 'docs/*', 'template/*']
+        config:
+            tab_width: '4'
+            standard: WordPress-Extra
+            sniffs:
+                wordpress:
+                    files:
+                        file_name_sniff: false
+                    php:
+                        yoda_conditions_sniff: false
+                        discouraged_functions_sniff: true
+                        disallow_short_ternary_sniff: false
+                    arrays:
+                        array_declaration_sniff: true
+                    classes:
+                        valid_class_name_sniff: true
+                    formatting:
+                        multiple_statement_alignment_sniff: true
+                    functions:
+                        function_call_signature_sniff: true
+                        function_declaration_argument_spacing_sniff: true
+                    naming_conventions:
+                        valid_function_name_sniff: true
+                    objects:
+                        object_instantiation_sniff: true
+                    strings:
+                        double_quote_usage_sniff: true
+                    white_space:
+                        control_structure_spacing_sniff: true
+                        operator_spacing_sniff: true
+                        php_indent_sniff: true
+                    xss:
+                        escape_output_sniff: true
+                    wp:
+                        alternative_functions_sniff: false
+                generic:
+                    code_analysis:
+                        unused_function_parameter_sniff: true
+                    commenting:
+                        todo_sniff: true
+    sensiolabs_security_checker:
+        filter:
+            excluded_paths: ['tests/*', 'docs/*']
+    php_cpd:
+        filter:
+            excluded_paths: ['tests/*', 'docs/*', 'template/*']
+    php_pdepend:
+        excluded_dirs:
+            - tests
+            - docs
+            - node_modules
+            - vendor
+            - template
+
+checks:
+    php:
+        fix_php_opening_tag: false
+        remove_php_closing_tag: false
+        one_class_per_file: false
+        side_effects_or_types: false
+        no_mixed_inline_html: false
+        require_braces_around_control_structures: false
+        php5_style_constructor: false
+        no_global_keyword: false
+        avoid_usage_of_logical_operators: false
+        psr2_class_declaration: false
+        no_underscore_prefix_in_properties: false
+        no_underscore_prefix_in_methods: false
+        blank_line_after_namespace_declaration: false
+        single_namespace_per_use: false
+        psr2_switch_declaration: false
+        psr2_control_structure_declaration: false
+        avoid_superglobals: false
+        security_vulnerabilities: false
+        no_exit: false
+        code_rating: true
+        duplication: true
+
+coding_style:
+    php: {  }
