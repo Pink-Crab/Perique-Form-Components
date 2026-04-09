@@ -429,6 +429,60 @@ trait Shared_Field_Cases {
 		$this->assertEquals( 1, substr_count( $field->get_wrapper_attribute( 'class' ), 'test' ) );
 	}
 
+	/**
+	 * @testdox [Shared::WrapperAttributes] Adding multiple wrapper classes should not cause double or triple escaping of class values.
+	 * @see https://github.com/Pink-Crab/Perique-Form-Components/issues/16
+	 */
+	public function test_add_wrapper_class_no_double_escaping(): void {
+		$class = $this->get_class_under_test();
+		$field = new $class( 'test' );
+
+		$field->add_wrapper_class( 'custom-one' );
+		$field->add_wrapper_class( 'custom-two' );
+		$field->add_wrapper_class( 'custom-three' );
+
+		$result = $field->get_wrapper_attribute( 'class' );
+		$this->assertEquals( 1, substr_count( $result, 'custom-one' ), 'custom-one should appear exactly once' );
+		$this->assertEquals( 1, substr_count( $result, 'custom-two' ), 'custom-two should appear exactly once' );
+		$this->assertEquals( 1, substr_count( $result, 'custom-three' ), 'custom-three should appear exactly once' );
+		$this->assertStringContainsString( 'custom-one custom-two custom-three', $result, 'Added classes should appear in order without escaping artifacts' );
+	}
+
+	/**
+	 * @testdox [Shared::WrapperAttributes] Adding duplicate wrapper classes should result in a clean class string without escaped duplicates.
+	 * @see https://github.com/Pink-Crab/Perique-Form-Components/issues/16
+	 */
+	public function test_add_wrapper_class_duplicates_no_escaping_artifacts(): void {
+		$class = $this->get_class_under_test();
+		$field = new $class( 'test' );
+
+		// The default style already adds pc-form__element, adding it again should not duplicate.
+		$field->add_wrapper_class( 'pc-form__element' );
+		$field->add_wrapper_class( 'pc-form__element' );
+
+		$result = $field->get_wrapper_attribute( 'class' );
+		$this->assertEquals( 1, substr_count( $result, 'pc-form__element ' ), 'pc-form__element should appear only once as a distinct class (not duplicated by escaping)' );
+	}
+
+	/**
+	 * @testdox [Shared::WrapperAttributes] Removing a wrapper class should produce a clean class string without escaping artifacts.
+	 * @see https://github.com/Pink-Crab/Perique-Form-Components/issues/16
+	 */
+	public function test_remove_wrapper_class_no_double_escaping(): void {
+		$class = $this->get_class_under_test();
+		$field = new $class( 'test' );
+
+		$field->add_wrapper_class( 'custom-one' );
+		$field->add_wrapper_class( 'custom-two' );
+		$field->add_wrapper_class( 'custom-three' );
+		$field->remove_wrapper_class( 'custom-two' );
+
+		$result = $field->get_wrapper_attribute( 'class' );
+		$this->assertEquals( 1, substr_count( $result, 'custom-one' ), 'custom-one should remain' );
+		$this->assertEquals( 0, substr_count( $result, 'custom-two' ), 'custom-two should be removed' );
+		$this->assertEquals( 1, substr_count( $result, 'custom-three' ), 'custom-three should remain' );
+	}
+
 	/** @testdox [Shared::WrapperAttributes] It should be possible remove a class by its values from wrapper attributes. */
 	public function test_remove_wrapper_class_by_name(): void {
 		$class = $this->get_class_under_test();

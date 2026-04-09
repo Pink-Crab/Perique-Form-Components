@@ -61,9 +61,16 @@ class Input_Component extends Abstract_Field_Component {
 			'class' => sprintf( $this->field->get_style()->field_control_class(), "{$this->input_type}-input" ),
 		);
 
-		// If field uses the datalist trait and passed attribute doesnt include list.
+		// Auto-generate id from name if not explicitly set.
+		if ( ! $this->field->has_attribute( 'id' ) ) {
+			$attributes['id'] = $this->field->get_name();
+		}
+
+		// If field uses the datalist trait and has datalist items configured.
 		if ( usesTrait( Datalist::class )( $this->field )
 		&& method_exists( $this->field, 'get_datalist_key' )
+		&& method_exists( $this->field, 'has_datalist_items' )
+		&& $this->field->has_datalist_items()
 		) {
 			$attributes['list'] = $this->field->get_datalist_key();
 		}

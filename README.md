@@ -251,5 +251,6 @@ $this->component( Make::form( 'enquiry', fn( $f ) => $f
 
 ## Change Log
 
+* 2.1.2 - Fixed label/input accessibility, wrapper class duplication and unnecessary `list` attribute rendering.
 * 2.1.1 - Added Custom_Field element for rendering arbitrary HTML with full field treatment (wrapper, label, notifications, configurable kses filtering)
 * 2.1.0 - Initial release for Perique 2.1.*
