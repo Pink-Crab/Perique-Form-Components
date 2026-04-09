@@ -124,17 +124,20 @@ trait Wrapper_Attributes {
 	 * @return static
 	 */
 	public function add_wrapper_class( string $class_name ): self {
-		$classes = $this->get_wrapper_attribute( 'class' );
+		$classes = $this->wrapper_attributes['class'] ?? null;
 		if ( ! $classes ) {
-			return $this->wrapper_attribute( 'class', Esc::attribute( $class_name ) );
+			$this->wrapper_attributes['class'] = Esc::attribute( $class_name );
+			return $this;
 		}
 
-		$classes = explode( ' ', Esc::attribute( $classes ) );
-		if ( ! in_array( $class_name, $classes, true ) ) {
-			$classes[] = Esc::attribute( $class_name );
+		$classes      = explode( ' ', (string) $classes );
+		$escaped_name = Esc::attribute( $class_name );
+		if ( ! in_array( $escaped_name, $classes, true ) ) {
+			$classes[] = $escaped_name;
 		}
 
-		return $this->wrapper_attribute( 'class', implode( ' ', array_map( array( Esc::class, 'attribute' ), $classes ) ) );
+		$this->wrapper_attributes['class'] = implode( ' ', $classes );
+		return $this;
 	}
 
 	/**
@@ -144,17 +147,19 @@ trait Wrapper_Attributes {
 	 * @return static
 	 */
 	public function remove_wrapper_class( string $class_name ): self {
-		$classes = $this->get_wrapper_attribute( 'class' );
+		$classes = $this->wrapper_attributes['class'] ?? null;
 		if ( ! $classes ) {
 			return $this;
 		}
 
-		$classes = explode( ' ', Esc::attribute( $classes ) );
-		if ( in_array( $class_name, $classes, true ) ) {
-			$classes = array_diff( $classes, array( $class_name ) );
+		$classes      = explode( ' ', (string) $classes );
+		$escaped_name = Esc::attribute( $class_name );
+		if ( in_array( $escaped_name, $classes, true ) ) {
+			$classes = array_diff( $classes, array( $escaped_name ) );
 		}
 
-		return $this->wrapper_attribute( 'class', implode( ' ', array_map( array( Esc::class, 'attribute' ), $classes ) ) );
+		$this->wrapper_attributes['class'] = implode( ' ', $classes );
+		return $this;
 	}
 
 
