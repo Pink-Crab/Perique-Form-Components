@@ -30,7 +30,7 @@ use PinkCrab\Form_Components\Element\Field\Attribute\{Pattern, Autocomplete, Dis
 
 class Password extends Abstract_Input {
 
-	use Autocomplete, Length, Pattern, Placeholder, Read_Only, Size,  Disabled, Required;
+	use Autocomplete, Length, Pattern, Placeholder, Read_Only, Size, Disabled, Required;
 
 	/** @inheritDoc */
 	protected $input_type = 'password';

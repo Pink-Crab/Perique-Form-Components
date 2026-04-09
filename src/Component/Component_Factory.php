@@ -45,6 +45,8 @@ use PinkCrab\Form_Components\Component\Field\Checkbox_Group_Component;
 use PinkCrab\Form_Components\Component\Field\Textarea_Component;
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Form_Components\Element\Field\Input\Abstract_Input;
+use PinkCrab\Form_Components\Element\Custom_Field;
+use PinkCrab\Form_Components\Component\Field\Custom_Field_Component;
 use PinkCrab\Form_Components\Element\{Field, Group, Fieldset, Element, Button};
 use function PinkCrab\FunctionConstructors\Objects\isInstanceOf;
 
@@ -94,6 +96,9 @@ class Component_Factory {
 
 			case $element instanceof Textarea:
 				return $this->from_textarea( $element );
+
+			case $element instanceof Custom_Field:
+				return $this->from_custom_field( $element );
 
 			case $element instanceof Abstract_Input:
 				return $this->from_field( $element );
@@ -217,5 +222,15 @@ class Component_Factory {
 	 */
 	public function from_html( Raw_HTML $html ): Component {
 		return new Raw_HTML_Component( $html );
+	}
+
+	/**
+	 * Create a component from a Custom_Field element.
+	 *
+	 * @param Custom_Field $field
+	 * @return Component
+	 */
+	public function from_custom_field( Custom_Field $field ): Component {
+		return new Custom_Field_Component( $field );
 	}
 }

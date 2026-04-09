@@ -22,6 +22,7 @@ use PinkCrab\Form_Components\Component\Field\Checkbox_Group_Component;
 use PinkCrab\Form_Components\Component\Field\Radio_Group_Component;
 use PinkCrab\Form_Components\Component\Form\Form_Component;
 use PinkCrab\Form_Components\Component\Form\Fieldset_Component;
+use PinkCrab\Form_Components\Component\Field\Custom_Field_Component;
 use PinkCrab\Form_Components\Component\Partial\Nonce_Component;
 use PinkCrab\Perique\Services\View\Component\Component;
 
@@ -190,6 +191,17 @@ class Test_Make extends WP_UnitTestCase {
 		$this->assertInstanceOf( Fieldset_Component::class, $component );
 	}
 
+	/** @testdox Make::custom() returns a Custom_Field_Component */
+	public function test_custom(): void {
+		$this->assertInstanceOf( Custom_Field_Component::class, Make::custom( 'widget' ) );
+	}
+
+	/** @testdox Make::custom() accepts a config callable */
+	public function test_custom_with_config(): void {
+		$component = Make::custom( 'widget', fn( $f ) => $f->label( 'My Widget' )->content( '<div>Hi</div>' ) );
+		$this->assertInstanceOf( Custom_Field_Component::class, $component );
+	}
+
 	/** @testdox All Make methods return instances of Component */
 	public function test_all_return_component(): void {
 		$this->assertInstanceOf( Component::class, Make::text( 'a' ) );
@@ -200,5 +212,6 @@ class Test_Make extends WP_UnitTestCase {
 		$this->assertInstanceOf( Component::class, Make::raw_html( 'f' ) );
 		$this->assertInstanceOf( Component::class, Make::form( 'g' ) );
 		$this->assertInstanceOf( Component::class, Make::fieldset( 'h' ) );
+		$this->assertInstanceOf( Component::class, Make::custom( 'i' ) );
 	}
 }

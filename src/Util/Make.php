@@ -33,6 +33,8 @@ use PinkCrab\Form_Components\Element\Nonce;
 use PinkCrab\Form_Components\Element\Button;
 use PinkCrab\Form_Components\Element\Raw_HTML;
 use PinkCrab\Form_Components\Element\Fieldset;
+use PinkCrab\Form_Components\Element\Custom_Field;
+use PinkCrab\Form_Components\Component\Field\Custom_Field_Component;
 use PinkCrab\Form_Components\Element\Field\Select;
 use PinkCrab\Form_Components\Element\Field\Textarea;
 use PinkCrab\Form_Components\Element\Field\Input\Tel;
@@ -402,5 +404,17 @@ class Make {
 	public static function fieldset( string $name, ?callable $config = null ): Component {
 		$element = Fieldset::make( $name );
 		return new Fieldset_Component( $config ? $config( $element ) : $element );
+	}
+
+	/**
+	 * Custom field element.
+	 *
+	 * @param string $name
+	 * @param callable|null $config fn(Custom_Field): Custom_Field
+	 * @return Component
+	 */
+	public static function custom( string $name, ?callable $config = null ): Component {
+		$element = Custom_Field::make( $name );
+		return new Custom_Field_Component( $config ? $config( $element ) : $element );
 	}
 }

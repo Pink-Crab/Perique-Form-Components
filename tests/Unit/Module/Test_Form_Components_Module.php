@@ -24,6 +24,7 @@ use PinkCrab\Form_Components\Component\Field\Checkbox_Group_Component;
 use PinkCrab\Form_Components\Component\Field\Button_Component;
 use PinkCrab\Form_Components\Component\Field\Datalist_Component;
 use PinkCrab\Form_Components\Component\Field\Notification_Component;
+use PinkCrab\Form_Components\Component\Field\Custom_Field_Component;
 use PinkCrab\Form_Components\Component\Form\Form_Component;
 use PinkCrab\Form_Components\Component\Form\Group_Component;
 use PinkCrab\Form_Components\Component\Form\Fieldset_Component;
@@ -83,6 +84,7 @@ class Test_Form_Components_Module extends WP_UnitTestCase {
 		$this->assertArrayHasKey( Form_Component::class, $aliases );
 		$this->assertArrayHasKey( Group_Component::class, $aliases );
 		$this->assertArrayHasKey( Fieldset_Component::class, $aliases );
+		$this->assertArrayHasKey( Custom_Field_Component::class, $aliases );
 	}
 
 	/** @testdox The template paths should point to existing files */
