@@ -136,4 +136,8 @@ checks:
         duplication: true
 
 coding_style:
-    php: {  }
+    php:
+        indentation:
+            general:
+                use_tabs: true
+                size: 4
