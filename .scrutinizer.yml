@@ -1,11 +1,14 @@
 build:
     environment:
         php: 8.2
+    dependencies:
+        override:
+            - 'composer install --no-interaction --prefer-dist'
     nodes:
         analysis:
             project_setup:
                 override:
-                    - 'composer install --no-interaction --prefer-dist'
+                    - 'true'
             tests:
                 override:
                     - php-scrutinizer-run
