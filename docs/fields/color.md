@@ -647,4 +647,5 @@ Color::make( 'color' )->style( new Default_Style() )
 | Disabled | `disabled()`, `is_disabled()` |
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Datalist | `datalist_items()`, `get_datalist_key()`, `get_datalist_items()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

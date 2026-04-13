@@ -285,6 +285,26 @@ Checkbox::make( 'optional' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Checkbox::make( 'agree' )
+    ->label( 'I agree to the terms' )
+    ->pre_description( 'Please review the terms before agreeing.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Checkbox::make( 'agree' )
+    ->label( 'I agree to the terms' )
+    ->post_description( 'You can withdraw consent at any time.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -582,5 +602,6 @@ Checkbox::make( 'agree' )->style( new Default_Style() )
 | Single_Value | `value()`, `get_value()`, `has_value()` |
 | Checked | `checked()`, `is_checked()` |
 | Disabled | `disabled()`, `is_disabled()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |
 | Form_Style | `style()`, `get_style()`, `has_explicit_style()` |
