@@ -457,6 +457,26 @@ Number::make( 'info_qty' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Number::make( 'quantity' )
+    ->label( 'Quantity' )
+    ->pre_description( 'Enter the number of items.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Number::make( 'quantity' )
+    ->label( 'Quantity' )
+    ->post_description( 'Must be between 1 and 100.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -756,4 +776,5 @@ Number::make( 'quantity' )->style( new Default_Style() )
 | Read_Only | `readonly()`, `is_read_only()` |
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Datalist | `datalist_items()`, `get_datalist_key()`, `get_datalist_items()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

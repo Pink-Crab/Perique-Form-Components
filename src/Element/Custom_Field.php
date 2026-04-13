@@ -34,10 +34,11 @@ use PinkCrab\Form_Components\Element\Field;
 use PinkCrab\Form_Components\Element\Field\Attribute\Label;
 use PinkCrab\Form_Components\Element\Field\Attribute\Single_Value;
 use PinkCrab\Form_Components\Element\Field\Attribute\Notification;
+use PinkCrab\Form_Components\Element\Field\Attribute\Description;
 
 class Custom_Field extends Field {
 
-	use Label, Single_Value, Notification;
+	use Label, Single_Value, Notification, Description;
 
 	/**
 	 * The HTML content to render in the field slot.

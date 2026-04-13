@@ -25,6 +25,7 @@ use PinkCrab\Form_Components\Tests\Fixtures\Mock_Objects\Stringable_Stub;
 class Test_Checkbox extends WP_UnitTestCase {
 
 	use \PinkCrab\Form_Components\Tests\Unit\Element\Shared_Field_Cases;
+	use \PinkCrab\Form_Components\Tests\Unit\Element\Shared_Description_Cases;
 
 	/** @inheritDoc */
 	public function get_class_under_test(): string {

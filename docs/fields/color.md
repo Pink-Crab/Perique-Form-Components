@@ -326,6 +326,26 @@ Color::make( 'info_color' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Color::make( 'brand_color' )
+    ->label( 'Brand Colour' )
+    ->pre_description( 'Pick your brand colour.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Color::make( 'brand_color' )
+    ->label( 'Brand Colour' )
+    ->post_description( 'Used across all pages.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.

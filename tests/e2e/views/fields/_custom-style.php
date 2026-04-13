@@ -38,5 +38,8 @@ if ( ! class_exists( 'E2E_Custom_Style' ) ) {
 		public function legend_class(): string {
 			return 'custom-legend';
 		}
+		public function description_class(): string {
+			return 'custom-description';
+		}
 	}
 }

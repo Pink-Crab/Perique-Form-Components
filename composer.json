@@ -51,7 +51,8 @@
         "analyse": "vendor/bin/phpstan analyse src -l8",
         "sniff": "./vendor/bin/phpcs src/ -v",
         "all": "composer coverage && composer analyse && composer sniff",
-        "test:application": "vendor/bin/phpunit --colors=always --testdox --group=application"
+        "test:application": "vendor/bin/phpunit --colors=always --testdox --group=application",
+        "e2e": "WP_BASE_URL=http://localhost:57892 npm run test:e2e"
     },
     "prefer-stable": true,
     "minimum-stability": "dev",

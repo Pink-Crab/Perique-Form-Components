@@ -466,6 +466,26 @@ Month::make( 'info_month' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Month::make( 'birth_month' )
+    ->label( 'Birth Month' )
+    ->pre_description( 'Select your birth month.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Month::make( 'birth_month' )
+    ->label( 'Birth Month' )
+    ->post_description( 'Format: YYYY-MM' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -766,4 +786,5 @@ Month::make( 'birth_month' )->style( new Default_Style() )
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Input_Mode | `inputmode()`, `get_inputmode()`, `has_inputmode()`, `clear_inputmode()` |
 | Datalist | `datalist_items()`, `get_datalist_key()`, `get_datalist_items()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

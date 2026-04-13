@@ -34,10 +34,11 @@ use function PinkCrab\FunctionConstructors\Objects\usesTrait;
 use PinkCrab\Form_Components\Element\Field_Traits\Form_Style;
 use PinkCrab\Form_Components\Element\Field\Attribute\Notification;
 use PinkCrab\Form_Components\Element\Field\Attribute\Single_Value;
+use PinkCrab\Form_Components\Element\Field\Attribute\Description;
 
 class Abstract_Input extends Field {
 
-	use Label, Single_Value, Form_Style, Notification;
+	use Label, Single_Value, Form_Style, Notification, Description;
 
 	/**
 	 * Set the value of the input

@@ -29,11 +29,11 @@ use PinkCrab\Form_Components\Element\Field;
 use PinkCrab\Form_Components\Util\Sanitize;
 use PinkCrab\Form_Components\Element\Field_Traits\Sanitizer;
 use function PinkCrab\FunctionConstructors\Objects\usesTrait;
-use PinkCrab\Form_Components\Element\Field\Attribute\{Label, Single_Value, Notification, Options, Disabled, Required, Multiple, Autocomplete, Size};
+use PinkCrab\Form_Components\Element\Field\Attribute\{Label, Single_Value, Notification, Options, Disabled, Required, Multiple, Autocomplete, Size, Description};
 
 class Select extends Field {
 
-	use Label, Single_Value, Notification, Options, Disabled, Required, Multiple, Autocomplete, Size;
+	use Label, Single_Value, Notification, Options, Disabled, Required, Multiple, Autocomplete, Size, Description;
 
 	/**
 	 * Holds the value of the field (may be array when multiple).

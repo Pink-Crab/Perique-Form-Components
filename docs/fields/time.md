@@ -562,6 +562,26 @@ Time::make( 'info_time' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Time::make( 'start_time' )
+    ->label( 'Start Time' )
+    ->pre_description( 'Select your preferred time.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Time::make( 'start_time' )
+    ->label( 'Start Time' )
+    ->post_description( 'All times are in UTC.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -863,4 +883,5 @@ Time::make( 'start_time' )->style( new Default_Style() )
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Input_Mode | `inputmode()`, `get_inputmode()`, `has_inputmode()`, `clear_inputmode()` |
 | Datalist | `datalist_items()`, `get_datalist_key()`, `get_datalist_items()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

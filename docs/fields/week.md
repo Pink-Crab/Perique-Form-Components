@@ -466,6 +466,26 @@ Week::make( 'info_week' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Week::make( 'delivery_week' )
+    ->label( 'Delivery Week' )
+    ->pre_description( 'Select your preferred delivery week.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Week::make( 'delivery_week' )
+    ->label( 'Delivery Week' )
+    ->post_description( 'Format: YYYY-Wnn (e.g. 2026-W26)' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -771,4 +791,5 @@ Week::make( 'delivery_week' )->style( new Default_Style() )
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Input_Mode | `inputmode()`, `get_inputmode()`, `has_inputmode()`, `clear_inputmode()` |
 | Datalist | `datalist_items()`, `get_datalist_key()`, `get_datalist_items()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

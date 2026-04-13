@@ -76,4 +76,9 @@ class Default_Style implements Style {
 	public function legend_class(): string {
 		return 'pc-form__legend';
 	}
+
+	/** @inheritDoc */
+	public function description_class(): string {
+		return 'pc-form__description';
+	}
 }

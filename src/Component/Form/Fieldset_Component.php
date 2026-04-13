@@ -54,6 +54,15 @@ class Fieldset_Component extends Component {
 	/** @var string */
 	protected $after;
 
+	/** @var string|null */
+	protected $pre_description;
+
+	/** @var string|null */
+	protected $post_description;
+
+	/** @var string */
+	protected $description_class;
+
 	/**
 	 * @param Fieldset $fieldset
 	 */
@@ -73,9 +82,12 @@ class Fieldset_Component extends Component {
 
 		$this->fieldset_attributes = Attributes::parse( $attributes );
 
-		$this->legend       = $fieldset->get_legend();
-		$this->legend_class = $fieldset->get_style()->legend_class();
-		$this->before       = $fieldset->get_before() ?? '';
-		$this->after        = $fieldset->get_after() ?? '';
+		$this->legend            = $fieldset->get_legend();
+		$this->legend_class      = $fieldset->get_style()->legend_class();
+		$this->before            = $fieldset->get_before() ?? '';
+		$this->after             = $fieldset->get_after() ?? '';
+		$this->pre_description   = $fieldset->get_pre_description();
+		$this->post_description  = $fieldset->get_post_description();
+		$this->description_class = $fieldset->get_style()->description_class();
 	}
 }

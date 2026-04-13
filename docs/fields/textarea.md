@@ -449,6 +449,26 @@ Textarea::make( 'bio' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the textarea.
+
+```php
+Textarea::make( 'bio' )
+    ->label( 'Biography' )
+    ->pre_description( 'Tell us about yourself.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the textarea, before any notification.
+
+```php
+Textarea::make( 'bio' )
+    ->label( 'Biography' )
+    ->post_description( 'Maximum 500 characters.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the textarea within the wrapper.
@@ -764,3 +784,4 @@ Textarea::make( 'bio' )
 | Length | `minlength()`, `maxlength()`, `get_min_length()`, `get_max_length()` |
 | Spellcheck | `spellcheck()`, `is_spellcheck()` |
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |

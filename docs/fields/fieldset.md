@@ -255,6 +255,32 @@ Fieldset::make( 'disabled_section' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description displayed after the legend but before the child fields.
+
+```php
+Fieldset::make( 'personal' )
+    ->legend( 'Personal Details' )
+    ->pre_description( 'Please fill in your personal information.' )
+    ->fields(
+        Text::make( 'name' )->label( 'Name' ),
+    )
+```
+
+### post_description( string $description )
+
+Sets a description displayed after the child fields.
+
+```php
+Fieldset::make( 'personal' )
+    ->legend( 'Personal Details' )
+    ->post_description( 'All fields are required.' )
+    ->fields(
+        Text::make( 'name' )->label( 'Name' ),
+    )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the fieldset's child elements, rendered inside the `<fieldset>` tag (after the legend).
@@ -650,3 +676,4 @@ Fieldset::make( 'address' )
 | Fields | `fields()`, `add_field()`, `get_fields()`, `get_field()`, `has_field()`, `get_field_names()`, `get_nested_fields()`, `add_validation_rule()`, `get_validation_rules()` |
 | Form_Style | `style()`, `get_style()`, `has_explicit_style()` |
 | Disabled | `disabled()`, `is_disabled()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
