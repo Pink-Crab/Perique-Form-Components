@@ -108,4 +108,11 @@ interface Style {
 	 * @return string
 	 */
 	public function legend_class(): string;
+
+	/**
+	 * Description element class.
+	 *
+	 * @return string
+	 */
+	public function description_class(): string;
 }

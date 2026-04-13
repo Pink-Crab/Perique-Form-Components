@@ -309,6 +309,26 @@ File::make( 'info_upload' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+File::make( 'upload' )
+    ->label( 'Upload File' )
+    ->pre_description( 'Select a file to upload.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+File::make( 'upload' )
+    ->label( 'Upload File' )
+    ->post_description( 'Accepted formats: PNG, JPG, PDF. Max 5MB.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -597,4 +617,5 @@ File::make( 'upload' )->style( new Default_Style() )
 | Multiple | `multiple()`, `is_multiple()` |
 | Disabled | `disabled()`, `is_disabled()` |
 | Required | `required()`, `is_required()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

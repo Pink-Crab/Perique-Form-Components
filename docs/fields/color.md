@@ -326,6 +326,26 @@ Color::make( 'info_color' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Color::make( 'brand_color' )
+    ->label( 'Brand Colour' )
+    ->pre_description( 'Pick your brand colour.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Color::make( 'brand_color' )
+    ->label( 'Brand Colour' )
+    ->post_description( 'Used across all pages.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -627,4 +647,5 @@ Color::make( 'color' )->style( new Default_Style() )
 | Disabled | `disabled()`, `is_disabled()` |
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Datalist | `datalist_items()`, `get_datalist_key()`, `get_datalist_items()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

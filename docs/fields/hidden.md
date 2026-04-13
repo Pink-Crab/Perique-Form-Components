@@ -283,6 +283,24 @@ Hidden::make( 'action' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Hidden::make( 'form_id' )
+    ->pre_description( 'Internal form identifier.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Hidden::make( 'form_id' )
+    ->post_description( 'Auto-generated value.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper. Only relevant if `show_wrapper(true)` has been called.
@@ -530,4 +548,5 @@ Hidden::make( 'user_id' )->style( new Default_Style() )
 |-------|---------|
 | Label | `label()`, `get_label()`, `has_label()` |
 | Single_Value | `value()`, `get_value()`, `has_value()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

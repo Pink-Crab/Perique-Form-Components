@@ -364,6 +364,26 @@ Checkbox_Group::make( 'interests' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the checkbox options.
+
+```php
+Checkbox_Group::make( 'interests' )
+    ->label( 'Interests' )
+    ->pre_description( 'Select all that apply.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the checkbox options, before any notification.
+
+```php
+Checkbox_Group::make( 'interests' )
+    ->label( 'Interests' )
+    ->post_description( 'You can change these later.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the checkbox group within the wrapper.
@@ -593,3 +613,4 @@ Checkbox_Group::make( 'interests' )
 | Options | `options()`, `get_options()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |
 | Disabled | `disabled()`, `is_disabled()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |

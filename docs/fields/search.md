@@ -493,6 +493,26 @@ Search::make( 'query_info' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Search::make( 'query' )
+    ->label( 'Search' )
+    ->pre_description( 'Search across all content.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Search::make( 'query' )
+    ->label( 'Search' )
+    ->post_description( 'Use quotes for exact match.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -826,4 +846,5 @@ Search::make( 'query' )
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Input_Mode | `inputmode()`, `get_input_mode()`, `has_input_mode()` |
 | Spellcheck | `spellcheck()`, `is_spellcheck()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

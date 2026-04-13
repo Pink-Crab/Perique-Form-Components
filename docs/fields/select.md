@@ -549,6 +549,26 @@ Select::make( 'country' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the select.
+
+```php
+Select::make( 'country' )
+    ->label( 'Country' )
+    ->pre_description( 'Where are you based?' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the select, before any notification.
+
+```php
+Select::make( 'country' )
+    ->label( 'Country' )
+    ->post_description( 'Used for shipping calculations.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the select within the wrapper.
@@ -880,3 +900,4 @@ Select::make( 'country' )
 | Multiple | `multiple()`, `is_multiple()` |
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Size | `size()`, `get_size()`, `has_size()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |

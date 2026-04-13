@@ -549,6 +549,26 @@ Datetime::make( 'info_event' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Datetime::make( 'event_start' )
+    ->label( 'Event Start' )
+    ->pre_description( 'Select the event date and time.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Datetime::make( 'event_start' )
+    ->label( 'Event Start' )
+    ->post_description( 'All times are in your local timezone.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -848,4 +868,5 @@ Datetime::make( 'event_start' )->style( new Default_Style() )
 | Read_Only | `readonly()`, `is_read_only()` |
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Datalist | `datalist_items()`, `get_datalist_key()`, `get_datalist_items()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

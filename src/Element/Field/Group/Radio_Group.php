@@ -27,11 +27,11 @@ declare( strict_types=1 );
 namespace PinkCrab\Form_Components\Element\Field\Group;
 
 use PinkCrab\Form_Components\Element\Field;
-use PinkCrab\Form_Components\Element\Field\Attribute\{Label, Options, Notification, Disabled, Required};
+use PinkCrab\Form_Components\Element\Field\Attribute\{Label, Options, Notification, Disabled, Required, Description};
 
 class Radio_Group extends Field {
 
-	use Label, Options, Notification, Disabled, Required;
+	use Label, Options, Notification, Disabled, Required, Description;
 
 	/**
 	 * The selected value.

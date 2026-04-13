@@ -274,4 +274,42 @@ class Test_Fieldset extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( 'foo', $fieldset->get_attribute( 'class' ) );
 		$this->assertStringContainsString( 'bar', $fieldset->get_attribute( 'class' ) );
 	}
+
+	####################################################################
+	######                  DESCRIPTION                            ######
+	####################################################################
+
+	/**
+	 * @testdox It should be possible to set and get a pre-description
+	 * @see https://github.com/Pink-Crab/Perique-Form-Components/issues/18
+	 */
+	public function test_pre_description(): void {
+		$fieldset = new Fieldset( 'test' );
+		$fieldset->pre_description( 'Hint before fields' );
+		$this->assertTrue( $fieldset->has_pre_description() );
+		$this->assertSame( 'Hint before fields', $fieldset->get_pre_description() );
+	}
+
+	/**
+	 * @testdox It should be possible to set and get a post-description
+	 * @see https://github.com/Pink-Crab/Perique-Form-Components/issues/18
+	 */
+	public function test_post_description(): void {
+		$fieldset = new Fieldset( 'test' );
+		$fieldset->post_description( 'Help text after fields' );
+		$this->assertTrue( $fieldset->has_post_description() );
+		$this->assertSame( 'Help text after fields', $fieldset->get_post_description() );
+	}
+
+	/**
+	 * @testdox A fieldset with no descriptions should return null
+	 * @see https://github.com/Pink-Crab/Perique-Form-Components/issues/18
+	 */
+	public function test_no_descriptions_returns_null(): void {
+		$fieldset = new Fieldset( 'test' );
+		$this->assertFalse( $fieldset->has_pre_description() );
+		$this->assertFalse( $fieldset->has_post_description() );
+		$this->assertNull( $fieldset->get_pre_description() );
+		$this->assertNull( $fieldset->get_post_description() );
+	}
 }

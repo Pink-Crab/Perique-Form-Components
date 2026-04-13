@@ -29,11 +29,11 @@ use PinkCrab\Form_Components\Element\Field;
 use PinkCrab\Form_Components\Util\Sanitize;
 use PinkCrab\Form_Components\Element\Field_Traits\Sanitizer;
 use function PinkCrab\FunctionConstructors\Objects\usesTrait;
-use PinkCrab\Form_Components\Element\Field\Attribute\{Label, Single_Value, Notification, Placeholder, Disabled, Read_Only, Required, Length, Spellcheck, Autocomplete};
+use PinkCrab\Form_Components\Element\Field\Attribute\{Label, Single_Value, Notification, Placeholder, Disabled, Read_Only, Required, Length, Spellcheck, Autocomplete, Description};
 
 class Textarea extends Field {
 
-	use Label, Single_Value, Notification, Placeholder, Disabled, Read_Only, Required, Length, Spellcheck, Autocomplete;
+	use Label, Single_Value, Notification, Placeholder, Disabled, Read_Only, Required, Length, Spellcheck, Autocomplete, Description;
 
 	/**
 	 * The default sanitizer for the textarea.

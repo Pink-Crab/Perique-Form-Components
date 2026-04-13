@@ -476,6 +476,26 @@ Email::make( 'info_email' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Email::make( 'email' )
+    ->label( 'Email Address' )
+    ->pre_description( 'We will never share your email.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Email::make( 'email' )
+    ->label( 'Email Address' )
+    ->post_description( 'Used for account recovery only.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -781,5 +801,6 @@ Email::make( 'email' )->style( new Default_Style() )
 | Size | `size()`, `get_size()`, `has_size()` |
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Multiple | `multiple()`, `is_multiple()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |
 | Form_Style | `style()`, `get_style()`, `has_explicit_style()` |

@@ -149,6 +149,26 @@ Custom_Field::make( 'widget' )
     ->error_notification( 'Widget configuration is invalid.' )
 ```
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the custom content.
+
+```php
+Custom_Field::make( 'preview' )
+    ->label( 'Preview' )
+    ->pre_description( 'This is a preview of your content.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the custom content, before any notification.
+
+```php
+Custom_Field::make( 'preview' )
+    ->label( 'Preview' )
+    ->post_description( 'Content will be sanitized on save.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the field within the wrapper.
@@ -194,6 +214,7 @@ Sets a custom style, overriding the default.
 | Label | `label()`, `get_label()`, `has_label()` |
 | Single_Value | `value()`, `get_value()`, `has_value()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 
 ---
 

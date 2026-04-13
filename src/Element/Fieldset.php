@@ -35,12 +35,13 @@ use PinkCrab\Form_Components\Element\Field_Traits\Form_Style;
 use PinkCrab\Form_Components\Element\Field_Traits\Element_Wrap;
 use PinkCrab\Form_Components\Element\Field_Traits\Wrapper_Attributes;
 use PinkCrab\Form_Components\Element\Field\Attribute\Disabled;
+use PinkCrab\Form_Components\Element\Field\Attribute\Description;
 
 use function PinkCrab\FunctionConstructors\GeneralFunctions\pipe;
 
 class Fieldset implements Element {
 
-	use Wrapper_Attributes, Attributes, Element_Wrap, Fields, Form_Style, Disabled;
+	use Wrapper_Attributes, Attributes, Element_Wrap, Fields, Form_Style, Disabled, Description;
 
 	/**
 	 * The fieldset name.

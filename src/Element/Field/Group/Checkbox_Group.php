@@ -27,11 +27,11 @@ declare( strict_types=1 );
 namespace PinkCrab\Form_Components\Element\Field\Group;
 
 use PinkCrab\Form_Components\Element\Field;
-use PinkCrab\Form_Components\Element\Field\Attribute\{Label, Options, Notification, Disabled};
+use PinkCrab\Form_Components\Element\Field\Attribute\{Label, Options, Notification, Disabled, Description};
 
 class Checkbox_Group extends Field {
 
-	use Label, Options, Notification, Disabled;
+	use Label, Options, Notification, Disabled, Description;
 
 	/**
 	 * The selected values.

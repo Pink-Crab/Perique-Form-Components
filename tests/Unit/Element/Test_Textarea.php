@@ -27,6 +27,7 @@ use PinkCrab\Form_Components\Element\Field\Attribute\{Label, Single_Value, Place
 class Test_Textarea extends WP_UnitTestCase {
 
 	use \PinkCrab\Form_Components\Tests\Unit\Element\Shared_Field_Cases;
+	use \PinkCrab\Form_Components\Tests\Unit\Element\Shared_Description_Cases;
 
 	/** @inheritDoc */
 	public function get_class_under_test(): string {

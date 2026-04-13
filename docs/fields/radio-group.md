@@ -374,6 +374,26 @@ Radio_Group::make( 'plan' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the radio options.
+
+```php
+Radio_Group::make( 'priority' )
+    ->label( 'Priority' )
+    ->pre_description( 'Choose one option.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the radio options, before any notification.
+
+```php
+Radio_Group::make( 'priority' )
+    ->label( 'Priority' )
+    ->post_description( 'This affects response time.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the radio group within the wrapper.
@@ -604,3 +624,4 @@ Radio_Group::make( 'plan' )
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |
 | Disabled | `disabled()`, `is_disabled()` |
 | Required | `required()`, `is_required()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |

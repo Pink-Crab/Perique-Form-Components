@@ -515,6 +515,26 @@ Url::make( 'url_info' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Url::make( 'website' )
+    ->label( 'Website' )
+    ->pre_description( 'Your public profile URL.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Url::make( 'website' )
+    ->label( 'Website' )
+    ->post_description( 'Must start with https://' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -849,4 +869,5 @@ Url::make( 'website' )
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
 | Input_Mode | `inputmode()`, `get_input_mode()`, `has_input_mode()` |
 | Spellcheck | `spellcheck()`, `is_spellcheck()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |

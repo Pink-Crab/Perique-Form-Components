@@ -48,6 +48,7 @@ class Test_Style_Provider extends WP_UnitTestCase {
 			public function group_option_class(): string { return '%s__custom-option'; }
 			public function label_class(): string { return 'custom-label'; }
 			public function legend_class(): string { return 'custom-legend'; }
+			public function description_class(): string { return 'custom-description'; }
 		};
 
 		Style_Provider::set_default_style( get_class( $custom_style ) );

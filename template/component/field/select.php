@@ -22,6 +22,10 @@ use function PinkCrab\FunctionConstructors\Objects\usesTrait;
 		<?php $this->component( new PinkCrab\Form_Components\Component\Field\Label_Component( $field->get_label(), $field->get_name(), $field->get_style()->label_class() ) ); ?>
 	<?php endif; ?>
 
+	<?php if ( $field->has_pre_description() ) : ?>
+		<p class="<?php echo esc_attr( $field->get_style()->description_class() ); ?>"><?php echo wp_kses_post( $field->get_pre_description() ); ?></p>
+	<?php endif; ?>
+
 	<select
 		name="<?php echo esc_attr( $field->get_name() ); ?><?php echo $field->is_multiple() ? '[]' : ''; ?>"
 		<?php echo $field_attributes; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, parts escaped before composition. ?>
@@ -46,6 +50,10 @@ use function PinkCrab\FunctionConstructors\Objects\usesTrait;
 			<?php endforeach; ?>
 		<?php endif; ?>
 	</select>
+
+	<?php if ( $field->has_post_description() ) : ?>
+		<p class="<?php echo esc_attr( $field->get_style()->description_class() ); ?>"><?php echo wp_kses_post( $field->get_post_description() ); ?></p>
+	<?php endif; ?>
 
 	<?php if ( usesTrait( PinkCrab\Form_Components\Element\Field\Attribute\Notification::class )( $field ) && $field->has_notification() ) : ?>
 		<?php $this->component( new PinkCrab\Form_Components\Component\Field\Notification_Component( $field ) ); ?>

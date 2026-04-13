@@ -395,6 +395,26 @@ Password::make( 'pw_info' )
 ```
 </details>
 
+### pre_description( string $description )
+
+Sets a description or hint displayed before the input.
+
+```php
+Password::make( 'password' )
+    ->label( 'Password' )
+    ->pre_description( 'Choose a strong password.' )
+```
+
+### post_description( string $description )
+
+Sets a description or help text displayed after the input, before any notification.
+
+```php
+Password::make( 'password' )
+    ->label( 'Password' )
+    ->post_description( 'Must contain at least 8 characters.' )
+```
+
 ### before( string $html ) / after( string $html )
 
 HTML content before or after the input within the wrapper.
@@ -726,4 +746,5 @@ Password::make( 'password' )
 | Length | `minlength()`, `maxlength()`, `get_min_length()`, `get_max_length()` |
 | Size | `size()`, `get_size()`, `has_size()` |
 | Autocomplete | `autocomplete()`, `get_autocomplete()`, `has_autocomplete()` |
+| Description | `pre_description()`, `post_description()`, `get_pre_description()`, `get_post_description()`, `has_pre_description()`, `has_post_description()` |
 | Notification | `error_notification()`, `warning_notification()`, `success_notification()`, `info_notification()` |
