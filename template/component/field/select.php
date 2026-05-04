@@ -1,23 +1,26 @@
 <?php
 /**
- * The Select component template
+ * The Select component template.
  *
  * @package Perique\form-fields
  *
  * // Expected Variables
- * @var Select $field
- * @var string $before_field
- * @var string $after_field
- * @var string $field_attributes
- * @var string $wrapper_attributes
- * @var bool $show_wrapper
+ * @var Select $field              The select element being rendered.
+ * @var string $before_field       HTML rendered before the field's inner content.
+ * @var string $after_field        HTML rendered after the field's inner content.
+ * @var string $field_attributes   Pre-escaped HTML attributes for the select element.
+ * @var string $wrapper_attributes Pre-escaped HTML attributes for the wrapper element.
+ * @var bool   $show_wrapper       Whether to render the surrounding wrapper div.
  */
 
 use function PinkCrab\FunctionConstructors\Objects\usesTrait;
 ?>
 <?php if ( $show_wrapper ) : ?>
-	<?php $this->component( new PinkCrab\Form_Components\Component\Partial\Field_Wrapper_Start( $wrapper_attributes, $before_field ) ); ?>
+	<?php $this->component( new PinkCrab\Form_Components\Component\Partial\Field_Wrapper_Start( $wrapper_attributes ) ); ?>
 <?php endif; ?>
+	<?php if ( '' !== $before_field ) : ?>
+		<?php echo wp_kses_post( $before_field ); ?>
+	<?php endif; ?>
 	<?php if ( $field->has_label() ) : ?>
 		<?php $this->component( new PinkCrab\Form_Components\Component\Field\Label_Component( $field->get_label(), $field->get_name(), $field->get_style()->label_class() ) ); ?>
 	<?php endif; ?>
@@ -59,6 +62,10 @@ use function PinkCrab\FunctionConstructors\Objects\usesTrait;
 		<?php $this->component( new PinkCrab\Form_Components\Component\Field\Notification_Component( $field ) ); ?>
 	<?php endif; ?>
 
+	<?php if ( '' !== $after_field ) : ?>
+		<?php echo wp_kses_post( $after_field ); ?>
+	<?php endif; ?>
+
 <?php if ( $show_wrapper ) : ?>
-	<?php $this->component( new PinkCrab\Form_Components\Component\Partial\Field_Wrapper_End( $after_field ) ); ?>
+	<?php $this->component( new PinkCrab\Form_Components\Component\Partial\Field_Wrapper_End() ); ?>
 <?php endif; ?>

@@ -46,6 +46,24 @@ require_once __DIR__ . '/_custom-style.php';
 			->show_wrapper( false )
 	) ); ?>
 
+	<!-- Issue #23: before/after must render even when show_wrapper(false). -->
+	<div id="text-no-wrapper-with-adornments-host">
+	<?php $this->component( new Input_Component(
+		Text::make( 'text_no_wrapper_adornments' )
+			->add_class( 'e2e-text-no-wrapper-adornments' )
+			->show_wrapper( false )
+			->before( '<span class="e2e-no-wrap-before">BEFORE_NO_WRAP</span>' )
+			->after( '<span class="e2e-no-wrap-after">AFTER_NO_WRAP</span>' )
+	) ); ?>
+	</div>
+
+	<!-- Issue #23: nested-array form name (PHP repeater style) must be preserved verbatim. -->
+	<?php $this->component( new Input_Component(
+		Text::make( 'wm_loc_coordinates[0][latlong]' )
+			->label( 'Bracketed Name' )
+			->add_class( 'e2e-text-bracketed-name' )
+	) ); ?>
+
 	<!-- Data attributes -->
 	<?php $this->component( new Input_Component(
 		Text::make( 'text_data_attrs' )

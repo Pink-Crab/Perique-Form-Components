@@ -208,64 +208,30 @@ class Test_Components extends WP_UnitTestCase {
 	######              FIELD WRAPPER END COMPONENT               ######
 	####################################################################
 
-	/** @testdox Field_Wrapper_End should be constructable */
+	/** @testdox Field_Wrapper_End should be constructable with no args (after_field moved into field templates per issue #23) */
 	public function test_field_wrapper_end_construct(): void {
-		$component = new Field_Wrapper_End( 'after content' );
+		$component = new Field_Wrapper_End();
 		$this->assertInstanceOf( Component::class, $component );
-	}
-
-	/** @testdox Field_Wrapper_End should store after_field */
-	public function test_field_wrapper_end_properties(): void {
-		$component  = new Field_Wrapper_End( '<p>After</p>' );
-		$reflection = new \ReflectionClass( $component );
-
-		$prop = $reflection->getProperty( 'after_field' );
-		$prop->setAccessible( true );
-		$this->assertEquals( '<p>After</p>', $prop->getValue( $component ) );
-	}
-
-	/** @testdox Field_Wrapper_End should default to empty string for null */
-	public function test_field_wrapper_end_null(): void {
-		$component  = new Field_Wrapper_End( null );
-		$reflection = new \ReflectionClass( $component );
-
-		$prop = $reflection->getProperty( 'after_field' );
-		$prop->setAccessible( true );
-		$this->assertEquals( '', $prop->getValue( $component ) );
 	}
 
 	####################################################################
 	######            FIELD WRAPPER START COMPONENT               ######
 	####################################################################
 
-	/** @testdox Field_Wrapper_Start should be constructable */
+	/** @testdox Field_Wrapper_Start should be constructable (before_field moved into field templates per issue #23) */
 	public function test_field_wrapper_start_construct(): void {
-		$component = new Field_Wrapper_Start( 'class="wrapper"', 'before content' );
+		$component = new Field_Wrapper_Start( 'class="wrapper"' );
 		$this->assertInstanceOf( Component::class, $component );
 	}
 
-	/** @testdox Field_Wrapper_Start should store its properties */
+	/** @testdox Field_Wrapper_Start stores wrapper_attributes for the partial template */
 	public function test_field_wrapper_start_properties(): void {
-		$component  = new Field_Wrapper_Start( 'id="wrapper" class="test"', '<h3>Before</h3>' );
+		$component  = new Field_Wrapper_Start( 'id="wrapper" class="test"' );
 		$reflection = new \ReflectionClass( $component );
 
 		$attr_prop = $reflection->getProperty( 'wrapper_attributes' );
 		$attr_prop->setAccessible( true );
 		$this->assertEquals( 'id="wrapper" class="test"', $attr_prop->getValue( $component ) );
-
-		$before_prop = $reflection->getProperty( 'before_field' );
-		$before_prop->setAccessible( true );
-		$this->assertEquals( '<h3>Before</h3>', $before_prop->getValue( $component ) );
-	}
-
-	/** @testdox Field_Wrapper_Start should default before_field to empty string for null */
-	public function test_field_wrapper_start_null_before(): void {
-		$component  = new Field_Wrapper_Start( 'class="test"', null );
-		$reflection = new \ReflectionClass( $component );
-
-		$before_prop = $reflection->getProperty( 'before_field' );
-		$before_prop->setAccessible( true );
-		$this->assertEquals( '', $before_prop->getValue( $component ) );
 	}
 
 	####################################################################

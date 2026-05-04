@@ -28,16 +28,10 @@ use PinkCrab\Perique\Services\View\Component\Component;
 
 class Field_Wrapper_End extends Component {
 
-	/** @var string */
-	protected $after_field;
-
 	/**
 	 * Creates an instance of the component.
-	 *
-	 * @param string $after_field
 	 */
-	public function __construct( ?string $after_field ) {
-		$this->after_field = $after_field ?? '';
+	public function __construct() {
 	}
 
 }

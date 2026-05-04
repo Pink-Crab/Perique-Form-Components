@@ -57,7 +57,10 @@ abstract class Field implements Element {
 	 * @param Style $style
 	 */
 	public function __construct( string $name, ?Style $style = null ) {
-		$this->name = esc_attr( \sanitize_title( $name ) );
+		// Stored verbatim — HTML form names legitimately contain `[` `]`
+		// (PHP nested-array submission) and case can be meaningful. Templates
+		// already escape via esc_attr() at the output boundary.
+		$this->name = $name;
 		$this->set_defaults();
 
 		// Set the style.
@@ -67,8 +70,8 @@ abstract class Field implements Element {
 			$this->set_style( Style_Provider::get_default_style() );
 		}
 
-		// Set with a default wrapper id.
-		$this->wrapper_id( 'form-field_' . $this->name );
+		// Auto-generated wrapper id must be a valid HTML id, so slugify here.
+		$this->wrapper_id( 'form-field_' . \sanitize_title( $name ) );
 	}
 
 	/**

@@ -71,6 +71,36 @@ test.describe( 'Text Input - Kitchen Sink', () => {
 		await expect( wrapper ).toHaveCount( 0 );
 	} );
 
+	test( 'issue #23: before/after render even when show_wrapper(false)', async ( { page } ) => {
+		// Input is present but no wrapper div with the auto-generated id.
+		const input = page.locator( 'input[name="text_no_wrapper_adornments"]' );
+		await expect( input ).toBeAttached();
+		await expect(
+			page.locator( '#form-field_text_no_wrapper_adornments' )
+		).toHaveCount( 0 );
+
+		// Adornments still render (issue #23 — bug was that wrapper-off dropped them).
+		const before = page.locator( '.e2e-no-wrap-before' );
+		await expect( before ).toHaveText( 'BEFORE_NO_WRAP' );
+		const after = page.locator( '.e2e-no-wrap-after' );
+		await expect( after ).toHaveText( 'AFTER_NO_WRAP' );
+	} );
+
+	test( 'issue #23: bracketed (PHP nested-array) field name is preserved verbatim in name attribute', async ( {
+		page,
+	} ) => {
+		// Old behaviour: sanitize_title() mangled "wm_loc_coordinates[0][latlong]"
+		// into "wm_loc_coordinates0latlong". The fix preserves it.
+		const input = page.locator(
+			'input[name="wm_loc_coordinates[0][latlong]"]'
+		);
+		await expect( input ).toBeVisible();
+		await expect( input ).toHaveAttribute(
+			'name',
+			'wm_loc_coordinates[0][latlong]'
+		);
+	} );
+
 	test( 'data attributes', async ( { page } ) => {
 		const input = page.locator( 'input[name="text_data_attrs"]' );
 		await expect( input ).toHaveAttribute(
