@@ -1,11 +1,11 @@
-![logo](./.github/Perique%20Form%20Components%20Card.jpg "PinkCrab Perique Form Components")
+![logo](docs/form-components-logo.png "PinkCrab Perique Form Components")
 
 
 # Perique - Form Components
 
 A collection of View Components for rendering form fields in the Perique Framework. Build forms with a fluent PHP API, automatic HTML rendering, built-in sanitization and validation.
 
-[![Latest Stable Version](http://poser.pugx.org/pinkcrab/form-components/v)](https://packagist.org/packages/pinkcrab/form-components) [![Total Downloads](http://poser.pugx.org/pinkcrab/form-components/downloads)](https://packagist.org/packages/pinkcrab/form-components) [![Latest Unstable Version](http://poser.pugx.org/pinkcrab/form-components/v/unstable)](https://packagist.org/packages/pinkcrab/form-components) [![License](http://poser.pugx.org/pinkcrab/form-components/license)](https://packagist.org/packages/pinkcrab/form-components) [![PHP Version Require](http://poser.pugx.org/pinkcrab/form-components/require/php)](https://packagist.org/packages/pinkcrab/form-components)
+[![Latest Stable Version](https://poser.pugx.org/pinkcrab/form-components/v)](https://packagist.org/packages/pinkcrab/form-components) [![Total Downloads](https://poser.pugx.org/pinkcrab/form-components/downloads)](https://packagist.org/packages/pinkcrab/form-components) [![Latest Unstable Version](https://poser.pugx.org/pinkcrab/form-components/v/unstable)](https://packagist.org/packages/pinkcrab/form-components) [![License](https://poser.pugx.org/pinkcrab/form-components/license)](https://packagist.org/packages/pinkcrab/form-components) [![PHP Version Require](https://poser.pugx.org/pinkcrab/form-components/require/php)](https://packagist.org/packages/pinkcrab/form-components)
 ![GitHub contributors](https://img.shields.io/github/contributors/Pink-Crab/Perique-Form-Components?label=Contributors)
 ![GitHub issues](https://img.shields.io/github/issues-raw/Pink-Crab/Perique-Form-Components)
 [![WordPress 6.6 Test Suite [PHP8.0-8.4]](https://github.com/Pink-Crab/Perique-Form-Components/actions/workflows/WP_6_6.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Form-Components/actions/workflows/WP_6_6.yaml)
