@@ -31,18 +31,13 @@ class Field_Wrapper_Start extends Component {
 	/** @var string */
 	protected $wrapper_attributes;
 
-	/** @var string */
-	protected $before_field;
-
 	/**
-	 * Creates an instance ofthe component.
+	 * Creates an instance of the component.
 	 *
 	 * @param string $wrapper_attributes
-	 * @param string $before_field
 	 */
-	public function __construct( string $wrapper_attributes, ?string $before_field ) {
+	public function __construct( string $wrapper_attributes ) {
 		$this->wrapper_attributes = $wrapper_attributes;
-		$this->before_field       = $before_field ?? '';
 	}
 
 }

@@ -34,11 +34,26 @@ trait Shared_Field_Cases {
 		$this->assertEquals( 'test', $field->get_name() );
 	}
 
-	/** @testdox [Shared::Field] The name a field is created with should have its name santized as a string */
-	public function test_name_sanitized(): void {
+	/** @testdox [Shared::Field] (issue #23) Field name is stored verbatim — escaping happens at the template output boundary, not in the constructor. */
+	public function test_name_stored_verbatim(): void {
 		$class = $this->get_class_under_test();
 		$field = new $class( '<p>test</p>' );
-		$this->assertEquals( 'test', $field->get_name() );
+		// Was previously slugified to 'test'; now preserved so templates can escape on output.
+		$this->assertEquals( '<p>test</p>', $field->get_name() );
+	}
+
+	/** @testdox [Shared::Field] (issue #23) Field names with PHP-style brackets (nested array submission) are preserved verbatim — the old sanitize_title() call mangled them. */
+	public function test_name_preserves_brackets(): void {
+		$class = $this->get_class_under_test();
+		$field = new $class( 'wm_loc_coordinates[0][latlong]' );
+		$this->assertEquals( 'wm_loc_coordinates[0][latlong]', $field->get_name() );
+	}
+
+	/** @testdox [Shared::Field] (issue #23) Field name case is preserved — HTML form names are case-sensitive. */
+	public function test_name_preserves_case(): void {
+		$class = $this->get_class_under_test();
+		$field = new $class( 'CamelCaseName' );
+		$this->assertEquals( 'CamelCaseName', $field->get_name() );
 	}
 
 	/** @testdox [Shared::Field] It should be possible to get the type of the field ass soon as the field is created. */
