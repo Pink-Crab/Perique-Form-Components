@@ -18,7 +18,7 @@
 <?php if ( $show_wrapper ) : ?>
 	<?php $this->component( new PinkCrab\Form_Components\Component\Partial\Field_Wrapper_Start( $wrapper_attributes ) ); ?>
 <?php endif; ?>
-	<?php if ( '' !== $before_field ) : ?>
+	<?php if ( null !== $before_field && '' !== $before_field ) : ?>
 		<?php echo wp_kses_post( $before_field ); ?>
 	<?php endif; ?>
 	<button
@@ -26,7 +26,7 @@
 		name="<?php echo esc_attr( $field->get_name() ); ?>"
 		<?php echo $field_attributes; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, parts escaped before composition. ?>
 	><?php echo wp_kses_post( $text ); ?></button>
-	<?php if ( '' !== $after_field ) : ?>
+	<?php if ( null !== $after_field && '' !== $after_field ) : ?>
 		<?php echo wp_kses_post( $after_field ); ?>
 	<?php endif; ?>
 <?php if ( $show_wrapper ) : ?>

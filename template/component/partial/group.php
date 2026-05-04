@@ -13,7 +13,7 @@
 
 ?>
 <?php $this->component( new PinkCrab\Form_Components\Component\Partial\Field_Wrapper_Start( $attributes ) ); ?>
-		<?php if ( '' !== $before ) : ?>
+		<?php if ( null !== $before && '' !== $before ) : ?>
 			<?php echo wp_kses_post( $before ); ?>
 		<?php endif; ?>
 		<?php
@@ -22,7 +22,7 @@
 			$this->component( $component );
 		}
 		?>
-		<?php if ( '' !== $after ) : ?>
+		<?php if ( null !== $after && '' !== $after ) : ?>
 			<?php echo wp_kses_post( $after ); ?>
 		<?php endif; ?>
 <?php
