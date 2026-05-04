@@ -18,7 +18,7 @@ use function PinkCrab\FunctionConstructors\Objects\usesTrait;
 <?php if ( $show_wrapper ) : ?>
 	<?php $this->component( new PinkCrab\Form_Components\Component\Partial\Field_Wrapper_Start( $wrapper_attributes ) ); ?>
 <?php endif; ?>
-	<?php if ( '' !== $before_field ) : ?>
+	<?php if ( null !== $before_field && '' !== $before_field ) : ?>
 		<?php echo wp_kses_post( $before_field ); ?>
 	<?php endif; ?>
 	<?php if ( $field->has_label() ) : ?>
@@ -62,7 +62,7 @@ use function PinkCrab\FunctionConstructors\Objects\usesTrait;
 		<?php $this->component( new PinkCrab\Form_Components\Component\Field\Notification_Component( $field ) ); ?>
 	<?php endif; ?>
 
-	<?php if ( '' !== $after_field ) : ?>
+	<?php if ( null !== $after_field && '' !== $after_field ) : ?>
 		<?php echo wp_kses_post( $after_field ); ?>
 	<?php endif; ?>
 
